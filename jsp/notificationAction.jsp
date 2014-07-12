@@ -29,7 +29,7 @@
 		creator_idx = ds.getString(3) ;
 		timegap = ds.getString(4) ;
 		
-		String sUserInfo = String.format(Config.getProperty("init", Cs.USER_PROFILE_IMAGE_URN), oUserSession.getDomainIdx(), creator_idx, oUserSessigetDomainIdx()n()) ;
+		String sUserInfo = String.format(Config.getProperty("init", Cs.USER_PROFILE_IMAGE_URN), oUserSession.getDomainIdx(), creator_idx, oUserSession.getDomainIdx()) ;
 		result.append(
 			Html.li(
 			    Html.a( 
