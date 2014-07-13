@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.util.*,java.io.*" %>
 <%@ include file="../common/include/incInit.jspf" %>
 <%@ include file="../common/include/incSession.jspf" %>
 <%
@@ -55,7 +54,7 @@
             $.ajax({
                 // Uncomment the following to send cross-domain cookies:
                 //xhrFields: {withCredentials: true},
-                url: '#',
+                url: '/jsp/profile/upload.jsp?pAction=GetProfileImage',
                 dataType: 'json',
                 context: $('#fileupload')[0]
             }).always(function () {
@@ -71,24 +70,20 @@
 <body>
 <div class='row-fluid'>
     <div>
-        <form id="fileupload" action="/jsp/common/fileupload/fileAction.jsp" method="POST"
-              enctype="multipart/form-data">
-            <input type="hidden" name="tsk_idx" value="<%=TASK_IDX %>"/>
+        <form id="fileupload" action="/jsp/profile/upload.jsp" method="POST" enctype="multipart/form-data">
             <!-- Redirect browsers with JavaScript disabled to the origin page -->
-            <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-
+            <!-- The fileupload-buttonbar contains buttons to add/delete files and s tart/cancel the upload -->
             <table role="presentation" class="table table-striped" border="0">
                 <tbody class="files"></tbody>
             </table>
-            <% if (true) { %>
             <div class="row fileupload-buttonbar" style="margin-left:5px;">
                 <div class="col-lg-7">
                     <!-- The fileinput-button span is used to style the file input field as button -->
-			                <span class="btn btn-success fileinput-button">
-			                    <i class="glyphicon glyphicon-plus"></i>
-			                    <span class="file">Add Files</span>
-			                    <input type="file" name="files[]" multiple>
-			                </span>
+                    <span class="btn btn-success fileinput-button">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        <span class="file">Add Files</span>
+                        <input type="file" name="files[]" multiple>
+                    </span>
                     <button type="submit" class="btn btn-primary start">
                         <i class="glyphicon glyphicon-upload"></i>
                         <span class="file">Upload All</span>
@@ -116,21 +111,10 @@
                     <div class="progress-extended">&nbsp;</div>
                 </div>
             </div>
-            <% } %>
         </form>
     </div>
-    <!-- The blueimp Gallery widget -->
-    <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
-        <div class="slides"></div>
-        <h3 class="title"></h3>
-        <a class="prev">‹</a>
-        <a class="next">›</a>
-        <a class="close">×</a>
-        <a class="play-pause"></a>
-        <ol class="indicator"></ol>
-    </div>
+</div>
 </body>
-</html>
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
@@ -165,51 +149,21 @@
         </td>
     </tr>
 {% } %}
-
 </script>
-
 <script id="template-download" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-download fade">
-		<td style="text-align:center;width:{%=file.thumbnailWidth%}px;height:{%=file.thumbnailHeight%}px">
-		{% if(file.thumbnailUrl) { %}
-				<a href="{%=file.url%}" title="{%=file.name%}" data-gallery ><img src="{%=file.thumbnailUrl%}" onerror="this.src='/html/images/file_icon.png'" /></a>
-		{% } %} 
+		<td style="text-align:center;">
+            <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}"><img src="{%=file.url%}" onerror="this.src='/html/images/file_icon.png'" /></a>
 		</td>
-        <td width="*" >
-            <p class="name">
-                {% if (file.url) { %}
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}">{%=file.name%}</a>
-                {% } else { %}
-                    <span>{%=file.name%}</span>
-                {% } %} 
-            </p>
-            {% if (file.error) { %}
-                <div><span class="label label-danger">Error</span> {%=file.error%}</div>
-            {% } %}
-        </td>
-<!--
-		<td>
-            <p class="size">{%=o.formatFileSize(file.size)%}</p>
-        </td>
--->
         <td width="200px" style="text-align:right;">
-            {% if (file.deleteUrl) { %}
-                <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
-                    <i class="glyphicon glyphicon-trash"></i>
-                    <span>Delete</span>
-                </button>
-                <input type="checkbox" name="delete" value="1" class="toggle">
-            {% } %}
+            <button class="btn btn-danger delete" data-type="GET" data-url="/jsp/profile/upload.jsp?pAction=DeleteFile"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+                <i class="glyphicon glyphicon-trash"></i>
+                <span>Delete</span>
+            </button>
+            <input type="checkbox" name="delete" value="1" class="toggle">
         </td>
-<!--
-		<td width="200px" style="text-align:right;"> 
-		{% if(file.thumbnailUrl) { %}
-			<a href="{%=file.url%}" title="{%=file.name%}" data-gallery class="btn btn-primary">Preview</a>
-		{% } %}</td>
--->
     </tr>
 {% } %}
-
 </script>
 </html>

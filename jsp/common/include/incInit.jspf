@@ -109,29 +109,28 @@
 	}
 	
 	// -- TODO - ProfileImage Class 필요 - 태스크 온/오프 사용자 표시, 사용자 온/오프 표시 일괄처리 필요 
-	
-	public static String getProfileImage(String domain, int n_owner_idx) {
-		return getProfileImage(domain, n_owner_idx, 50,"", false) ;
+	public static String getProfileImage(String domain_idx, int n_owner_idx) {
+		return getProfileImage(domain_idx, n_owner_idx, 50,"", false) ;
 	}
 
-	public static String getProfileImage(String domain, int n_owner_idx, boolean isGrayScale) {
-		return getProfileImage(domain, n_owner_idx, 50,"", isGrayScale) ;
+	public static String getProfileImage(String domain_idx, int n_owner_idx, boolean isGrayScale) {
+		return getProfileImage(domain_idx, n_owner_idx, 50,"", isGrayScale) ;
 	}
 	
-	public static String getProfileImage(String domain, int n_owner_idx, int width, boolean isGrayScale) {
-		return getProfileImage(domain, n_owner_idx, width, "", isGrayScale) ;
+	public static String getProfileImage(String domain_idx, int n_owner_idx, int width, boolean isGrayScale) {
+		return getProfileImage(domain_idx, n_owner_idx, width, "", isGrayScale) ;
 	}
 	
-	public static String getProfileImage(String domain, int n_owner_idx, int width) {
-		return getProfileImage(domain, n_owner_idx, width, "", false) ;
+	public static String getProfileImage(String domain_idx, int n_owner_idx, int width) {
+		return getProfileImage(domain_idx, n_owner_idx, width, "", false) ;
 	}
 	
-	public static String getProfileImage(String domain, int n_owner_idx, int width, String imageShape) {
-		return getProfileImage(domain, n_owner_idx, width, "", false) ;
+	public static String getProfileImage(String domain_idx, int n_owner_idx, int width, String imageShape) {
+		return getProfileImage(domain_idx, n_owner_idx, width, "", false) ;
 	}
 	
-	public static String getProfileImage(String domain, int n_owner_idx, int width, String imageShape, boolean isGrayScale) {
-		if( domain == null || n_owner_idx <=0)return null ;
+	public static String getProfileImage(String domain_idx, int n_owner_idx, int width, String imageShape, boolean isGrayScale) {
+		if( domain_idx == null || n_owner_idx <=0)return null ;
 		if(width<=0)width=50 ;
 		
 		if(imageShape == null || "".equals(imageShape)) imageShape = ImageShape.NORMAL ;	// -- rounded, polaroid, circle
@@ -139,9 +138,9 @@
 		String sUserInfo = "";
 		
 		if(isGrayScale) {
-			sUserInfo = String.format(Config.getProperty("init", Cs.USER_PROFILE_IMAGE_URN), domain, n_owner_idx + "_g", domain) ;
+			sUserInfo = String.format(Config.getProperty("init", Cs.USER_PROFILE_IMAGE_URN), domain_idx, n_owner_idx + "_g", domain_idx) ;
 		} else {
-			sUserInfo = String.format(Config.getProperty("init", Cs.USER_PROFILE_IMAGE_URN), domain, n_owner_idx, domain) ;
+			sUserInfo = String.format(Config.getProperty("init", Cs.USER_PROFILE_IMAGE_URN), domain_idx, n_owner_idx, domain_idx) ;
 		}
 		
 		return String.format("<img src='%s' onerror=\"this.src='/html/images/avatar.png'\" class='%s' width='%spx' height='%spx' />", sUserInfo, imageShape, width, width) ;
