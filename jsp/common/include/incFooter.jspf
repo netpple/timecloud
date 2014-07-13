@@ -1,0 +1,28 @@
+
+<script>
+var noti = $(".noti");
+noti.scroll(function() {
+	var sc = parseInt(noti.outerHeight()) + parseInt(150);
+	if ( noti[0].scrollHeight - noti.scrollTop() <= sc){
+		var listCount = noti.attr('listCount');
+		$.ajax({
+			type : 'post',
+			async : true,
+			url : "notificationAction.jsp?listCount="+listCount,
+			beforeSend : function() {
+				$('#notificationLoading').show().fadeIn('fast'); 
+			},
+			success : function(data) {
+				if(data != -1){
+					$('.media-list').append(data);	
+					noti.attr("listCount",parseInt(listCount) + parseInt(10));
+				}
+			},
+			complete : function() {
+				$('#notificationLoading').fadeOut();
+			}
+		});
+	}
+});
+</script>
+

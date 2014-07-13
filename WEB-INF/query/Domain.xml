@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-statement>
+    <query>
+        <id>SELECT_DOMAIN_LIST</id>
+        <value>
+            SELECT
+            A.N_IDX AS N_IDX
+            , A.V_NAME
+            , A.C_OFF_YN
+            , FN_TIMEGAP(A.V_REG_DATETIME) AS V_REG_DATETIME
+            , FN_TIMEGAP(A.V_EDT_DATETIME) AS V_EDT_DATETIME
+            , (SELECT COUNT(*) FROM TIMECLOUD_DOMAIN_USER WHERE N_DOMAIN_IDX = N_IDX) AS USER_CNT
+            FROM
+            TIMECLOUD_DOMAIN A
+            WHERE
+            A.C_DEL_YN = 'N'
+            ORDER BY
+            A.N_IDX ASC
+        </value>
+        <description></description>
+    </query>
+    <query>
+        <id>INSERT_DOMAIN</id>
+        <value>
+            INSERT INTO
+            TIMECLOUD_DOMAIN(N_IDX,V_NAME,V_REG_DATETIME,V_EDT_DATETIME,C_DEL_YN,C_OFF_YN)
+            VALUES (
+            SEQ_DOMAIN_IDX.NEXTVAL
+            ,?
+            ,TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            ,TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            ,'N'
+            ,'N'
+            )
+        </value>
+    </query>
+    <query>
+        <id>UPDATE_DOMAIN_OFF</id>
+        <value>
+            UPDATE TIMECLOUD_DOMAIN SET C_OFF_YN = 'Y'
+            ,v_edt_datetime=TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            WHERE N_IDX=?
+        </value>
+        <description></description>
+    </query>
+    <query>
+        <id>UPDATE_DOMAIN_ON</id>
+        <value>
+            UPDATE TIMECLOUD_DOMAIN SET C_OFF_YN = 'N'
+            ,v_edt_datetime=TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            WHERE N_IDX=?
+        </value>
+        <description></description>
+    </query>
+    <query>
+        <id>DELETE_DOMAIN</id>
+        <value>
+            UPDATE TIMECLOUD_DOMAIN SET C_DEL_YN = 'Y'
+            ,v_edt_datetime=TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            WHERE N_IDX=?
+        </value>
+        <description></description>
+    </query>
+    <query>
+        <id>RECOVER_DOMAIN</id>
+        <value>
+            UPDATE TIMECLOUD_DOMAIN SET C_DEL_YN = 'N'
+            ,v_edt_datetime=TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            WHERE N_IDX=?
+        </value>
+        <description></description>
+    </query>
+</sql-statement>

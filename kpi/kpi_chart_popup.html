@@ -1,0 +1,47 @@
+<html>	
+<head>
+	<title></title>         
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<style type="text/css">
+		html,body {
+			height : 100% ;
+		}
+	</style>
+	<link href="css/main_cello.css" rel="stylesheet" type="text/css">        
+	<link href="chart/chart.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="chart/swfobject.js"></script>
+	<script type="text/javascript" src="chart/chart.js"></script>
+	<script type="text/javascript">/*<![cdata[*/         
+		def_flashvars.lang = opener.def_flashvars.lang ;
+		def_flashvars.chartbaseurl = opener.def_flashvars.chartbaseurl ;
+		
+		function init() {
+			if(window.opener.closed)window.close() ;
+			document.title = opener.document.title ;
+			var chartId = opener._nowFullChartId ;
+			var chartType = opener._nowFullChartType ;
+			var chartXmlObj = opener.document.getElementById(chartId+"XML") ;
+			
+			var xmlObj = document.getElementById("chartFullXML") ;
+			var temp = chartXmlObj.value ;
+			
+			temp = replaceAll(temp, 'wheel="disabled"', 'wheel="enabled"') ;
+			temp = replaceAll(temp, 'drag="disabled"', 'drag="enabled"') ;
+			
+			xmlObj.value = temp ;
+			
+			addChart("chartFullPool", "chartFull", chartType, -1, -1) ;
+		}
+		
+		function replaceAll(str,src,tar) {
+			var temp = str ;
+			temp = temp.split( src ).join( tar ) ;
+			return temp ;
+		}
+	/*]]>*/</script>
+</head>
+<body onLoad="javascript:init() ;">
+	<div id="chartFullPool"></div>
+	<input type='hidden' id='chartFullXML' name='chartFullXML' value='' />		
+</body>
+</html>

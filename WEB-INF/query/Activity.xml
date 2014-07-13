@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-statement>
+	<query>
+		<id>SELECT_ACTIVITY_LIST</id>
+		<value>
+			SELECT 
+				N_IDX, V_DESC, V_START_DATETIME, V_END_DATETIME
+				, ceil(to_date(SUBSTR(v_start_datetime,0,8),'yyyymmdd') - to_date(to_char(sysdate,'yyyymmdd'),'yyyymmdd')) as n_start_gap
+				, ceil(to_date(SUBSTR(v_end_datetime,0,8),'yyyymmdd') - to_date(to_char(sysdate,'yyyymmdd'),'yyyymmdd') ) as n_end_gap
+			FROM TIMECLOUD_ACTIVITY 
+			WHERE (N_TASK_IDX = ? AND N_OWNER_IDX = ?) 
+			AND C_DEL_YN = 'N'
+			-- AND ( V_START_DATETIME LIKE ('201212%') OR V_END_DATETIME LIKE ('201212%') )
+			ORDER BY N_IDX DESC
+		</value>
+		<description>액티비티 목록</description>
+	</query>
+	<query>
+		<id>SELECT_TASK_ALL_ACTIVITY_LIST</id>
+		<value>
+			SELECT 
+                N_IDX, V_DESC, V_START_DATETIME, V_END_DATETIME
+                , ceil(to_date(SUBSTR(v_start_datetime,0,8),'yyyymmdd') - to_date(to_char(sysdate,'yyyymmdd'),'yyyymmdd')) as n_start_gap
+                , ceil(to_date(SUBSTR(v_end_datetime,0,8),'yyyymmdd') - to_date(to_char(sysdate,'yyyymmdd'),'yyyymmdd') ) as n_end_gap
+                , N_TASK_IDX
+            FROM TIMECLOUD_ACTIVITY 
+            WHERE N_TASK_IDX IN (SELECT N_IDX FROM TIMECLOUD_TASK WHERE N_LIST = (SELECT N_LIST FROM TIMECLOUD_TASK WHERE N_IDX = ?))
+            AND C_DEL_YN = 'N'
+            -- AND ( V_START_DATETIME LIKE ('201212%') OR V_END_DATETIME LIKE ('201212%') )
+            ORDER BY N_IDX DESC
+		</value>
+		<description>액티비티 목록</description>
+	</query>
+	
+	<query>
+		<id>SELECT_ALL_ACTIVITY_LIST</id>
+		<value>
+			SELECT 
+				N_IDX, V_DESC, V_START_DATETIME, V_END_DATETIME
+				, ceil(to_date(SUBSTR(v_start_datetime,0,8),'yyyymmdd') - to_date(to_char(sysdate,'yyyymmdd'),'yyyymmdd')) as n_start_gap
+				, ceil(to_date(SUBSTR(v_end_datetime,0,8),'yyyymmdd') - to_date(to_char(sysdate,'yyyymmdd'),'yyyymmdd') ) as n_end_gap
+				, N_TASK_IDX
+			FROM TIMECLOUD_ACTIVITY 
+			WHERE N_OWNER_IDX = ?
+			AND C_DEL_YN = 'N'
+			ORDER BY N_IDX DESC
+		</value>
+		<description>액티비티 목록</description>
+	</query>
+	
+	
+	<query>
+		<id>SELECT_ACTIVITY_INFO</id>
+		<value>
+			SELECT 
+				N_IDX, V_DESC, V_START_DATETIME, V_END_DATETIME, V_REG_DATETIME, V_EDT_DATETIME				
+			FROM TIMECLOUD_ACTIVITY 
+			WHERE (N_IDX = ? AND N_OWNER_IDX = ?) 
+			AND C_DEL_YN = 'N'
+		</value>
+		<description>액티비티 정보</description>	    
+	</query>
+	<query>
+	    <id>SELECT_ACTIVITY_SEQ</id>
+	    <value>
+	        SELECT seq_activity_idx.nextval FROM DUAL
+	    </value>
+	    <description>액티비티 시퀀스 생성</description>
+	</query>
+	<query>
+		<id>INSERT_ACTIVITY</id>
+		<value>
+			INSERT INTO TIMECLOUD_ACTIVITY(
+				N_IDX, 
+				N_TASK_IDX, 
+				V_DESC, 
+				V_START_DATETIME, 
+				V_END_DATETIME, 
+				V_REG_DATETIME, 
+				V_EDT_DATETIME, 
+				N_OWNER_IDX,
+                N_DOMAIN_IDX
+			) VALUES (
+				SEQ_ACTIVITY_IDX.nextval,		
+				?,		
+				?,
+				?,
+				?,	
+				TO_CHAR(sysdate,'YYYYMMDDHH24MISS'),
+				TO_CHAR(sysdate,'YYYYMMDDHH24MISS'),
+				?,
+                ?
+			)
+		</value>
+		<description>태스크 할당 시 자동액티비티 등록(할당대상자용)</description>
+	</query>
+	<query>
+		<id>INSERT_ACTIVITY2</id>
+		<value>
+			INSERT INTO TIMECLOUD_ACTIVITY(
+				N_IDX, 
+				N_TASK_IDX, 
+				V_DESC, 
+				V_START_DATETIME, 
+				V_END_DATETIME, 
+				V_REG_DATETIME, 
+				V_EDT_DATETIME, 
+				N_OWNER_IDX,
+                N_DOMAIN_IDX
+			) VALUES (
+				?,		
+				?,		
+				?,
+				?,
+				?,	
+				TO_CHAR(sysdate,'YYYYMMDDHH24MISS'),
+				TO_CHAR(sysdate,'YYYYMMDDHH24MISS'),
+				?,
+                ?
+			)
+		</value>
+		<description>태스크 할당 시 캘린더 출력을 위해 시퀀스를 직접 받음</description>
+	</query>
+	<query>
+		<id>INSERT_ACTIVITY3</id>
+		<value>
+			INSERT INTO TIMECLOUD_ACTIVITY(
+				N_IDX, 
+				N_TASK_IDX, 
+				V_DESC, 
+				V_START_DATETIME, 
+				V_END_DATETIME, 
+				V_REG_DATETIME, 
+				V_EDT_DATETIME, 
+				N_OWNER_IDX,
+                N_DOMAIN_IDX
+			) VALUES (
+				SEQ_ACTIVITY_IDX.nextval,		
+				?,		
+				?,
+				TO_CHAR(sysdate,'YYYYMMDDHH24MISS'),
+				TO_CHAR(sysdate,'YYYYMMDDHH24MISS'),
+				TO_CHAR(sysdate,'YYYYMMDDHH24MISS'),
+				TO_CHAR(sysdate,'YYYYMMDDHH24MISS'),
+				?,
+                ?
+			)
+		</value>
+		<description>로그성 액티비티 등록</description>
+	</query>
+	
+	<query>
+	    <id>UPDATE_ACTIVITY_DATETIME</id>
+	    <value>
+	        UPDATE TIMECLOUD_ACTIVITY SET
+	        	v_start_datetime=?,
+	        	v_end_datetime=?,
+	        	v_edt_datetime=to_char(sysdate,'YYYYMMDDHH24MISS')
+	        WHERE N_IDX=? AND N_OWNER_IDX=?
+	    </value>
+	    <description>달력에서 액티비티 날짜 수정</description>
+	</query>
+	
+	<query>
+		<id>SELECT_ACTIVITY_ALL</id>
+		<value>
+			SELECT 
+				X.N_IDX, X.N_OWNER_IDX, X.N_TASK_IDX,
+				X.V_DESC, X.V_REG_DATETIME,
+				Y.V_DESC AS V_TASK_DESC, Y.N_OWNER_IDX AS N_TASK_OWNER ,
+				(SELECT V_NAME FROM TIMECLOUD_USER WHERE N_IDX=X.N_OWNER_IDX) AS V_ACTIVITY_OWNER
+				,Y.C_STATUS
+			FROM TIMECLOUD_ACTIVITY X,
+			(
+				SELECT A.V_DESC, A.N_IDX, A.N_OWNER_IDX, A.C_STATUS
+				FROM TIMECLOUD_TASK A
+					, ( SELECT N_LIST FROM TIMECLOUD_TASK WHERE N_OWNER_IDX = ? GROUP BY N_LIST) B 
+				WHERE A.N_LIST = B.N_LIST
+				UNION
+                SELECT A.V_DESC, A.N_IDX, A.N_OWNER_IDX, A.C_STATUS
+                FROM TIMECLOUD_TASK A
+                    , ( 
+                    	SELECT E.N_IDX AS N_TASK_IDX FROM TIMECLOUD_TASK E, 
+                    	(
+	                    	SELECT D.N_LIST FROM TIMECLOUD_OBSERVER C, TIMECLOUD_TASK D 
+	                    	WHERE (C.N_TASK_IDX=D.N_IDX) AND C.N_OWNER_IDX = ? 
+	                    	GROUP BY D.N_LIST                    	
+	                    ) F WHERE E.N_LIST = F.N_LIST
+                    ) B   
+                WHERE A.N_IDX = B.N_TASK_IDX				
+			) Y
+			WHERE X.N_TASK_IDX=Y.N_IDX 
+			AND X.C_DEL_YN = 'N'
+			ORDER BY X.N_IDX DESC		    
+		</value>
+		<description>소속 태스크그룹 내 모든 액티비티 조회</description>
+	</query>
+	<query>
+	    <id>SELECT_ACTIVITY_MYTASK</id>
+	    <value>
+			SELECT 
+				X.N_IDX, X.N_OWNER_IDX,X.N_TASK_IDX,
+				X.V_DESC, X.V_REG_DATETIME,
+				Y.V_DESC AS V_TASK_DESC, Y.N_OWNER_IDX AS N_TASK_OWNER,
+				(SELECT V_NAME FROM TIMECLOUD_USER WHERE N_IDX=X.N_OWNER_IDX) AS V_ACTIVITY_OWNER
+				,Y.C_STATUS
+			FROM TIMECLOUD_ACTIVITY X, TIMECLOUD_TASK Y 
+			WHERE X.N_TASK_IDX = Y.N_IDX
+			AND X.C_DEL_YN = 'N' 
+			AND Y.N_OWNER_IDX=?
+			ORDER BY X.N_IDX DESC
+		</value>
+		<description>내태스크의 액티비티 조회</description>	    
+	</query>
+	<query>
+		<id>SELECT_ACTIVITY_CHILD</id>
+		<value>
+			SELECT 
+				X.N_IDX, X.N_OWNER_IDX, X.N_TASK_IDX,
+				X.V_DESC, X.V_REG_DATETIME,
+				Y.V_DESC AS V_TASK_DESC, Y.N_OWNER_IDX AS N_TASK_OWNER,
+				(SELECT V_NAME FROM TIMECLOUD_USER WHERE N_IDX=X.N_OWNER_IDX) AS V_ACTIVITY_OWNER
+				,Y.C_STATUS
+			FROM TIMECLOUD_ACTIVITY X,
+			(
+				SELECT A.V_DESC, A.N_IDX, A.N_OWNER_IDX, A.C_STATUS 
+				FROM TIMECLOUD_TASK A, TIMECLOUD_TASK B 
+				WHERE (A.N_PARENT_IDX = B.N_IDX)
+				AND A.N_LEVEL > 0 AND B.N_OWNER_IDX = ?
+			) Y
+			WHERE X.N_TASK_IDX=Y.N_IDX
+			AND X.C_DEL_YN = 'N'
+			ORDER BY X.N_IDX DESC		    
+		</value>
+		<description>내가 할당한 자식태스크의 액티비티 조회</description>
+	</query>
+	<query>
+	    <id>SELECT_ACTIVITY_OBSERVER</id>
+	    <value>
+			SELECT 
+				X.N_IDX, X.N_OWNER_IDX,X.N_TASK_IDX,
+				X.V_DESC, X.V_REG_DATETIME,
+				Y.V_DESC AS V_TASK_DESC, Y.N_OWNER_IDX AS N_TASK_OWNER,
+				(SELECT V_NAME FROM TIMECLOUD_USER WHERE N_IDX=X.N_OWNER_IDX) AS V_ACTIVITY_OWNER
+				,Y.C_STATUS
+			FROM TIMECLOUD_ACTIVITY X, TIMECLOUD_TASK Y, TIMECLOUD_OBSERVER Z 
+			WHERE (X.N_TASK_IDX = Y.N_IDX AND Y.N_IDX = Z.N_TASK_IDX)
+			AND X.C_DEL_YN = 'N' 
+			AND Z.N_OWNER_IDX=?
+			ORDER BY X.N_IDX DESC
+		</value>
+		<description>내가 참조받은 태스크의 액티비티 조회</description>	    
+	</query>	
+	
+	<query>
+	    <id>DELETE_ACTIVITY</id>
+	    <value>
+	        UPDATE TIMECLOUD_ACTIVITY
+	        SET C_DEL_YN = 'Y'
+	        WHERE N_IDX = ?
+		</value>
+		<description>액티비티 삭제</description>	    
+	</query>		
+</sql-statement>

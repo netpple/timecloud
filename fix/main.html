@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Roa Consulting</title>
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<link href="assets/css/bootstrap.css" rel="stylesheet" />
+		<link href="assets/css/bootstrap-responsive.css" rel="stylesheet" />
+		<link rel="stylesheet" href="assets/css/font-awesome.css" />
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
+		<link rel="stylesheet" href="assets/css/ace.css" />
+		<link rel="stylesheet" href="assets/css/ace-responsive.css" />
+		<link rel="stylesheet" href="assets/css/ace-skins.css" />
+	</head>
+
+	<body class="navbar-fixed">
+		<div class="navbar navbar-inverse navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container-fluid">
+					<a href="#" class="brand">
+						<small>
+							Roa Consulting 
+						</small>
+					</a><!--/.brand-->
+					
+					<div id="nav-global-search">
+						<form class="form-search">
+							<span class="input-icon">
+								<input type="text" placeholder="Search Anything" class="input-small search-query nav-global-search-input" id="nav-search-input" autocomplete="off" />
+								<i class="icon-search" id="nav-search-icon"></i>
+							</span>
+						</form>
+					</div><!--#nav-search-->					
+					
+					<ul class="profile nav ace-nav pull-right">
+						<li class="transaprent user-profile">
+							<a data-toggle="dropdown" href="#" class="user-menu dropdown-toggle">
+								<img class="nav-user-photo" src="hwang.png" alt="Profile Photo" />
+								<span id="user_info">
+									<small>활동지수 2위</small>
+									InSeoHwang
+								</span>
+								<i class="icon-caret-down"></i>
+							</a>
+							<ul class="pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer" id="user_menu">
+								<li>
+									<a href="#">
+										<i class="icon-cog"></i>
+										Settings
+									</a>
+								</li>
+
+								<li>
+									<a href="#">
+										<i class="icon-user"></i>
+										Profile
+									</a>
+								</li>
+
+								<li class="divider"></li>
+
+								<li>
+									<a href="#">
+										<i class="icon-off"></i>
+										Logout
+									</a>
+								</li>
+							</ul>
+						</li>
+						<div id="kpi-summary-chart"></div>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid" id="main-container">
+			<a id="menu-toggler" href="#">
+				<span></span>
+			</a>
+
+			<div id="notification" class="fixed" style="background:red">
+				<div class="itemdiv memberdiv notification">
+					<div class="user">
+						<img alt="Profile Photo" src="jykim.png" />
+					</div>
+				
+					<div class="body">
+						<div>
+							<a href="#">김진영</a>님이 <strong>태스크를 할당</strong>했습니다. "B-Camp참가신청 및 자료를 위해 업무 분장을 요청드리..."
+						</div>
+						<div class="time">
+							<i class="icon-time"></i>
+							<span class="green">방금</span>
+						</div>
+					</div>
+				</div>						
+				<div class="itemdiv memberdiv notification">
+					<div class="user">
+						<img alt="Profile Photo" src="jykim.png" />
+					</div>
+				
+					<div class="body">
+						<div>
+							<a href="#">김진영</a>님이 <strong>피드백</strong>을 남겼습니다. "A-Camp에서 여러분과 함께해서 너무 즐거웠습니다! 다음에 기회가.."
+						</div>
+						<div class="time">
+							<i class="icon-time"></i>
+							<span class="green">13분전</span>
+						</div>
+					</div>
+				</div>						
+				<div class="itemdiv memberdiv notification">
+					<div class="user">
+						<img alt="Profile Photo" src="jykim.png" />
+					</div>
+				
+					<div class="body">
+						<div>
+							<a href="#">김진영</a>님이 <strong>파일</strong>을 업로드 했습니다. "IR.ppt"
+						</div>
+						<div class="time">
+							<i class="icon-time"></i>
+							<span class="green">15분전</span>
+						</div>
+					</div>
+				</div>						
+				<div class="itemdiv memberdiv notification">
+					<div class="user">
+						<img alt="Profile Photo" src="jykim.png" />
+					</div>
+				
+					<div class="body">
+						<div>
+							<a href="#">김진영</a>님이 <strong>태스크를 참조</strong>했습니다. "B-Camp 12월"
+						</div>
+						<div class="time">
+							<i class="icon-time"></i>
+							<span class="green">18분전</span>
+						</div>
+					</div>
+				</div>						
+				<div class="itemdiv memberdiv notification">
+					<div class="user">
+						<img alt="Profile Photo" src="hwang.png" />
+					</div>
+				
+					<div class="body">
+						<div>
+							<a href="#">황인서</a>님이 <strong>파일</strong>을 업로드 하였습니다. "SmartSon UI 구성도.ppt"
+						</div>
+						<div class="time">
+							<i class="icon-time"></i>
+							<span class="green">25분전</span>
+						</div>
+					</div>
+				</div>						
+				<div class="itemdiv memberdiv notification">
+					<div class="user">
+						<img alt="Profile Photo" src="jykim.png" />
+					</div>
+				
+					<div class="body">
+						<div>
+							<a href="#">김진영</a>님이 <strong>피드백</strong>을 남겼습니다. "이번에 워크샵은 어디로 가면 좋을까요?"
+						</div>
+						<div class="time">
+							<i class="icon-time"></i>
+							<span class="green">33분전</span>
+						</div>
+					</div>
+				</div>						
+				<div class="itemdiv memberdiv notification">
+					<div class="user">
+						<img alt="Profile Photo" src="jykim.png" />
+					</div>
+				
+					<div class="body">
+						<div>
+							<a href="#">김진영</a>님이 <strong>파일</strong>을 업로드 하셨습니다. "투자심사.ppt"
+						</div>
+						<div class="time">
+							<i class="icon-time"></i>
+							<span class="green">1시간전</span>
+						</div>
+					</div>
+				</div>						
+				<div class="itemdiv memberdiv notification">
+					<div class="user">
+						<img alt="Profile Photo" src="hwang.png" />
+					</div>
+				
+					<div class="body">
+						<div>
+							<a href="#">황인서</a>님이 <strong>피드백을</strong>남겼습니다. "스마트손 프로젝트가 거의다 끝나가네요ㅋㅋ"
+						</div>
+						<div class="time">
+							<i class="icon-time"></i>
+							<span class="green">15분전</span>
+						</div>
+					</div>
+				</div>						
+				<div class="itemdiv memberdiv notification">
+					<div class="user">
+						<img alt="Profile Photo" src="jykim.png" />
+					</div>
+				
+					<div class="body">
+						<div>
+							<a href="#">김진영</a>님이 <strong>태스크를</strong>할당 하셨습니다. "태스크 투게더 보완사항"
+						</div>
+						<div class="time">
+							<i class="icon-time"></i>
+							<span class="green">15분전</span>
+						</div>
+					</div>
+				</div>						
+			</div>
+
+			<div id="main-content" class="clearfix">
+				<div class="span6 no-margin">
+					<div id="page-content" class="clearfix">
+						<div class="page-header position-relative">
+							<h1>태스크</h1>
+						</div>
+						
+						<div class="row-fluid">
+							<form class="form-search">
+								<span class="input-icon input-icon-right">
+									<input type="text" class="input-xlarge" id="main-task-input" placeholder="태스크를 입력하세요">
+									<i class="icon-edit"></i>
+								</span>
+							</form>
+							
+							<div class="widget-box">
+								<div id="task-tab" class="tab-pane active">
+									<h4 class="smaller lighter">
+									<i class="icon-list blue"></i>
+										<span class="blue">내가 할일</span>
+									</h4>
+
+									<ul id="my-task" class="item-list ui-sortable">
+										<li class="item-blue">
+											<label class="inline">
+												<input type="checkbox">
+												<span class="lbl"> B-Camp 참가 신청 및 자료준비를 위해 업무 ...</span>
+											</label>
+										</li>
+										<li class="item-blue">
+											<label class="inline">
+												<input type="checkbox">
+												<span class="lbl"> [RTI] Riding Together For Android</span>
+											</label>
+										</li>
+										<li class="item-blue selected">
+											<label class="inline">
+												<input type="checkbox" checked="checked">
+												<span class="lbl"> 스마트손 지도 이슈 ( 이동경로 및 표시 문제 )</span>
+											</label>
+										</li>
+										<li class="item-blue">
+											<label class="inline">
+												<input type="checkbox">
+												<span class="lbl"> 태스크 투게더 키 컨셉 및 BM 설계</span>
+											</label>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<br/>
+							<div class="widget-box">
+								<div id="task-tab" class="tab-pane active">
+									<h4 class="smaller lighter">
+									<i class="icon-list brown"></i>
+										<span class="brown">내가 시킨 일</span>
+									</h4>
+
+									<ul id="asign-task" class="item-list ui-sortable">
+										<li class="item-brown">
+											<label class="inline">
+												<input type="checkbox">
+												<span class="lbl"> Riding Together iOS 개발환경 포팅</span>
+											</label>
+										</li>
+										<li class="item-brown">
+											<label class="inline">
+												<input type="checkbox">
+												<span class="lbl"> 태스크투게더 개선사항 취합</span>
+											</label>
+										</li>
+										<li class="item-brown">
+											<label class="inline">
+												<input type="checkbox">
+												<span class="lbl"> Akka & PlayFramework API 번역</span>
+											</label>
+										</li>
+										<li class="item-brown">
+											<label class="inline">
+												<input type="checkbox">
+												<span class="lbl"> ORM Framework 조사</span>
+											</label>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<br/>
+							<div class="widget-box">
+								<div id="task-tab" class="tab-pane active">
+									<h4 class="smaller lighter">
+									<i class="icon-list green"></i>
+										<span class="green">내가 참조된 일</span>
+									</h4>
+
+									<ul id="ref-task" class="item-list ui-sortable">
+										<li class="item-green">
+											<label class="inline">
+												<input type="checkbox">
+												<span class="lbl"> 라이딩 투게더 안드로이드 버전 개발</span>
+											</label>
+										</li>
+										<li class="item-green">
+											<label class="inline">
+												<input type="checkbox">
+												<span class="lbl"> 스마트손 최종 검수 보고</span>
+											</label>
+										</li>
+										<li class="item-green">
+											<label class="inline">
+												<input type="checkbox">
+												<span class="lbl"> 망관리툴 현업 미팅</span>
+											</label>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="span6 no-margin">
+					<div id="page-content" class="clearfix">
+						<div class="page-header position-relative">
+							<h1>프로젝트</h1>
+						</div>
+						<div class="row-fluid">
+						
+							<div class="well">
+								<h4 class="green smaller lighter">[Velo] Riding Together Project</h4>
+								기간 : 2013-10-01 ~ 2013-12-30 <br/>
+								참여자 : <a href="#">김삼영</a> / <a href="#">유가람</a> / <a href="#">황인서</a> / <a href="#">노지훈</a> <br/>
+								최근태스크 : <a href="#">Riding Together Server 구성</a>
+							</div>
+							
+							<div class="well">
+								<h4 class="brown smaller lighter">망관리툴 Eng. 과제</h4>
+								기간 : 2013-09-01 ~ 2013-12-16 <br/>
+								참여자 : <a href="#">김삼영</a> / <a href="#">황인서</a><br/>
+								최근태스크 : <a href="#">멀티 타겟기능 구현 검토</a>
+							</div>
+							
+							<div class="well">
+								<h4 class="orange smaller lighter">Stellar - Task Together Solution 작업</h4>
+								기간 : 2013-10-07 ~ 2013-11-20 <br/>
+								참여자 : <a href="#">김삼영</a> / <a href="#">유가람</a> / <a href="#">황인서</a> <br/>
+								최근태스크 : <a href="#">BM 수립 / 화면 레이아웃 및 화면설계서 구상</a>
+							</div>
+							
+							<div class="well">
+								<h4 class="blue smaller lighter">스마트손 매니저 ENG 과제</h4>
+								기간 : 2013-10-11 ~ 2013-12-20 <br/>
+								참여자 : <a href="#">김삼영</a> / <a href="#">유가람</a> / <a href="#">황인서</a> <br/>
+								최근태스크 : <a href="#">Multi Thread Pool Enb Apply</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse">
+			<i class="icon-double-angle-up icon-only bigger-110"></i>
+		</a>
+
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='assets/js/jquery-1.9.1.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="assets/js/bootstrap.min.js"></script>
+		<script src="assets/js/ace-elements.min.js"></script>
+		<script src="assets/js/ace.min.js"></script>
+		<script src="assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+		<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+		<script src="assets/js/jquery.slimscroll.min.js"></script>
+		<script src="assets/js/jquery.easy-pie-chart.min.js"></script>
+		<script src="assets/js/jquery.sparkline.min.js"></script>
+		<script src="assets/js/flot/jquery.flot.min.js"></script>
+		<script src="assets/js/flot/jquery.flot.pie.min.js"></script>
+		<script src="assets/js/flot/jquery.flot.resize.min.js"></script>		
+		<script type="text/javascript">
+			$(document).ready(function() {
+				var data = [
+					{ data: 38.7, color: "#68BC31"},
+					{ data: 24.5, color: "#2091CF"},
+					{ data: 8.2, color: "#AF4E96"},
+					{ data: 18.6, color: "#DA5430"},
+					{ data: 10, color: "#FEE074"}
+				];
+				
+				var placeholder = $('#kpi-summary-chart').css({'width':'30px' , 'min-height':'30px'});
+				$.plot(placeholder, data, {
+					series: {
+						pie: {
+							show: true
+						}
+					}
+				});
+
+				$('#my-task').sortable();
+				$('#my-task input:checkbox').on('click', function(){
+					if(this.checked) $(this).closest('li').addClass('selected');
+					else $(this).closest('li').removeClass('selected');
+				});
+
+				$('#asign-task').sortable();
+				$('#asign-task input:checkbox').on('click', function(){
+					if(this.checked) $(this).closest('li').addClass('selected');
+					else $(this).closest('li').removeClass('selected');
+				});
+
+				$('#ref-task').sortable();
+				$('#ref-task input:checkbox').on('click', function(){
+					if(this.checked) $(this).closest('li').addClass('selected');
+					else $(this).closest('li').removeClass('selected');
+				});
+			});
+		</script>
+	</body>
+</html>

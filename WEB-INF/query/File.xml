@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-statement>
+
+	<query>
+		<id>SELECT_FILE_SEQUENCE</id>
+		<value>
+		    SELECT SEQ_FILE_IDX.NEXTVAL FROM DUAL
+		</value>
+		<description>파일 업로드 시퀀스</description>
+	</query>
+
+	<query>
+		<id>DELETE_FILE</id>
+		<value>
+		    UPDATE 
+		    	TIMECLOUD_FILE
+		    SET
+		    	C_DEL_YN = 'Y'
+		    WHERE
+		    	N_IDX = ?
+		</value>
+		<description>파일 삭제처리</description>
+	</query>
+
+	<query>
+		<id>UPDATE_FILE_COUNT</id>
+		<value>
+		    UPDATE 
+		    	TIMECLOUD_FILE
+		    SET
+		    	N_DOWNLOAD_COUNT = N_DOWNLOAD_COUNT + 1
+		    WHERE
+		    	N_IDX = ?
+		</value>
+		<description>파일 다운로드 횟수 업데이트</description>
+	</query>
+
+	<query>
+		<id>SELECT_FILE_LIST</id>
+		<value>
+          SELECT
+                A.N_IDX
+                ,A.V_ORIGIN_NAME
+                ,A.V_SAVE_NAME
+                ,A.V_EXT
+                ,A.N_FILE_SIZE
+                ,A.N_OWNER_IDX
+                ,A.V_REG_DATETIME
+                ,A.C_DEL_YN
+                ,B.V_NAME
+                ,A.N_TASK_IDX
+                ,A.N_DOWNLOAD_COUNT
+                ,FN_TIMEGAP(A.V_REG_DATETIME) as timegap
+            FROM
+                TIMECLOUD_FILE A, TIMECLOUD_USER B
+            WHERE
+                A.N_TASK_IDX = ? AND A.C_DEL_YN = 'N' AND A.N_OWNER_IDX = B.N_IDX
+            ORDER BY A.N_IDX ASC
+		</value>
+		<description>파일 목록 가져오기</description>
+	</query>
+
+	<query>
+	    <id>SELECT_FILE_TASKLIST</id>
+	    <value>
+			SELECT 
+				X.N_IDX, X.N_OWNER_IDX,X.N_TASK_IDX,
+				X.V_ORIGIN_NAME, X.V_REG_DATETIME,
+				Y.V_DESC AS V_TASK_DESC, Y.N_OWNER_IDX AS N_TASK_OWNER,
+				(SELECT V_NAME FROM TIMECLOUD_USER WHERE N_IDX=X.N_OWNER_IDX) AS V_FILE_OWNER
+			FROM TIMECLOUD_FILE X, TIMECLOUD_TASK Y 
+			WHERE X.N_TASK_IDX = Y.N_IDX
+			AND X.C_DEL_YN = 'N'
+			AND Y.N_LIST= ?
+			ORDER BY X.N_TASK_IDX ASC, X.N_IDX ASC
+		</value>
+		<description>태스크리스트 내 파일 조회</description>	    
+	</query>		
+	
+	<query>
+		<id>SELECT_FILE_INFO</id>
+		<value>
+		   SELECT
+				N_IDX,
+				N_TASK_IDX,
+		    	V_ORIGIN_NAME,
+		    	V_SAVE_NAME,
+		    	V_EXT,
+		    	N_FILE_SIZE,
+		    	N_OWNER_IDX,
+		    	V_REG_DATETIME,
+		    	C_DEL_YN
+		    FROM
+		    	TIMECLOUD_FILE
+		    WHERE
+		    	N_IDX = ?
+		</value>
+		<description>파일 정보 조회</description>
+	</query>
+
+	<query>
+		<id>INSERT_FILE</id>
+		<value>
+		    INSERT INTO TIMECLOUD_FILE (
+		    	N_IDX,
+		    	N_TASK_IDX,
+		    	V_ORIGIN_NAME,
+		    	V_SAVE_NAME,
+		    	V_EXT,
+		    	N_FILE_SIZE,
+		    	N_OWNER_IDX,
+		    	V_REG_DATETIME,
+		    	C_DEL_YN,
+                N_DOMAIN_IDX
+		    ) VALUES (
+		    	?,		-- N_IDX
+		    	?,		-- N_TASK_IDX
+		    	?,		-- V_ORIGIN_NAME
+		    	?,		-- V_SAVE_NAME
+		    	?,		-- V_EXT
+		    	?,		-- N_FIEL_SIZE
+		    	?,		-- N_OWNER_IDX
+		    	TO_CHAR(sysdate,'YYYYMMDDHH24MISS'),		-- V_REG_DATE
+		    	'N',
+                ? -- N_DOMAIN_IDX
+		    )
+		</value>
+		<description>FILE 정보 INSERT</description>
+	</query>
+	<!---->
+	<query>
+		<id>SELECT_FILE_ALL</id>
+		<value>
+			SELECT 
+				X.N_IDX, X.N_OWNER_IDX, X.N_TASK_IDX,
+				X.V_ORIGIN_NAME, X.V_REG_DATETIME,
+				Y.V_DESC AS V_TASK_DESC,Y.N_OWNER_IDX AS N_TASK_OWNER,
+				(SELECT V_NAME FROM TIMECLOUD_USER WHERE N_IDX=X.N_OWNER_IDX) AS V_FILE_OWNER
+				,Y.C_STATUS
+			FROM TIMECLOUD_FILE X,
+			(
+				SELECT A.V_DESC, A.N_IDX, A.N_OWNER_IDX, A.C_STATUS
+				FROM TIMECLOUD_TASK A
+					, ( SELECT N_LIST FROM TIMECLOUD_TASK WHERE N_OWNER_IDX = ? GROUP BY N_LIST) B 
+				WHERE A.N_LIST = B.N_LIST
+				UNION
+                SELECT A.V_DESC, A.N_IDX, A.N_OWNER_IDX, A.C_STATUS
+                FROM TIMECLOUD_TASK A
+                    , ( 
+                    	SELECT E.N_IDX AS N_TASK_IDX FROM TIMECLOUD_TASK E, 
+                    	(
+	                    	SELECT D.N_LIST FROM TIMECLOUD_OBSERVER C, TIMECLOUD_TASK D 
+	                    	WHERE (C.N_TASK_IDX=D.N_IDX) AND C.N_OWNER_IDX = ? 
+	                    	GROUP BY D.N_LIST                    	
+	                    ) F WHERE E.N_LIST = F.N_LIST
+                    ) B   
+                WHERE A.N_IDX = B.N_TASK_IDX
+			) Y
+			WHERE X.N_TASK_IDX=Y.N_IDX 
+			AND X.C_DEL_YN='N'
+			ORDER BY X.N_IDX DESC
+		</value>
+		<description>소속 태스크그룹 내 모든 파일 조회</description>
+	</query>
+	<query>
+	    <id>SELECT_FILE_MYTASK</id>
+	    <value>
+			SELECT 
+				X.N_IDX, X.N_OWNER_IDX,X.N_TASK_IDX,
+				X.V_ORIGIN_NAME, X.V_REG_DATETIME,
+				Y.V_DESC AS V_TASK_DESC,Y.N_OWNER_IDX AS N_TASK_OWNER,
+				(SELECT V_NAME FROM TIMECLOUD_USER WHERE N_IDX=X.N_OWNER_IDX) AS V_FILE_OWNER
+				,Y.C_STATUS
+			FROM TIMECLOUD_FILE X, TIMECLOUD_TASK Y 
+			WHERE X.N_TASK_IDX = Y.N_IDX 
+			AND X.C_DEL_YN='N'
+			AND Y.N_OWNER_IDX=?
+			ORDER BY X.N_IDX DESC
+		</value>
+		<description>내태스크의 파일 조회</description>	    
+	</query>
+	<query>
+		<id>SELECT_FILE_CHILD</id>
+		<value>
+			SELECT 
+				X.N_IDX, X.N_OWNER_IDX, X.N_TASK_IDX,
+				X.V_ORIGIN_NAME, X.V_REG_DATETIME,
+				Y.V_DESC AS V_TASK_DESC,Y.N_OWNER_IDX AS N_TASK_OWNER,
+				(SELECT V_NAME FROM TIMECLOUD_USER WHERE N_IDX=X.N_OWNER_IDX) AS V_FILE_OWNER
+				,Y.C_STATUS
+			FROM TIMECLOUD_FILE X,
+			(
+				SELECT A.V_DESC, A.N_IDX, A.N_OWNER_IDX, A.C_STATUS 
+				FROM TIMECLOUD_TASK A, TIMECLOUD_TASK B 
+				WHERE (A.N_PARENT_IDX = B.N_IDX)
+				AND A.N_LEVEL > 0 AND B.N_OWNER_IDX = ?
+			) Y
+			WHERE X.N_TASK_IDX=Y.N_IDX 
+			AND X.C_DEL_YN='N'
+			ORDER BY X.N_IDX DESC		    
+		</value>
+		<description>내가 할당한 자식태스크의 파일 조회</description>
+	</query>		
+	<query>
+		<id>SELECT_FILE_OBSERVER</id>
+		<value>
+			SELECT 
+				X.N_IDX, X.N_OWNER_IDX,X.N_TASK_IDX,
+				X.V_ORIGIN_NAME, X.V_REG_DATETIME,
+				Y.V_DESC AS V_TASK_DESC,Y.N_OWNER_IDX AS N_TASK_OWNER,
+				(SELECT V_NAME FROM TIMECLOUD_USER WHERE N_IDX=X.N_OWNER_IDX) AS V_FILE_OWNER
+				,Y.C_STATUS
+			FROM TIMECLOUD_FILE X, TIMECLOUD_TASK Y, TIMECLOUD_OBSERVER Z
+			WHERE (X.N_TASK_IDX = Y.N_IDX AND Y.N_IDX = Z.N_TASK_IDX)
+			AND X.C_DEL_YN='N' 
+			AND Z.N_OWNER_IDX = ?
+			ORDER BY X.N_IDX DESC
+		</value>
+		<description>내가 참조받은 태스크의 파일 조회</description>
+	</query>		
+</sql-statement>

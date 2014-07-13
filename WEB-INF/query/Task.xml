@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-statement>
+    <query>
+        <id>SELECT_TASK_HIERARCHY</id>
+        <value>
+            SELECT
+            A.N_IDX,
+            A.N_PARENT_IDX,
+            A.N_LIST,
+            A.N_LEVEL,
+            N_RIDX,
+            A.V_DESC,
+            A.V_REG_DATETIME,
+            FN_TIMEGAP(A.V_EDT_DATETIME) AS V_EDT_DATETIME,
+            A.N_OWNER_IDX,
+            B.V_EMAIL AS V_OWNER_EMAIL,
+            B.V_NAME AS V_OWNER_NAME,
+
+            C.N_IDX AS N_ASSIGNER_IDX,
+            C.V_EMAIL AS V_ASSIGNER_EMAIL,
+            C.V_NAME AS V_ASSIGNER_NAME,
+
+            A.C_OFF_YN,
+            A.C_DEL_YN,
+
+            A.C_STATUS,
+            A.V_HIDE,
+            Z.N_TBL_IDX AS N_FAVORITE
+            FROM
+            TIMECLOUD_TASK A
+            LEFT JOIN TIMECLOUD_FAVORITE Z
+            ON A.N_IDX = Z.N_TASK_IDX
+            AND Z.N_OWNER_IDX = ?
+            AND Z.V_TBL_NM = ?,
+            TIMECLOUD_USER B,
+            TIMECLOUD_USER C
+            WHERE
+            A.N_OWNER_IDX = B.N_IDX AND
+            C.N_IDX = (SELECT N_OWNER_IDX FROM TIMECLOUD_TASK WHERE N_IDX = A.N_PARENT_IDX) AND
+            A.N_LIST = (SELECT N_LIST FROM TIMECLOUD_TASK WHERE N_IDX=?)
+            ORDER BY N_RIDX
+        </value>
+        <description>태스크 그룹 목록</description>
+    </query>
+
+    <query>
+        <id>SELECT_TASK_HIERARCHY_LIST_IDX</id>
+        <value>
+            SELECT
+            N_LIST
+            FROM
+            TIMECLOUD_TASK
+            WHERE
+            N_IDX = ?
+        </value>
+        <description>태스크 LIST IDX</description>
+    </query>
+
+    <query>
+        <id>SELECT_TASK_HIERARCHY_LIST_IDX2</id>
+        <value>
+            SELECT
+            N_LIST
+            FROM
+            TIMECLOUD_TASK
+            WHERE
+            N_IDX = ? AND C_OFF_YN = 'N' AND C_DEL_YN = 'N'
+        </value>
+        <description>태스크 최상위 정보 LIST IDX</description>
+    </query>
+
+    <query>
+        <id>UPDATE_TASK_OFF</id>
+        <value>
+            UPDATE TIMECLOUD_TASK SET C_OFF_YN = 'Y'
+            ,v_edt_datetime=TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            WHERE N_IDX=? AND N_OWNER_IDX=?
+        </value>
+        <description>태스크 종료</description>
+    </query>
+    <query>
+        <id>UPDATE_TASK_ON</id>
+        <value>
+            UPDATE TIMECLOUD_TASK SET C_OFF_YN = 'N'
+            ,v_edt_datetime=TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            WHERE N_IDX=? AND N_OWNER_IDX=?
+        </value>
+        <description>태스크 재활성</description>
+    </query>
+    <query>
+        <id>UPDATE_TASK_STATUS</id>
+        <value>
+            UPDATE TIMECLOUD_TASK SET C_STATUS=?
+            ,v_edt_datetime=TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            WHERE N_IDX=? AND N_OWNER_IDX=?
+            AND C_DEL_YN='N' AND C_OFF_YN = 'N'
+        </value>
+        <description>태스크 상태 변경</description>
+    </query>
+    <query>
+        <id>UPDATE_TASK_HIDE</id>
+        <value>
+            UPDATE TIMECLOUD_TASK SET V_HIDE=?
+            ,v_edt_datetime=TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            WHERE N_IDX=? AND N_OWNER_IDX=?
+            AND C_DEL_YN='N' AND C_OFF_YN = 'N'
+        </value>
+        <description>태스크 숨김상태 변경</description>
+    </query>
+    <query>
+        <id>SELECT_TASK_LIST</id>
+        <value>
+            SELECT
+            N_IDX
+            , V_DESC
+            , C_OFF_YN
+            , V_REG_DATETIME
+            , V_EDT_DATETIME
+            , N_LIST
+            , N_PARENT_IDX
+            ,(SELECT (B.N_IDX ||'-'|| B.V_NAME) FROM TIMECLOUD_TASK A, TIMECLOUD_USER B WHERE (A.N_OWNER_IDX = B.N_IDX)
+            AND A.N_IDX=X.N_PARENT_IDX) AS V_PARENT_USER
+            ,C_STATUS
+            ,C_TASK_TYPE
+            FROM TIMECLOUD_TASK X
+            WHERE N_OWNER_IDX = ? AND C_DEL_YN = 'N'
+            ORDER BY N_IDX DESC
+        </value>
+        <description>태스크 목록</description>
+    </query>
+    <query>
+        <id>SELECT_TASK_LIST2</id>
+        <value>
+            SELECT
+            N_LIST, N_LEVEL, N_RIDX
+            FROM TIMECLOUD_TASK
+            WHERE N_IDX = ? AND N_OWNER_IDX = ? AND C_DEL_YN = 'N'
+        </value>
+        <description>태스크 하이어라키 정보</description>
+    </query>
+    <query>
+        <id>SELECT_TASK_LIST3</id>
+        <value>
+            SELECT
+            N_IDX
+            , V_DESC
+            , C_OFF_YN
+            , FN_TIMEGAP(V_REG_DATETIME) as v_reg_datetime
+            , FN_TIMEGAP(V_EDT_DATETIME) as v_edt_datetime
+            , N_LIST
+            , N_PARENT_IDX
+            ,(SELECT (B.N_IDX ||'-'|| B.V_NAME) FROM TIMECLOUD_TASK A, TIMECLOUD_USER B WHERE (A.N_OWNER_IDX = B.N_IDX)
+            AND A.N_IDX=X.N_PARENT_IDX) AS V_PARENT_USER
+            ,C_STATUS
+            ,C_TASK_TYPE
+            ,V_HIDE
+            FROM TIMECLOUD_TASK X
+            WHERE N_OWNER_IDX = ?
+            $0$
+            AND C_TASK_TYPE LIKE(?)
+            AND C_DEL_YN = 'N'
+            ORDER BY N_IDX DESC
+        </value>
+        <description>태스크 목록 - 태스크구분조건 추가</description>
+    </query>
+    <query>
+        <id>SELECT_TASK_INFO</id>
+        <value>
+            SELECT
+            X.N_IDX
+            ,X.N_LEVEL
+            ,X.V_DESC
+            ,(SELECT (B.N_IDX ||'-'|| B.V_NAME) FROM TIMECLOUD_TASK A, TIMECLOUD_USER B WHERE (A.N_OWNER_IDX = B.N_IDX)
+            AND A.N_IDX=X.N_PARENT_IDX) AS V_PARENT_USER
+            ,Y.V_NAME as V_OWNER_NAME
+            ,X.N_OWNER_IDX
+            ,X.C_STATUS
+            ,X.C_OFF_YN
+            ,X.C_DEL_YN
+            ,X.V_HIDE
+            FROM
+            (SELECT A.*
+            FROM TIMECLOUD_TASK A ,
+            (SELECT N_IDX,N_LIST,N_PARENT_IDX FROM TIMECLOUD_TASK WHERE N_IDX=?) B
+            WHERE A.N_IDX=B.N_IDX
+            OR (A.N_IDX=B.N_PARENT_IDX AND A.N_LEVEL>0)
+            OR (A.N_IDX=B.N_LIST AND A.N_LEVEL=0)
+            ORDER BY N_LEVEL ASC
+            ) X, TIMECLOUD_USER Y
+            WHERE (X.N_OWNER_IDX=Y.N_IDX)
+        </value>
+        <description>최상위,부모,본태스크 리턴</description>
+    </query>
+    <query>
+        <id>SELECT_TASK_INFO2</id>
+        <value>
+            SELECT
+            N_IDX, V_DESC, C_OFF_YN, V_REG_DATETIME, V_EDT_DATETIME,
+            N_LIST, N_PARENT_IDX
+            ,(SELECT (B.N_IDX ||'-'|| B.V_NAME) FROM TIMECLOUD_TASK A, TIMECLOUD_USER B WHERE (A.N_OWNER_IDX = B.N_IDX)
+            AND A.N_IDX=X.N_PARENT_IDX) AS V_PARENT_USER
+            ,N_OWNER_IDX
+            FROM TIMECLOUD_TASK X
+            WHERE N_IDX = ? AND C_DEL_YN = 'N'
+        </value>
+        <description>본태스크 정보만 리턴</description>
+    </query>
+    <query>
+        <id>SELECT_TASK_INFO3</id>
+        <value>
+            SELECT
+            N_IDX
+            , V_DESC
+            , C_OFF_YN
+            , V_REG_DATETIME
+            , V_EDT_DATETIME
+            , N_LIST
+            , N_PARENT_IDX
+            ,(SELECT (B.N_IDX ||'-'|| B.V_NAME) FROM TIMECLOUD_TASK A, TIMECLOUD_USER B WHERE (A.N_OWNER_IDX = B.N_IDX)
+            AND A.N_IDX=X.N_PARENT_IDX) AS V_PARENT_USER
+            , N_OWNER_IDX
+            , C_STATUS
+            , C_DEL_YN
+            FROM TIMECLOUD_TASK X
+            WHERE N_IDX = (SELECT N_LIST FROM TIMECLOUD_TASK WHERE N_IDX=?)
+            AND C_DEL_YN = 'N'
+        </value>
+        <description>최상위태스크 정보만 리턴</description>
+    </query>
+
+    <query>
+        <id>SELECT_TASK_SEQ</id>
+        <value>
+            SELECT seq_task_idx.nextval FROM DUAL
+        </value>
+        <description>태스크 시퀀스 생성</description>
+    </query>
+    <query>
+        <id>INSERT_TASK</id>
+        <value>
+            INSERT INTO TIMECLOUD_TASK(
+            N_IDX,
+            N_PARENT_IDX,
+            N_LIST,
+            N_LEVEL,
+            N_RIDX,
+            V_DESC,
+            V_REG_DATETIME,
+            V_EDT_DATETIME,
+            N_OWNER_IDX,
+            N_DOMAIN_IDX
+            ) VALUES(
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            TO_CHAR(sysdate,'YYYYMMDDHH24MISS'),
+            TO_CHAR(sysdate,'YYYYMMDDHH24MISS'),
+            ?,
+            ?
+            )
+        </value>
+        <description>태스크 등록</description>
+    </query>
+    <query>
+        <id>UPDATE_TASK_RIDX</id>
+        <value>
+            UPDATE TIMECLOUD_TASK SET N_RIDX = N_RIDX+1 WHERE N_LIST = ? AND N_RIDX > ?
+            AND C_DEL_YN = 'N'
+        </value>
+        <description>태스크 할당 시 RIDX 재정렬용</description>
+    </query>
+    <query>
+        <id>SELECT_TASK_CHILD_LIST</id>
+        <value>
+            SELECT
+            X.N_IDX, X.V_DESC, X.C_OFF_YN
+            , FN_TIMEGAP(X.V_REG_DATETIME) AS V_REG_DATETIME
+            , FN_TIMEGAP(X.V_EDT_DATETIME) AS V_EDT_DATETIME
+            , X.N_LIST, X.N_PARENT_IDX
+            ,(
+            SELECT
+            (B.N_IDX ||'-'|| B.V_NAME)
+            FROM TIMECLOUD_USER B
+            WHERE B.N_IDX=X.N_OWNER_IDX
+            ) AS V_CHILD_USER
+            ,X.C_STATUS
+            FROM TIMECLOUD_TASK X,
+            (
+            SELECT
+            N_IDX, N_OWNER_IDX
+            FROM TIMECLOUD_TASK
+            WHERE N_OWNER_IDX=?
+            ) Y
+            WHERE
+            X.N_PARENT_IDX = Y.N_IDX AND X.N_LEVEL>0
+            ORDER BY X.N_IDX DESC
+        </value>
+        <description>할당태스크 목록 조회</description>
+    </query>
+    <query>
+        <id>SELECT_TASK_OBSERVER_LIST</id>
+        <value>
+            SELECT
+            X.N_IDX, X.V_DESC, X.C_OFF_YN
+            , FN_TIMEGAP(X.V_REG_DATETIME) AS V_REG_DATETIME
+            , FN_TIMEGAP(X.V_EDT_DATETIME) AS V_EDT_DATETIME
+            , X.N_LIST, X.N_PARENT_IDX
+            ,(
+            SELECT
+            (B.N_IDX ||'-'|| B.V_NAME)
+            FROM TIMECLOUD_USER B
+            WHERE B.N_IDX=X.N_OWNER_IDX
+            ) AS V_TASK_OWNER
+            ,X.C_STATUS
+            FROM TIMECLOUD_TASK X, TIMECLOUD_OBSERVER Y
+            WHERE
+            X.N_IDX = Y.N_TASK_IDX AND Y.N_OWNER_IDX=?
+            ORDER BY X.N_IDX DESC
+        </value>
+        <description>참조태스크 목록 조회</description>
+    </query>
+
+    <query>
+        <id>SELECT_TASK_TYPE</id>
+        <value>
+            SELECT c_task_type FROM TIMECLOUD_TASK WHERE n_idx=?
+        </value>
+        <description>get task_type for toggle task</description>
+    </query>
+    <query>
+        <id>UPDATE_TASK_TYPE</id>
+        <value>
+            UPDATE TIMECLOUD_TASK SET C_TASK_TYPE=?
+            WHERE N_IDX=? AND N_OWNER_IDX=?
+            AND C_DEL_YN = 'N'
+        </value>
+        <description>Update Task Type</description>
+    </query>
+</sql-statement>

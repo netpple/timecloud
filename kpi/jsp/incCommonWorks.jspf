@@ -1,0 +1,112 @@
+<%!
+private List getMonthDataKeySet(Object[] keys) {
+	Object[] arr = null;
+	List ret = new ArrayList();
+	List retSort = new ArrayList();
+	int count = 0;
+	
+	if (null != keys && keys.length > 0) {
+		String key = "";
+		
+		for(int i = 0; i < keys.length; i++) {
+			key = (String)keys[i];
+			
+			if ("M_".equals(key.substring(0, 2))) {
+				//System.out.println(key);
+				ret.add(key);
+			}
+		}
+		
+		/////////////////////////
+		int cur = 0;
+		count = ret.size();
+		//System.out.println("count: " + count);
+		
+		for (int j = 0; j < count; j++) {
+			if (cur > (count-1)) {
+				break;
+			}
+			
+			String data = (String)ret.get(j);
+			String[] m = data.split("_");
+			
+			if (m[1].equals(String.valueOf(cur+1))) {
+				//System.out.println(String.valueOf(j+1) + ": " + data);
+
+				retSort.add(data);
+				cur += 1;
+				j = -1;
+			}
+		}
+		///////////////////////////
+		
+		//arr = ret.toArray();
+		//Arrays.sort(arr);
+		
+	} else {
+		return null;
+	}
+	
+	return retSort;//Arrays.asList(arr);	//return ret;
+}
+
+private Map getYearDataKeySet(Object[] keys) {
+	Map mapRet = new HashMap();
+	List ret = new ArrayList();
+	int count = 0;
+	
+	if (null != keys && keys.length > 0) {
+		String key = "";
+		
+		for(int i = 0; i < keys.length; i++) {
+			key = (String)keys[i];
+			
+			if ("M_".equals(key.substring(0, 2))) {
+				//System.out.println(key);
+				ret.add(key);
+			}
+		}
+		
+		count = ret.size();
+		String[] arr = new String[count];
+		
+		//System.out.println("count: " + count);
+		
+		for (int j = 0; j < count; j++) {
+			String data = (String)ret.get(j);
+			String[] m = data.split("_");
+			//arr[j] = m[2];
+			String strMn =  m[2].substring(0, 4);
+			//System.out.println(strMn);
+			
+			if (mapRet.get(strMn) == null) {
+				mapRet.put(strMn, "1");
+			} else {
+				String c = (String)mapRet.get(strMn);
+				int v = Integer.valueOf(c) + 1;
+				//System.out.println("c: " + c);
+				
+				mapRet.put(strMn, String.valueOf(v));
+			}
+		}
+
+		Set keySet = mapRet.keySet();
+		Object[] ks = keySet.toArray();
+		//System.out.println("length: " + ks.length);
+		
+		for (int i = 0; i<ks.length; i++) {
+			String ky = (String)ks[i];
+			String val = (String)mapRet.get(ky);
+			
+			//System.out.println(ky + ": " + val);
+		}
+	
+		//Arrays.sort(arr);
+		
+	} else {
+		return null;
+	}
+	
+	return mapRet;
+}
+%>

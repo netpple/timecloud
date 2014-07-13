@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-statement>
+	<query>
+		<id>KPI_TEST_01</id>
+		<value>
+			SELECT N_OWNER_IDX, V_URL, V_ACCESS_DATETIME FROM TIMECLOUD_ACCESSLOG
+		</value>
+		<description>로그 테이블</description>
+	</query>
+	<query>
+		<id>KPI_ACTIVITY_RANK</id>
+		<value>
+			SELECT N_OWNER_IDX, COUNT(*) as cnt FROM TIMECLOUD_ACTIVITY 
+			WHERE C_DEL_YN = 'N' AND V_REG_DATETIME LIKE(TO_CHAR(sysdate,'yyyymm')||'%') GROUP BY N_OWNER_IDX ORDER BY cnt DESC
+		</value>
+		<description>전체피드백에 노출할 피드백 월별랭킹</description>
+	</query>
+	<query>
+		<id>KPI_FEEDBACK_RANK</id>
+		<value>
+			SELECT N_OWNER_IDX, COUNT(*) as cnt FROM TIMECLOUD_FEEDBACK 
+			WHERE C_DEL_YN = 'N' AND V_REG_DATETIME LIKE(TO_CHAR(sysdate,'yyyymm')||'%') GROUP BY N_OWNER_IDX ORDER BY cnt DESC
+		</value>
+		<description>전체피드백에 노출할 피드백 월별랭킹</description>
+	</query>
+	<query>
+		<id>KPI_FILE_RANK</id>
+		<value>
+			SELECT N_OWNER_IDX, COUNT(*) as cnt FROM TIMECLOUD_FILE 
+			WHERE C_DEL_YN = 'N' AND V_REG_DATETIME LIKE(TO_CHAR(sysdate,'yyyymm')||'%') GROUP BY N_OWNER_IDX ORDER BY cnt DESC
+		</value>
+		<description>전체피드백에 노출할 피드백 월별랭킹</description>
+	</query>
+	<query>
+		<id>KPI_OBSERVER_RANK</id>
+		<value>
+			SELECT N_OWNER_IDX, COUNT(*) as cnt FROM TIMECLOUD_OBSERVER 
+			WHERE C_DEL_YN = 'N' AND V_REG_DATETIME LIKE(TO_CHAR(sysdate,'yyyymm')||'%') GROUP BY N_OWNER_IDX ORDER BY cnt DESC
+		</value>
+		<description>전체피드백에 노출할 피드백 월별랭킹</description>
+	</query>	
+	<query>
+		<id>KPI_TASK_ASSIGN_RANK</id>
+		<value>
+			SELECT N_OWNER_IDX, COUNT(*) as cnt FROM TIMECLOUD_TASK 
+			WHERE N_LEVEL>0 AND C_DEL_YN = 'N' AND V_REG_DATETIME LIKE(TO_CHAR(sysdate,'yyyymm')||'%') GROUP BY N_OWNER_IDX ORDER BY cnt DESC
+		</value>
+		<description>태스크 할당을 가장 많이 받은 사람 월별랭킹</description>
+	</query>	
+	<query>
+		<id>KPI_TASK_RANK</id>
+		<value>
+			SELECT N_OWNER_IDX, COUNT(*) as cnt FROM TIMECLOUD_TASK 
+			WHERE C_DEL_YN = 'N' AND V_REG_DATETIME LIKE(TO_CHAR(sysdate,'yyyymm')||'%') GROUP BY N_OWNER_IDX ORDER BY cnt DESC
+		</value>
+		<description>태스크가 가장 많은 사람 월별랭킹</description>
+	</query>	
+</sql-statement>

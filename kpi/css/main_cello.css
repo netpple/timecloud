@@ -1,0 +1,519 @@
+/*************************************************************/
+/************* Date : 2011.07.11  ****************************/
+/************* Ver   : 1.0    ********************************/
+/************* UI Design : Kim Min A**************************/
+/************* Samsung SDS         ***************************/
+/*************************************************************/
+
+
+BODY{
+	margin:0;	
+	scrollbar-face-color:#FFFFFF;
+	scrollbar-highlight-color:#D9D9D9;
+	scrollbar-3dlight-color:#FFFFFF;
+	scrollbar-shadow-color:#D9D9D9;
+	scrollbar-darkshadow-color:#FFFFFF;
+	scrollbar-track-color:#FFFFFF;
+	scrollbar-arrow-color:#ACACAC;
+	font-size:9pt;
+	color:#555555;
+	line-height:150%;
+	font-family: Dotum, Arial;
+    overflow:auto;}
+
+TD,DIV,form,center,pre {
+	margin:0;
+	scrollbar-face-color:#FFFFFF;
+	scrollbar-highlight-color:#D9D9D9;
+	scrollbar-3dlight-color:#FFFFFF;
+	scrollbar-shadow-color:#D9D9D9;
+	scrollbar-darkshadow-color:#FFFFFF;
+	scrollbar-track-color:#FFFFFF;
+	scrollbar-arrow-color:#ACACAC;
+	font-size:9pt;
+	line-height:140%;
+	color:#555555;
+	font-family: Dotum, Arial;
+	word-break:break-all;
+}
+ol, ul, li, dl, dt, dd { list-style-image:none; list-style-position:outside; list-style-type:none; }
+a,img        {border:0; outline:none; selector-dummy:expression(this.hideFocus=true); text-decoration:none; color:#555555;}
+a:hover      { color:#062db6; }
+
+a.style:link    { font-size:11px; color:#474747; font-weight:bold; }
+a.style:hover   { font-size:11px; color:#062db6; font-weight:bold; }
+a.style:visited { font-size:11px; color:#474747; }
+a.style:active  { font-size:11px; color:#474747; }
+
+/* body 분류 */
+.top_body      { margin:0; padding-bottom:10px; }
+.left_body     { margin:0; padding:0; }
+.contents_body { margin:3px 5px 5px 10px; padding:0; }
+.pop_body      { margin:0px; padding:10px 15px; }
+
+/* form 시리즈 속성 정의 */
+form { display:inline; border:0 none; margin:0; padding:0; }
+input              { height:17px; color:#555555; border:1px #D2D2D2 solid; font-size:9pt; padding:2px 0px 0px 3px; }
+input.readonly     { border:#D2D2D2 solid 1px; background-color:#f1f2f2; color:#444444; }
+input.readonly1    { border:0px; background-color:#ffffff; color:#444444; }
+input.ra           { margin:0 1px 2px 1px; padding:0; border:0px; width:12px; height:12px; }
+input.ch           { margin:1px; padding:0; border:0px; width:13px; height:13px;}
+input.right        { color:#555555; border:1px #D2D2D2 solid; font-size:9pt; padding:2px 3px 0px 3px; text-align:right; }
+select             { font-size:9pt; color:#555555; background-color:#fff; border:1px solide #fff; }
+textarea           { font-size:9pt; color:#555555; background-color:#ffffff; border:1px #D2D2D2 solid; padding:3px; ime-mode:active; line-height:18px; }
+textarea.readonly  { background-color:#f1f2f2; border:1px #D2D2D2 solid; }
+
+/* padding 속성 정의 */
+.margin_10      { margin:10px 0 !important;}
+.margin_top10   { margin-top:10px !important;}
+.margin_b5      { margin-bottom:5px !important;}
+.padding_left14 { padding-left:14px !important;}
+.padding_top5   { padding-top:5px !important;}
+.padding_top3   { padding-top:3px !important;}
+.padding4       { padding:4px !important;}
+.padding5       { padding:5px !important;}
+.padding_b5     { padding-bottom:5px !important;}
+.padding10      { padding:10px !important;}
+.padding15      { padding:15px !important;}
+.padding05      { padding:0 5px 5px 5px !important;}
+.padding010     { padding:0 10px 10px 10px !important;}
+.padding011     { padding:10px 10px 0px 8px !important;}
+.h2   {height:2px;}
+.h3   {height:3px;}
+.h5   {height:5px;}
+.h7   {height:7px;}
+.h10  {height:10px;}
+.h12  {height:12px;}
+.h15  {height:15px;}
+.h20  {height:20px;}
+.w1   {width:1px;}
+.w3   {width:3px;}
+.w7   {width:7px;}
+.w10  {width:10px;}
+.w15  {width:15px;}
+.w20  {width:20px;}
+.w30  {width:30px;}
+.w40  {width:40px;}
+.w50  {width:50px;}
+.w60  {width:60px;}
+.w70  {width:70px;}
+.w80  {width:80px;}
+.w100 {width:100px;}
+.w120 {width:120px;}
+.w150 {width:150px;}
+.w170 {width:170px;}
+.w200 {width:200px;}
+.w250 {width:250px;}
+.w300 {width:300px;}
+
+/* align 시리즈 속성 정의 */
+.left   {text-align:left !important;}
+.center {text-align:center !important;}
+.right  {text-align:right !important;} 
+.right0 {text-align:right;} 
+.top    {vertical-align:top !important;} 
+
+/* font color/style 시리즈 속성 정의 */
+.bold       {font-weight:bold !important;}
+.underline  {text-decoration:underline !important; }
+.f_h18      {line-height:18px !important; }
+.f8         {font-size:8pt !important;}
+.f_orange   {color:#f47421 !important;}
+.f_orange_b {color:#f47421 !important;font-weight:bold !important;}
+.f_green    {color:#478e41 !important;}
+.f_green_b  {color:#478e41 !important;font-weight:bold !important;}
+.f_black    {color:#000 !important;}
+.f_black_b  {color:#000000 !important;font-weight:bold !important;} 
+.f_blue     {color:#2d50d4 !important;}
+.f_blue_b   {color:#2d50d4 !important;font-weight:bold !important;}
+.f_red      {color:#ff0000 !important;}
+.f_red_s    {color:#d26309 !important; font-size:8pt !important; padding-right:3px !important;}
+.f_litegray {color:#939598 !important;}
+.a_style    {font-weight:bold !important;}/*--20110928 링크 관련 폰트 속성 */
+
+/* 보더 속성 정의   */
+.border_gray { border:1px solid #e6e7e8;}
+.border_blue { border:1px solid #c7cedc;}
+.border_left { border-left:2px solid #c7c7c7;}
+
+/* bg color 속성 정의   */
+.bg_blue    { background:#e5f0f9 !important;}
+.bg_gray    { background:#efefef !important;}
+.gray       { background:#F5F5F5 !important;}
+
+/***********************[      인풋박스.셀렉트박스     ]***************************************************************************************************************************/
+.input_search           { height:23px; color:#666666; background-color:#FFFFFF; border:1px #D1D1D1 solid; font-size:9pt; padding:4px 0px 0px 3px; }
+.input2                 { height:18px; color:#666666; background-color:#efefef; border:1px #D2D2D2 solid; font-size:8pt; padding:2px 0px 0px 3px; }
+.input_pop              { height:20px; color:#666666; background-color:#FFFFFF; border:1px #C8C1A4 solid; font-size:8pt; padding:2px 0px 0px 3px; }
+.input_transparent      { height:20px; color:#666666; background:transparent; border:1px #FFFFFF solid; font-size:8pt; padding:2px 0px 0px 3px; }
+.input_gr               { height:18px; color:#666666; background-color:#F3F3F3; border:1px #FFFFFF solid; font-size:8pt; padding:2px 0px 0px 3px; }
+.input_login            { height:20px; color:#666666; background-color:#FFFFFF; border:2px #CECECE solid; font-size:8pt; padding:2px 0px 0px 3px; }
+.input_read             { height:18px; color:#666666; background-color:#F3F3F3; border:1px #D2D2D2 solid; font-size:8pt; padding:2px 0px 0px 3px; } 
+.input_ime              { height:18px; color:#666666; background-color:#FFFFFF; border:1px #D2D2D2 solid; font-size:8pt; padding:2px 0px 0px 3px; ime-mode:active;}           
+.input_en_only          { height:18px; color:#666666; background-color:#FFFFFF; border:1px #D2D2D2 solid; font-size:8pt; padding:2px 0px 0px 3px; ime-mode:disabled;} 
+.input_right            { height:18px; color:#666666; background-color:#FFFFFF; border:1px #D2D2D2 solid; font-size:8pt; padding:2px 0px 0px 3px; Text-align:right; }
+.input_read_right       { height:18px; color:#666666; background-color:#F3F3F3; border:1px #D2D2D2 solid; font-size:8pt; padding:2px 0px 0px 3px; Text-align:right;} 
+.input_ime_right        { height:18px; color:#666666; background-color:#FFFFFF; border:1px #D2D2D2 solid; font-size:8pt; padding:2px 0px 0px 3px; ime-mode:active; Text-align:right;}  
+
+.cello_main_div01       { border:0; table-layout:fixed; width:100%; height:100px ;overflow-y:auto; }
+
+/***********************[         Top         ]*********************************************************************************************************************************/
+
+.cello_t_me                  { font-family:Dotum ;font-size: 9pt; font-weight:bold; text-align:center; padding:1px 18px 5px 18px; }
+.cello_t_me a                { color:#FFFFFF;}
+.cello_t_me a:hover          { color:#76e0fb;}
+
+.cello_t_me_select           { font-family:Dotum;font-size:9pt;font-weight:bold; text-align:center; padding:1px 18px 5px 18px;}
+.cello_t_me_select a         { color:#76e0fb;}
+.cello_t_me_select a:hover   { color:#76e0fb;}
+
+.cello_t_welcome       { font-size:9pt; color:#ffffff; padding: 3px 3px 0px 5px; }
+
+
+.cello_t_pm            { font-family: Verdana,Dotum; font-size:8pt; padding: 0px 10px 0px 3px;color:#cbcccd; }
+.cello_t_pm a          { color:#e6e7e8;}
+.cello_t_pm a:hover    { color:#76e0fb;}
+
+.cello_t_tag           { font-family: Dotum; FONT-SIZE:9pt; padding:6px 7px 0px 7px; color:#efefef;}
+.cello_t_tag a         { color:#efefef; }
+.cello_t_tag a:hover   { color:#a7a9ac; }
+
+.input_top             { font-size:8pt; height:17px; color:#ffffff; background-color:#666666; border:none; padding:3px 0px 0px 2px; }
+.select_top            { font-size:8pt;color:#333333; }
+
+.cello_t_dme                  { font-family: Verdana,Dotum ;font-size: 8pt; padding:2px 3px 2px 0; }
+.cello_t_dme a                { color:#FFFFFF;}
+.cello_t_dme a:hover          { color:#FFFFFF;}
+
+.cello_t_dme_select           { font-family: Verdana,Dotum;font-size:8pt;padding:2px 3px 2px 0; background-color:#d6e2fb; }
+.cello_t_dme_select a         { color:#2d4496;}
+.cello_t_dme_select a:hover   { color:#2d4496;}
+
+/***********       IPM 상단 메뉴   *****/
+.cello_t_sm                  { font-family:Dotum ;font-size: 9pt; font-weight:bold; text-align:center; padding:2px 18px 0 18px; }
+.cello_t_sm a                { color:#728195;}
+.cello_t_sm a:hover          { color:#1a1e36;}
+
+.cello_t_sm_select           { font-family:Dotum;font-size:9pt;font-weight:bold; text-align:center; padding:2px 18px 0 18px;}
+.cello_t_sm_select a         { color:#1a1e36;}
+.cello_t_sm_select a:hover   { color:#1a1e36;}
+
+/***********************[          타이틀        ]*******************************************************************************************************************************/
+.cello_tit01                  { font-size:11pt; color:#2d48a2; font-weight:bold; }
+.cello_tit01 a:link           { font-size:11pt; color:#2d48a2; text-decoration:none; }
+.cello_tit01 a:visited        { font-size:11pt; color:#2d48a2; text-decoration:none; }
+.cello_tit01 a:active         { font-size:11pt; color:#2d48a2; text-decoration:none; }
+.cello_tit01 a:hover          { font-size:11pt; color:#e9101a; text-decoration:none; }
+
+.cello_tit02                  { font-size:9pt; color:#3d5bc4; font-weight:bold; height:25px; padding:5px 0px 1px 2px; }
+.cello_tit02 a:link           { font-size:9pt; color:#3d5bc4; text-decoration:none; }
+.cello_tit02 a:visited        { font-size:9pt; color:#3d5bc4; text-decoration:none; }
+.cello_tit02 a:active         { font-size:9pt; color:#3d5bc4; text-decoration:none; }
+.cello_tit02 a:hover          { font-size:9pt; color:#e9101a; text-decoration:none; }
+
+.cello_tit04                  { font-size:9pt; color:#3d5bc4; font-weight:bold; height:28px; padding:5px 0px 1px 2px; }
+.cello_tit04 a:link           { font-size:9pt; color:#3d5bc4; text-decoration:none; }
+.cello_tit04 a:visited        { font-size:9pt; color:#3d5bc4; text-decoration:none; }
+.cello_tit04 a:active         { font-size:9pt; color:#3d5bc4; text-decoration:none; }
+.cello_tit04 a:hover          { font-size:9pt; color:#e9101a; text-decoration:none; }
+.cello_tit04_td               { font-size:9pt; height:25px; padding:5px 0px 1px 2px; }
+/***********    타이틀 + 밑줄      ***********************/
+.cello_tit03                  { font-size:9pt; color:#3d5bc4; font-weight:bold; height:25px; padding:5px 0px 1px 3px; border-bottom:2px solid #3d5bc4; }
+.cello_tit03 a:link           { font-size:9pt; color:#3d5bc4; text-decoration:none; }
+.cello_tit03 a:visited        { font-size:9pt; color:#3d5bc4; text-decoration:none; }
+.cello_tit03 a:active         { font-size:9pt; color:#3d5bc4; text-decoration:none; }
+.cello_tit03 a:hover          { font-size:9pt; color:#e9101a; text-decoration:none; }
+
+/**********************      타이틀 + 로케이션      *******************************************/
+.cello_location               { font-size:8pt;padding-right:3px; }
+.cello_location A             { color:#777777;}
+.cello_location A:hover       { color:#1d4e91;}
+
+/**********************      타이틀 (확장, 축소 버튼 추가)      *******************************************/
+.cello_expand                 { font-size:9pt; color:#3d5bc4; font-weight:bold; height:25px; padding:5px 0px 1px 3px; background:url(../images/main/tit_bg2.gif) repeat-x }
+.cello_expand  A              { color:#3d5bc4;}
+.cello_expand  A:hover        { color:#e9101a;}
+
+/**********************      타이틀 (검색영역)      *******************************************/
+.cello_tit_search                { font-size:8pt; color:#1c5b9c; height:20px; padding:5px 0px 1px 3px;}
+.cello_tit_search A              { color:#1c5b9c;}
+.cello_tit_search A:hover        { color:#6AABDF;}
+
+/***********************[         왼쪽메뉴       ]*********************************************************************************************************************************/
+.leftmenu_top              { height:32px; background: url(../images/left/left_tr.gif) no-repeat top right; }
+.leftmenu_top .tit         { padding:2px 0 0 5px; font-size:13px; font-weight:bold; color:#fff; }
+.leftmenu_top .tit a       { color:#fff;}
+.leftmenu_top .tit a:hover { color:#9ddeff;}
+
+.leftmenu_top2              { height:32px; background: url(../images/left/left_tr2.gif) no-repeat top right; }
+.leftmenu_top2 .tit         { padding:2px 0 0 5px; font-size:13px; font-weight:bold; color:#fff; }
+.leftmenu_top2 .tit a       { color:#fff;}
+.leftmenu_top2 .tit a:hover { color:#9ddeff;}
+
+.leftmenu_padding               { width:100%; padding-right:7px; text-align:left; background:url(../images/left/left_mr.gif) top right; }
+
+.leftmenu            { border-bottom:#ededed solid 1px; padding:7px 5px 5px 2px; }
+.leftmenu a          { color:#555555; }
+.leftmenu a:hover    { color:#0031a1; }
+.leftmenu .on        { color:#0031a1;font-weight:bold; }
+
+.leftmenu_bg            { background:#f8f8f8; padding:7px 5px 5px 2px; }
+.leftmenu_bg a          { color:#555555; }
+.leftmenu_bg a:hover    { color:#0031a1; }
+.leftmenu_bg .on        { color:#0031a1;font-weight:bold; }
+
+.leftmenu_bottom              { height:9px; background:url(../images/left/left_br.gif) no-repeat top right;}
+.leftmenu_btn                 { height:27px; background:url(../images/left/left_btn_r.gif) no-repeat top right; font-size:12px; text-align:center;font-weight:bold; color:#333333;padding-top:3px; }
+/***********************[           버튼         ]********************************************************************************************************************************/
+
+/********  팝업호출, 관련화면 호출 버튼 **********/
+.cello_bu01                   { font-size:9pt; color:#FFFFFF; font-weight:bold; padding-top:2px; background:url(../images/main/bu01_bg.gif) repeat-x; }
+.cello_bu01 a                 { color:#FFFFFF;}
+.cello_bu01 a:hover           { color:#003399;}
+.cello_bu01_r                 { width:10px; height:20px; background:url(../images/main/bu01_right.gif) no-repeat; }
+.cello_bu01_l                 { width:10px; height:20px; background:url(../images/main/bu01_left.gif) no-repeat; }
+
+.cello_bu02                   { font-size:8pt; color:#555555; padding-top:3px; background:url(../images/main/bu02_bg.gif) repeat-x; }
+.cello_bu02 a                 { color:#555555;}
+.cello_bu02 a:hover           { color:#1c5b9c;}
+.cello_bu02_r                 { width:8px; height:18px; background:url(../images/main/bu02_right.gif) no-repeat; }
+.cello_bu02_l                 { width:8px; height:18px; background:url(../images/main/bu02_left.gif) no-repeat; }
+
+/********  전체관련 액션버튼 **********/
+.cello_bu03                   { font-size:9pt; color:#FFFFFF; font-weight:bold; padding-top:2px; background:url(../images/main/bu03_bg.gif) repeat-x; }
+.cello_bu03 a                 { color:#FFFFFF;}
+.cello_bu03 a:hover           { color:#9ddeff;}
+.cello_bu03_r                 { width:10px; height:20px; background:url(../images/main/bu03_right.gif) no-repeat; }
+.cello_bu03_l                 { width:10px; height:20px; background:url(../images/main/bu03_left.gif) no-repeat; }
+
+/*****  조회영역  검색버튼 ************/
+.cello_bu04                   { font-size:8pt; color:#FFFFFF; padding-top:1px; background:url(../images/main/bu04_bg.gif) repeat-x; }
+.cello_bu04 a                 { color:#FFFFFF;}
+.cello_bu04 a:hover           { color: #CCC;}
+.cello_bu04_r                 { width:6px; height:18px; background:url(../images/main/bu04_right.gif) no-repeat; }
+.cello_bu04_l                 { width:18px; height:18px; background:url(../images/main/bu04_left.gif) no-repeat; }
+
+/***********************[           탭           ]*********************************************************************************************************************************/
+/* 일반탭 */
+.cello_tab_bg             { height:23px; background:url(../images/main/tab_bg.gif) repeat-x; padding:0; margin:0; }
+
+.cello_tab_off            { height:23px; font-size:8pt; color:#a1a1a1; font-weight:bold; padding-top:2px; background:url(../images/main/tab01_bg.gif) repeat-x; }
+.cello_tab_off a          { color:#a1a1a1;}
+.cello_tab_off a:hover    { color:#5788ce;}
+.cello_tab_off_r          { width:12px; height:23px; background:url(../images/main/tab01_right.gif) no-repeat; }
+.cello_tab_off_l          { width:11px; height:23px; background:url(../images/main/tab01_left.gif) no-repeat; }
+
+.cello_tab_on             { height:23px; font-size:8pt; color:#ffffff; font-weight:bold; padding:3px 10px 0px 10px; background:url(../images/main/tab02_bg.gif) repeat-x; }
+.cello_tab_on a           { color:#ffffff;}
+.cello_tab_on a:hover     { color:#9ddeff;}
+.cello_tab_on_r           { width:12px; height:23px; background:url(../images/main/tab02_right.gif) no-repeat; }
+.cello_tab_on_l           { width:11px; height:23px; background:url(../images/main/tab02_left.gif) no-repeat; }
+
+/***********************[          팝업           ]*********************************************************************************************************************************/
+.cello_pop_bg       { font-size:9pt; color:#ffffff; font-weight:bold; height:30px; padding:0 0 0 26px; background:url(../images/popup/popup_bg01.gif) no-repeat #7291af;  }
+.cello_pop_bg2      { font-size:18pt;height:50px;color:#ffffff; font-weight:bold; padding:0 0 0 28px; background:url(../images/popup/popup_bg02.gif)  no-repeat #7291af;  }
+.cello_pop_right    { width:80px; height:30px; background:url(../images/popup/popup_bg03.gif) right;  }
+.cello_pop_right2   { width:80px; height:50px; background:url(../images/popup/popup_bg04.gif) right;  }
+
+/***********************[           테이블            ]*********************************************************************************************************************************/
+/* 데이터 */
+.table_data         { width:100%; margin:0px; padding:0px; border-top:solid 2px #3d5bc4; border-right:solid 1px #c7cedc; border-collapse:collapse; background:#fff; }
+.table_data .td     { height:25px; padding:2px 3px 2px 3px; border-bottom:solid 1px #c7cedc; border-left:solid 1px #c7cedc; text-align:center; color:#474747; }
+.table_data .th     { height:25px; padding:3px 3px 2px 3px; color:#1c5b9c; font-size:8pt; background:#e5f0f9; border-bottom:solid 1px #c7cedc; border-left:solid 1px #c7cedc; text-align:center; }
+
+/* 링크 추가  2012.02.01*/
+.tablelink01 a                      { color:#475894; }
+.tablelink01 a:hover                { color:#062db6; }
+.tablelink01 a:visited, a:cative    { color:#475894; }
+.tablelink02 a                      { color:#475894; }
+.tablelink02 a:hover                { color:#062db6; text-decoration:underline; }
+.tablelink02 a:visited, a:cative    { color:#475894; }
+
+/* View/입력 */
+.table_view         { width:100%; margin:0px; padding:0px; border-top:solid 2px #3d5bc4; border-right:solid 1px #c7cedc; border-collapse:collapse; background:#fff; }
+.table_view .td     { height:25px; padding:3px 4px 2px 4px; border-bottom:solid 1px #c7cedc; border-left:solid 1px #c7cedc; color:#474747; }
+.table_view .th     { height:25px; padding:5px 4px 3px 8px; color:#1c5b9c; font-size:8pt; background:#e5f0f9; border-bottom:solid 1px #c7cedc; border-left:solid 1px #c7cedc; }
+
+/* List_검색 */
+.t_search           { width:100%; margin:0px; padding:5px; border:solid 1px #d5d5d5; background:#efefef;}
+
+/* 테이블 안에 테이블이 있을 경우 */
+.table_in         { width:100%; margin:0px; padding:0px;  border-collapse:collapse; background:#fff; }
+.table_in .td     { height:20px; padding:2px 3px 1px 3px; font-size:11px; border-bottom:solid 1px #dfdfdf; border-left:solid 1px #dfdfdf; border-right:solid 1px #dfdfdf; border-top:solid 1px #dfdfdf; color:#474747; }
+.table_in .th     { height:20px; padding:2px 3px 1px 3px; font-size:11px; color:#5a5a5a; background:#f0f0f0; border-top:solid 1px #dfdfdf; border-bottom:solid 1px #dfdfdf; border-left:solid 1px #dfdfdf; border-right:solid 1px #dfdfdf; text-align:center; }
+
+/* 111102 테이블 안에 헤드가 없는 리스트가 포함된 경우 */
+.table_in2         { width:100%; margin:0px; padding:0px;  border-collapse:collapse; background:#fff; }
+.table_in2 .td     { padding:2px 3px 1px 3px; font-size:11px; border-bottom:solid 1px #dfdfdf; border-left:solid 0px #dfdfdf; border-right:solid 0px #dfdfdf; border-top:solid 0px #dfdfdf; color:#474747; vertical-align:top; text-align:left; line-height:160% }
+
+/* 111104 테이블 안에 레벨 데이터 */
+.table_levdata         { width:100%; margin:0px 0px 5px 0px; padding:0px; border-top:solid 2px #3d5bc4; border-right:solid 0px #c7cedc; border-collapse:collapse; background:#efefef !important; }
+.table_levdata .td     { height:25px; padding:5px; border-top:dotted 1px #c7cedc; border-bottom:dotted 1px #999; border-left:solid 0px #c7cedc; text-align:left; color:#474747; }
+
+
+/***********************[          포틀릿           ]*********************************************************************************************************************************/
+/* 메인 */
+.table_main         { width:100%; margin:0px; padding:0px;  border-collapse:collapse; background:#fff; }
+.table_main .td     { height:20px; padding:2px 3px 2px 3px; font-size:11px; border-bottom:solid 1px #efefef; text-align:center; color:#474747; }
+.table_main .th     { height:19px; padding-top:1px; font-size:11px; color:#7e7e7e; background:url(../images/main/bg_th.gif) repeat-x; border-top:solid 1px #c7c7c7;border-bottom:solid 1px #dbdbdb; border-left:0px; border-right:solid 1px #dbdbdb; text-align:center; }
+.table_main .unline { border-right:0px !important; }
+
+.cello_portlet_box01    { background-color:#234372 ; border:1px #0d2341 solid; padding:7px;}
+.cello_portlet_tit01    { font-family: Verdana,Dotum ;font-size: 10pt; font-weight:bold;color:#ffffff;}
+.cello_portlet_txt01    { font-size: 8pt; color:#ffffff;line-height:150%;padding:1px 0; }
+.cello_portlet_txt02    { font-size: 8pt; color:#000000;line-height:150%; height:20px;padding-top:3px;}
+.cello_portlet_txt_red  { font-size: 8pt; color:red;line-height:150%; height:20px;padding-top:3px;font-weight:bold;}
+.cello_portlet_txt_blue { font-size: 8pt; color:blue;line-height:150%; height:20px;padding-top:3px;font-weight:bold;}
+
+.cello_portlet_box02    { background-color:#ffffff ; border:1px #b4b4b4 solid; padding:8px; }
+.cello_portlet_tit02    { font-family: Verdana,Dotum ;font-size:10pt; font-weight:bold; color:#224272; padding-bottom:5px;}
+
+.cello_portlet_tit03    { font-family: Verdana,Dotum ;font-size:10pt; font-weight:bold; color:#224272; padding-bottom:6px; padding-left:2px; }
+
+.cello_portlet_list             { font-size:9pt; height:20px;padding:3px 10px 0 3px; }
+.cello_portlet_list A           { color:#555555;}
+.cello_portlet_list A:hover     { color:#062db6;}
+
+.text_t                         { font-size:11px; color:#474747; }
+.cello_type                     { font-size:8pt; color:#1c5b9c; }
+.select_type                    { font-size:8pt; color:#555555; background-color:#ffffff; border:1px #D2D2D2 solid; }
+.bg_line                        { width:25px; background:url(../images/portlet/bg_01.gif) repeat-y; }
+.people_box                     { padding-bottom:10px; border-bottom:1px #e4e4e4 solid; margin-bottom:10px; }
+.people_box td                  { font-size:11px; color:#656565; }
+.ask_box                        { background-color:#f6f6f6 ; border:1px #ededed solid; padding:5px; }
+.left_portlet_s                 { background-color:#f6f6f6 ; border:1px #ededed solid; padding:3px; }
+.left_portlet_t                 { margin-top:4px;}
+.left_portlet_t td              { padding:3px 0px 2px 0px;}
+.banner01                       { height:42px; border:2px #777777 solid; background:#303131;  }
+
+/***********************[         지식검색          ]*********************************************************************************************************************************/
+.cello_km_t01          { font-size:9pt; height:30px; }
+.cello_km_t01 a        { color:#3d5bc4; text-decoration:underline;}
+.cello_km_t01 a:hover  { color:#3d5bc4;}
+.cello_km_t02          { font-size:9pt; line-height:150%; }
+.cello_km_t03          { font-size:8pt; color:#9d9d9d; height:30px;}
+.cello_km_t03 a        { color:#9d9d9d;}
+.cello_km_t03 a:hover  { color:#9d9d9d; text-decoration:underline;}
+.cello_km_more         { font-size:9pt; height:30px; text-align:right; font-weight:bold; }
+.cello_km_more a       { color:#0036ff;}
+.cello_km_more a:hover { color:#0036ff;}
+
+/***********************[        페이지 넘버     ]************************************************************************************************************************************/
+.page_text             { font-size:9pt; color:#777777; height:23px; padding-top:2px; text-align:center; }
+.page_text a           { font-size:9pt; color:#777777; text-decoration:none; }
+.page_text a:hover     { font-size:9pt; color:#2d50d4; text-decoration:none; }
+
+.page_t01              { font-size:8pt; color:#3663b8; padding-top:5px; text-align:right; }
+
+/***********************[     트리메뉴     ]************************************************************************************************************************************/
+.cello_tme_t01         { font-size:9pt; height:22px; padding:3px 0 0 3px; }
+.cello_tme_t01 a       { color:#555555;}
+.cello_tme_t01 a:hover { color:#062db6;}
+
+.cello_tme_t02         { color:#555555; height:22px; padding:0 0 0 5px; border-bottom:1px solid #e6e7e8; }
+.cello_tme_t02 a       { color:#555555;}
+.cello_tme_t02 a:hover { color:#062db6;}
+
+.select                { background:#d5edff; padding:3px; }
+
+/***********************[     에러화면     ]************************************************************************************************************************************/
+.error                { width:570px; height:190px; background:url(../images/main/error_img.gif) no-repeat; border:0; padding:0;  }
+.error td.text01      { height:54px; padding:20px 29px 0 29px; font-size:14px; font-weight:bold; color:#bf4f54; }
+.error td.text02      { height:50px; padding:6px 29px 0 29px; font-size:11px; color:#616161; line-height:18px; }
+.error td.text03      { height:86px; padding:30px 20px 0 0; color:#303030; text-align:right; }
+
+/***********************[   팁/도움말/데이터없을경우   ]************************************************************************************************************************************/
+.table_tip            { width:100%; border:1px solid #c7cedc; background:#F5F5F5; padding:6px 7px 4px 7px; }
+.table_tip td         { font-size:11px; line-height:17px;  }
+.table_tip .bullet    { width:18px; vertical-align:top; padding-right:0px !important; }
+.table_tip .td_p      { padding-right:0px !important; padding-left:0px !important; }
+
+/***********************[          processbar          ]************************************************************************************************************************************/
+.processbar           { width:290px; height:68px; margin:0; padding:0; background:url(../images/main/processbar_bg.gif) no-repeat; }
+.processbar .text     { height:32px; font-size:11px; padding-left:18px; padding-top:3px; }
+
+/***********************[      리스크 등록 단계          ]************************************************************************************************************************************/
+.risk_reg_on          { width:109px; height:109px; background:url(../images/main/circle_on.gif) no-repeat; color:#00073b; font-weight:bold; text-align:center;}
+.risk_reg_off         { width:109px; height:109px; background:url(../images/main/circle_off.gif) no-repeat; color:#00073b; text-align:center;}
+
+/***********************[     리스크 맵          ]************************************************************************************************************************************/
+.map_tit              { height:25px; font-size:12px; color:#2d50d4; font-weight:bold; }
+.map_tit a            { color:#2d50d4; text-decoration:none; }
+.map_tit a:hover      { color:#2d50d4; text-decoration:underline; }
+
+/***********************[     레이어 팝업         ]************************************************************************************************************************************/
+.layer_pop            { background:#c9dbf1; border:1px solid #6698d7; margin:0; padding:3px; vertical-align:top; }
+.layer_pop_bg         { background:#e6ebf2; margin:0; padding:0px 5px; height:20px; font-size:11px; color:#81a3c7; }
+.layer_pop_con        { background:#fff; padding:7px; vertical-align:top; }
+.layer_pop_t td       { font-size:11px; color:#555555; padding:1px 0; }
+
+/***********************[     전문가 리스트         ]************************************************************************************************************************************/
+.box_expert           { border:1px solid #e6e7e8; background-color:#fbfbfb; padding:10px; }
+
+/***********************[     membership         ]************************************************************************************************************************************/
+.member_top           { margin:0; padding:0px; height:90px; background:url(../images/main/member_bg.gif) repeat-x; text-align:center;}
+.member_bottom        { margin:0; padding:0px; height:100%; background:url(../images/main/member_bg1.gif) repeat-x; background-color:#f7f7f7; text-align:center; vertical-align:top;}
+
+/***********************[     Activity list 스타일          ]************************************************************************************************************************************/
+.aclist_tit           { font-size:12px; color:#155B9B; border:#ABD3E2 1px solid; background-color:#E6EFFB; padding:5px;}
+.aclist_tit a         { color:#155B9B; text-decoration:none; }
+.aclist_tit a:hover   { color:#155B9B; text-decoration:underline; }
+.aclist               { font-size:12px; border:#ABD3E2 1px solid; padding:5px;}
+
+/***********************[     일상업무주기설정 스타일       ]************************************************************************************************************************************/
+.setting_left                 { width:100%; margin:0; }
+.setting_left td              { font-size:12px; font-weight:bold; }
+.setting_left .on             { background:#a1a1a1; padding:5px 5px 5px 8px; }
+.setting_left .on a           { display:block; color:#ffffff; }
+.setting_left .on a:hover     { color:#9ed9ff; }
+.setting_left .off            { background:#ffffff; padding:5px 5px 5px 8px; }
+.setting_left .off a          { display:block; color:#a1a1a1; }
+.setting_left .off a:hover    { color:#5088d7; }
+.cello_tit02_g                { font-size:9pt; color:#555555; font-weight:bold; padding:1px 0px 1px 0px; }
+.setting_date                 { width:100%; margin-left:14px; }
+.setting_date td              { font-size:9pt; color:#555555; padding:1px 0px 5px 0px; }
+.setting_date1                { width:100%; }
+.setting_date1 td             { font-size:9pt; color:#555555; text-align:center; padding:0px;}
+.setting_date2                { width:100%; }
+.setting_date2 td             { font-size:9pt; color:#555555; padding:5px 0px 3px 0px; }
+.text_help                    { font-size:8pt; color:#888888; padding:1px 0px; }
+
+/***********************[     2011.0818 - 추가       ]************************************************************************************************************************************/
+.ellipsis{  white-space:nowrap; 
+			text-overflow:ellipsis;		/* IE, Safari */
+			-o-text-overflow:ellipsis;	/* Opera under 10.7 */
+			overflow:hidden;			/* "overflow" value must be different from "visible" */ 
+			-moz-binding: url('ellipsis.xml#ellipsis'); }
+			
+/***********************[    2011.0905 - My Desk 상단 버튼 추가     ]**********************************************************************************************************************/
+.cello_bu05                   { font-size:9pt; color:#FFFFFF; font-weight:bold; padding-top:2px; background:url(../images/main/bu05_bg.gif) repeat-x; }
+.cello_bu05 a                 { color:#FFFFFF;}
+.cello_bu05 a:hover           { color:#062db6;}
+.cello_bu05_r                 { width:10px; height:20px; background:url(../images/main/bu05_right.gif) no-repeat; }
+.cello_bu05_l                 { width:10px; height:20px; background:url(../images/main/bu05_left.gif) no-repeat; }
+
+.mydesk_btn                   { height:30px; background:url(../images/main/mydesk_bg.gif) repeat-x; }
+
+/***********************[   2011.1007 덧글   ]************************************************************************************************************************************/
+.add_tip            { width:100%; padding:4px 7px 2px 7px; }
+.add_tip td         { font-size:11px; line-height:14px; vertical-align:top; border-top:#ccc 1px dotted; padding-top:5px; color:#7e7e7e;}
+.add_tip .blue      { color:#1c5b9c; }
+.tit_star           { color:#1c5b9c; font-size:15px; font-weight:bold; padding-bottom:5px; }
+
+/***********************[   2011.11.17 검색영역 스타일 추가 background:url(../images/main/tit_blet.gif) no-repeat;  ]************************************************************************************************************************************/
+table.detail_v1            {width:100%;}
+table.detail_v1 th         {text-align:right; font-weight:normal; white-space:nowrap;font-size:9pt; color:#1c5b9c; vertical-align:middle; height:22px;}
+table.detail_v1 td         {text-align:left; height:22px;}
+.margin0                   {margin:0!important}
+.form_all                  {width:100%; color:#555; border:1px solid #d2d2d2; height:18px;}
+table.detail_v2            {width:auto;}
+table.detail_v2 td         {text-align:right;}
+table.detail_v2 .option    {white-space:nowrap;font-size:9pt;}
+.form_fit                  {width:100%}
+
+/*************[ 120126_테이블 스타일 추가 _테이블에 대한 조건 ]******************/
+.table_case        { float:right !important;  margin:0px; padding:0px; border:solid 1px #c7cedc; border-collapse:collapse; background:#fff; margin-bottom:3px; } 
+.table_case tr     { padding:2px 3px 2px 3px;}
+
+/***********************[   2011.11.10 그리드 영역항목의 링크 유무에 따른 스타일 정의   ]*********************************************************************************************/
+.list_nolink {color:#999;}

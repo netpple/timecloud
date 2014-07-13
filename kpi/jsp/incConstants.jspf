@@ -1,0 +1,139 @@
+<%@page import="org.apache.log4j.Logger"%><%!
+	// -- Basic Delim.
+	private static final char __DELIM__ = 7 ;
+	
+	// -- KPI Page Info Params Delim. (kpi_main.jsp, *.jsp)
+	private static final char __INFO_DELIM__ = __DELIM__ ;	// -- AJAX
+
+	// -- Ext. Params Delim. (incCommon.jspf)
+	private static final String __PARAM_EXT_DELIM__ = "" + __DELIM__ ;	// -- POPUP
+
+	// -- Chart Constants -- Usage Example ) Chart.__CHART_COLUMN__ 
+	
+	// -- SpanHandler (incCommonUtil.jspf)
+	private static final String __SPAN_DELIM__ = "" + __DELIM__ ;	// --
+	private static final String __NUM_DELIM__ = "" + __DELIM__ ;	// -- colspan
+	
+	// -- BKM
+	private static final int __DEFAULT_BKM_WEIGHT_RATE__ = 50 ; // -- 정보성 지식 가중률 (업무성 지식 가중률 WKS_WEIGHT_RATE)
+	
+	private static final String __PROCESS_ID_NA__ = "NA" ;	// -- N/A = Not Avaliable
+%><%!
+//-- added by Sam Kim for Test SessionHandler - 20120228
+/*
+static class SessionHandler {
+	public static boolean checkSession (HttpServletRequest request, HttpSession session) {
+		Logger logger = Logger.getLogger( com.sds.cello.bkm.service.BkmQueryHandler.class ) ; 	
+		logger.debug("userId from session :"+session.getAttribute("userId")) ;
+		
+		String _D1 = null ;
+		String testMode = System.getProperty("snaTestMode") ;
+		if( testMode != null && "TRUE".equals( testMode.toUpperCase() ) ) {
+			logger.debug("snaTestMode now .. ") ;
+			String testLoc = request.getParameter("testLoc") ;
+			if(testLoc == null || testLoc =="")testLoc = "ko" ;			
+			logger.debug("request"+request) ;
+			logger.debug("testLoc:"+testLoc) ;
+			if( request.getParameter("D1") == null ) { 
+				if("en".equals(testLoc)) {
+					_D1 = "gH+epF2ng2/KPu1K7CNQ81aB2IkmS+iT2jCqSxCn3bif8E9Qdnm/mGmzcNtSX7OrkOgVYfWkAxO2ygOuY0D3fYdhrytAlZtGAfj6sTCUr8ePhgdWWVL/fcfOiE0vkdmAfCCvwYQP23SZBjrxTHkLZNPk+EwqZ8ZOsCJbFtQag/I=;NZZkriK2cSzga3NvMUCO5/iCJ3WMh2mMjx0uyPxnwNVIx5dliSD8UZ2A9J5n5/viRor23XNFIuk+l8qCOeMUQVjQkQaMLI+fss+4lh17rmO5j6A39Jxc+0VhXAE+r2csiLmnAHccVVZUEejKBlplYUMnlLxIFqg1yHnWw3m2+v0s63gPrBCGF5OhyT6Rbs/d2F65xrBBvnOhl1bg+8aNxv1uDK1MrA7r3k9VKWQRaB9cVj0KHcUIMBBElP6QVtpGS7rVRvFwBF+Q4fZoksWXQI4iCMcJD1hM4XvXFosi2VOjR+fPvlLncdC+ZNyTgUPq/qIP978FRnIBTTbJNeP4ItIlAU2HHXsyG81CqdLp4aYFN7lP198VaNe2or7IQBfqrGRkZcUqev+Gx2JqrqlqOPmpLQPzbtxtDa0GV+6FNOu5j6A39Jxc+wFrbsfwZmFSAWJtjV1Q7ubZ4+Qm4vdp7kLX4YSmcunXCU3runpifNbVW6qTIb3Q6yvkYhmz3W97H7p0JoyovNbetjH0AjfkSci3YRwcMkTaOUBXmMu3vmdeMYprS8gzTZGetB9aBZ9BS6eeXo311SaraJARBEcdEOZheMDspEaqHK3X9rs6WeOaHGBwQ5D94jOReko727vSsfxRSh23o881ljGVbf/hbA5J/or9r7UvhnBBRrS2z5b+9KtjR2Ra03UA31XseergDiLqjTIDPyvhdL5nC7ekR3S8+w0jzjoB3E7dY30vvJMHv2snfZzZ/XrY4HjIs03vqxuVF8i6GdZtWI++CMrwvY5omR8givSBR1zQnoFb/ocBxwhpTKwPOmnbeb5z8jXkgMzhrJgVCCkacAWEYfGik359xgTMeaWB+nG8nE8B5fEskD35JDQY0lxNbfUbT6DjmKj6kWFiIfHx9Jd6oeE7ULbL8li6Z/rD0CeWmYlvXz48EdXk6IApZYeoHh3j4iBI+mj2E3GT3LilwfOe7XWXZc8n1mleKaPOF038jxhSmoRi6bB+g/wQsCj3hzEa+HT8Mu+Lrr9n9e3rb5EnznguyDdHHMapVBSUvt5z7ru5UQ4Fz6BCnLcoLtsmL5524UdIqkvlhPOosRK/mz7jrd9QdOI6QSSgVNwsrbPp4byWEjUEercKb6jfsstzA47L9lbaNrkgvGQufN20/z6JOrRyqUFCAoEBBuBr7jVBEfPgs31WUckw81MLOJrA3esWWWH9ayOBUYHs4XgVrzJAN2E4XvLdE+orJVHhkXrp1vrq8PUvZL09HpkcAVnZvay6+xx9JDDWGCShD+kLPF9VaMfHJRc9ITbOKKhjui4lplNg3zy6c3kR3zVAeFBt3CXP7B+swgBz6rUanmX5jYdUGV27NeS9IOTQniLXY5R7RcF94dIHqa3x+XQv7RePpKRpm0Mm" ;
+				}
+				else if("zh".equals(testLoc)){
+					_D1 = "qY0YvQuFXxk2Oo5Thhq3Q3Fid6JhiSI2p9EvvH9Hym3pjiH4CsqbyLXAsjU80RZNxZUIqxtOCbFNCGEzu/pbDIhACZZhdd/hOobFQvo4ELlrDnAWaldIZRkS3EqeTuDk1oK7xZlqEJ1iw2hs1EvowmY8+I7TMMMRSM0dDFke4mE=;x8wFcxVbdapC4OCL+q9x36NCH4JizPYvWB/ZiFpjqN8Z5XaPClyAemxLX/1taXSnnEcGUlv+XmA/q+Wo0On33nB/fmakv9y0owSba6m0NFoRqXH5SvZUWTxEH2/EvnuTxbBvkRsYuYD/bLYe7gaEWG807Lzbf1lY+84opTXjVbtVn+RN6+gPaHm5pVwvfXJMLN7DSCr6IoKwRrx2QxQwT6TsijFUpQGVC/lnB04BZ+oYrHJrme9en9tzbnwbXmWTTMglxXDvU4lplehbdvRRgAULHQfjEOxchvC+6gVIDWIPWoYCyptYnNhsdv5nZMMqsGJsXPf+Q/d2GCtAlKSnh3WGPoIPhvy73w8tLFjtbTctN+0yWHuXbtzn/tS0aTVsdQL5H4zZCfNMkn8u7ka4WiEn2EAkc92zSphDzhz84Q4RqXH5SvZUWTstiqIpo/aiioT25eMd1q4klKBuJVtIc/i2n9tOn+YfJBsuNoeGTKHnu80x7AdjtnOiFFjt0Cu0wipOjQ8ZHcL5UFoht9twfgWol6HScXFOVTVZQcQKFNHS27KT7gjBVNF3YFKnKC17/qIz5d6uCsyyCyEkXKDFc/hCxctC7ST/j8ajj/sSTr+X+DBTA+GQ9hX4g0NEwtClbEA+2Tp2TaA1qaxjIBtCDi8Ng30B7yZteCML6knrEpJejdQ0tQ8o52/7vn1Hh+ehQfuhhDSahA2fdLAcuIIxqJlhCQPwCa2YiGfocdHrqT+TYK7+1coRrg+xE2PRDTxhsGOJ0m9pYl86FH/aDfecKIbuc3w5uO8ZqDGiDtScI/xkbAsVRC9nSV0yN2fNyOwiqm9whCrzx/KB4GXeu91DsWXc3ScY0cZUbmkBtIcv28RD4OOW3f6TUOSt+nTXM2MukgTTgjcwmj8Qq77QZ6VTQa+nbZwVPMM3fE+buGUhyUwIeXW6NFevNmoKfyRcjBJn8hBoQhmunnYbC0Wu/1If32rq/d5SdwzSikW/1aUe3ehqvDL/NW9po/59jvDritAUi+TgfY8udXot1w3ATElraE2NJb7ZXgrIQxKgMUHzMrNpIik9iBeS7sRXfLOo5Rpk48DNMlRALPBUuxRkX7czbrwFKRJ6VMJ8yOZJGXO3ZgCigABWAbvnk3l7iEIN8CvK5h76ClMLrdqzgGrr/zx+lfct4wQQ3MlXm72Jhkr3EQLUGmsV1vvuuPbIP0J8xowMITN1wLARLJcM6zzp4osxoHNMsmasP0ptkc2LdgNQ3WXRObwxK7bl9oaPfw5M6dJL1jiKAi01Gc7ggR7Q93cuBzoGyMs3MfQwjDqz73Y9jFbJ7rZwI7hphjz0hsvq+Ti7mcbKisa0UZF+ceO8pWdbSSJdWmINOW1GiBdtdZ8FBQDfSEZOxG00BWEl5tvhWJY8SWAfcE2n7Mh38CanfWVvLQ==" ;
+				}
+				else {
+					_D1 = "ih3AU+Zt9QbpLldv7bs77VMP4xLwyDjQ3EW/uYUHQ9xIDsyyCP2Gjgb0Zi4oEiFq7VqMfdNZa3yjQOeH4LSp909XXMHIlcxHnqxETNxMd6W8GZc4NHqSeczmrGscc4Q4No0hHIK0J7yFzEgbl+yxLcAKrZebQLnHL4lO+jKc2mc=;ceNYT58TCj/uwayVfqTVbBjTSNh6jXrUu8s7TKxbMhNXVhf8eOyDp6kb0bXCba+hl3UEIh4TvU0Lkl9EvBjb6c6MkBMqqWTA/znu04W8G8YOijT0gjXVdZKiCkMIu8QsindYw1YDm0M3Qt8zRA7XFMVDY0EHnRKGWB6gWhtmoHmLshjX53sC4NHRxex/y+1iFxziFJgi5GX6EGqGPywwA9NxU3oFOsG74zGW5JUHpUoepkxwJeAWZVYXSoZpDUB0sR23Mqs+HpM6MocMwsh2DY5Ul+/GWeSlLnM7zj3mY9gg9+Ee4g0qDHElBEhgpVhdkX6FS9SgeVXTYrAdNjOyi7joo7ac+SoLQeBGRdiTVyAm1oNtxXHlsWV0vfDtzlcha2z+n/rSgiSS2SbLyjfo86Gp8sc4oggVrwfuh6U5o6MJtNRN8dc5ZP8EO13/l0gVses9PiKT1su6wT/1xfQu07PE9Edg1oRejD16JoJZCjmJybKLvG8800t3bnqHvXbSAiPeYaG43hDe5umPwM7AbGr2qX2rgd/hoK+FYfehpQbm57PCCEZBd2hAURLbcpYV2wALNbz8hiEd5MJerO1uFJOgRgEcgUR3HryXx+kQvduu3H5jDcblQWNiSe+gZ6yKWMBss3qenz021+f7Pj3tiOvrhYVydcK8cug89IOcZQ/e0yZ9MFLApbbOOLXupVsWxvaAXH40o1J7FSrtftEcj/Cvt+uD9jIs3L5unzHH5PtcsxjW6+JE6GODtzK9x8zk0nF3kS3NiwFYAp+Bo8M1c8wD94OBzQV6mlcdGFWFkOoU/K5+DkxjemCpWWTtl8sGowBE4l5X7//xM6jc2ir3U7M/EEdnzfVemPIfvQZsnnfWOQEUtivfhkJevKkx8f5CnF9gc1nh77PO05oXxau6q/Rmot/8ltME0bIYNtwr2sa0iYWzN7N9ZtbS1GiebVoO0EOFCEuHyVCEJhI5KumBHiDj4ZlRsRg3RRQi4ZOEVdzXcinRGmtysKIJGt09O/FAi9leFU2lYkX1GgNG9MZjnjeD0z3zhf0eeRKLAwAGBm0OcmdrS69K8C9QVITNiWtTAOlRNi6pw8C4CW4oE41sL+eug0eOAag6LRAMpPEKXy+kcOnhWJhflLPF4cn+prdittpRShUhVnE7sqEeAB5h9izf4USfZvlBvkMc/eeXANLWgHQbsZr4w2Db9AIOf/E2pfviMGxqCA8E6OMsb4bVWj77dzWDcS+FLbVoB+TWo6p47u9uxLoO1jE+dQ3xsyEpgweCJgW/QhVujSVTYi+p4LLw1YaY4kS0Ng6si0kFiCU+laqiSOoVwCQgz1RgcWo+ExNZcz7cutrv2Afn3fRZ7USnCma/V8Yb" ;
+				}
+				
+				request.setAttribute("D1", _D1) ;	// -- FOR TEST
+				logger.debug("D1 is changed for localeCode "+testLoc) ;
+			}
+		}
+		else { 
+			_D1 = request.getParameter("D1") ;
+		}
+
+		if(_D1 != null ) {	// -- D1 (encoded session parameters)
+			logger.debug(_D1) ;
+			////////////////////////////////////////////////////////////////////
+			// ACUBE SSO D1
+			////////////////////////////////////////////////////////////////////
+			SnaSSOUtil sso = new SnaSSOUtil();
+			String[] arrD1 = sso.getInfoValues( _D1 );
+			////////////////////////////////////////////////////////////////////
+				
+			String	_userId=arrD1[0] ;	// -- loginId
+			String	_timeZone=arrD1[56] ;
+			String	_localeCode=arrD1[47] ;
+						  
+	  		String	_userName=arrD1[1] ;
+			String	_compId=arrD1[2] ;
+			String	_deptId=arrD1[5] ;
+			String	_deptName=arrD1[6] ;			
+			String	_deptHeadId=arrD1[65];
+			String	_userUID=arrD1[17] ; // -- UID
+				
+	    	if( session.getAttribute("userId") == null ) {	// -- 1. 세션이 없을 경우
+	    		logger.debug("CASE1. no session") ;
+	   			session.setAttribute("userId", _userId ) ;	// -- loginId
+	   			session.setAttribute("timeZone", _timeZone ) ;
+	   			session.setAttribute("localeCode", _localeCode ) ;
+	   			session.setAttribute("userName", _userName ) ;
+	   			session.setAttribute("compId", _compId ) ;
+	   			session.setAttribute("deptId", _deptId ) ;
+	   			session.setAttribute("deptHeadId", _deptHeadId ) ;
+	   			session.setAttribute("deptName", _deptName ) ;			
+	   			session.setAttribute("userUID", _userUID ) ; // -- UID
+	    	}
+	    	else { // -- 2. 세션이 있을 경우 : 
+	    		logger.debug("CASE2. session exist") ;
+		        String _sess_user_id_ = (String)session.getAttribute("userId") ;
+		        if( _sess_user_id_.equals(_userId) ) {  // -- id is same : session update 
+		        	logger.debug("CASE2-1. userId is same.") ;
+	    			session.setAttribute("timeZone", _timeZone ) ;
+	    			session.setAttribute("localeCode", _localeCode ) ;
+	    			session.setAttribute("userName", _userName ) ;
+	    			session.setAttribute("deptName", _deptName ) ;			
+		        }
+		        else { // -- id is same : session renew
+		        	logger.debug("CASE2-2. userId is different.") ;
+	    			session.setAttribute("userId", _userId ) ;	// -- loginId
+	    			session.setAttribute("timeZone", _timeZone ) ;
+	    			session.setAttribute("localeCode", _localeCode ) ;
+	    			session.setAttribute("userName", _userName ) ;
+	    			session.setAttribute("deptName", _deptName ) ;			
+	    			session.setAttribute("compId", _compId ) ;
+	    			session.setAttribute("deptId", _deptId ) ;
+	    			session.setAttribute("deptHeadId", _deptHeadId ) ;
+	    			session.setAttribute("userUID", _userUID ) ; // -- UID
+		        }
+
+		        request.setAttribute("D1",_D1) ;
+	    	}
+		}
+		else {  // -- D1 is NULL
+			if( session.getAttribute("userId") == null ) {	// -- 1.check session
+				logger.debug("session is null") ;
+				return false ;
+			}
+		}
+
+		// -- 
+		logger.debug(
+				"session value is setted \n"
+				+"userId:"+session.getAttribute("userId")+"\n"
+				+"userName:"+session.getAttribute("userName")+"\n"
+				+"compId:"+session.getAttribute("compId")+"\n"
+				+"deptId:"+session.getAttribute("deptId")+"\n"
+				+"deptHeadId:"+session.getAttribute("deptHeadId")+"\n"
+				+"deptName:"+session.getAttribute("deptName")+"\n"
+				+"userUID:"+session.getAttribute("userUID") + "\n"
+				+"timeZone:"+session.getAttribute("timeZone")+"\n"
+				+"localeCode:"+session.getAttribute("localeCode")
+				) ;
+		
+		return true ;
+	}	
+}
+*/
+%>

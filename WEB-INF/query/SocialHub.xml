@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-statement>
+	<query>
+		<id>INSERT_USER_SNSMAP</id>
+		<value>
+			INSERT INTO TIMECLOUD_USER_SNSMAP (
+				N_OWNER_IDX,
+				C_SNS_TYPE,
+				V_ACCESS_TOKEN,
+				V_REG_DATETIME
+			) VALUES (
+				?,
+				?,
+				?,
+				TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+			) 
+		</value>
+		<description></description>
+	</query>
+	
+	<query>
+		<id>UPDATE_USER_SNSMAP</id>
+		<value>
+			UPDATE TIMECLOUD_USER_SNSMAP 
+			SET V_ACCESS_TOKEN = ?
+			WHERE N_OWNER_IDX = ? 
+				AND C_SNS_TYPE = ?			
+		</value>
+		<description></description>
+	</query>
+	
+	<query>
+		<id>SELECT_USER_SNSMAP</id>
+		<value>
+			SELECT
+				C_SNS_TYPE,
+				V_ACCESS_TOKEN
+			FROM TIMECLOUD_USER_SNSMAP
+			WHERE 
+				N_OWNER_IDX = ?
+		</value>
+		<description></description>
+	</query>
+
+	<query>
+	    <id>SELECT_TASK_INFO_FOR_YAMMER_NOTIFICATION</id>
+	    <value>
+			SELECT 
+				X.V_DESC ,
+				(SELECT B.N_IDX||'-'||B.V_NAME FROM TIMECLOUD_TASK A, TIMECLOUD_USER B WHERE (A.N_OWNER_IDX = B.N_IDX) AND A.N_IDX=X.N_PARENT_IDX) AS V_PARENT_USER,
+				X.N_OWNER_IDX,
+				Y.V_NAME
+            FROM
+	            (SELECT A.* 
+	                FROM TIMECLOUD_TASK A ,
+	                (SELECT N_IDX,N_LIST,N_PARENT_IDX FROM TIMECLOUD_TASK WHERE N_IDX=?) B
+	                WHERE A.N_IDX=B.N_IDX 
+	
+	                ORDER BY N_LEVEL ASC
+	            ) X, TIMECLOUD_USER Y
+            WHERE (X.N_OWNER_IDX=Y.N_IDX)
+         </value>
+	    <description>최상위,부모,본태스크 리턴</description>
+	</query>
+		
+
+	<query>
+	    <id>SELECT_FEEDBACK_TALKER</id>
+	    <value>
+			SELECT
+			    DISTINCT N_OWNER_IDX
+			FROM
+			    TIMECLOUD_FEEDBACK
+			WHERE
+			    N_TASK_IDX = ?
+         </value>
+	    <description>피드백에서 대화하는 사용자들 목록</description>
+	</query>	
+
+	<query>
+	    <id>SELECT_FILE_UPLOADER</id>
+	    <value>
+			SELECT
+			    DISTINCT N_OWNER_IDX
+			FROM
+			    TIMECLOUD_FILE
+			WHERE
+			    N_TASK_IDX = ?
+         </value>
+	    <description>파일함에 파일 올린 사용자들 목록</description>
+	</query>	
+
+
+	
+</sql-statement>

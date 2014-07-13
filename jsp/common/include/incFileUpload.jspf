@@ -1,0 +1,20 @@
+<link rel="stylesheet" href="http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
+<link rel="stylesheet" href="<%=CSS_PATH%>/fileupload/jquery.fileupload.css">
+<link rel="stylesheet" href="<%=CSS_PATH%>/fileupload/jquery.fileupload-ui.css">
+
+<script src="<%=JS_PATH%>/fileupload/vendor/jquery.ui.widget.js"></script>
+<script src="<%=JS_PATH %>/fileupload/tmpl.min.js"></script>
+<script src="<%=JS_PATH %>/fileupload/load-image.min.js"></script>
+<script src="<%=JS_PATH %>/fileupload/canvas-to-blob.min.js"></script>
+<script src="<%=JS_PATH %>/fileupload/jquery.blueimp-gallery.min.js"></script>
+<script src="<%=JS_PATH%>/fileupload/jquery.iframe-transport.js"></script>
+<script src="<%=JS_PATH%>/fileupload/jquery.fileupload.js"></script>
+<script src="<%=JS_PATH%>/fileupload/jquery.fileupload-process.js"></script>
+<script src="<%=JS_PATH%>/fileupload/jquery.fileupload-image.js"></script>
+<script src="<%=JS_PATH%>/fileupload/jquery.fileupload-audio.js"></script>
+<script src="<%=JS_PATH%>/fileupload/jquery.fileupload-video.js"></script>
+<script src="<%=JS_PATH%>/fileupload/jquery.fileupload-validate.js"></script>
+<script src="<%=JS_PATH%>/fileupload/jquery.fileupload-ui.js"></script>
+<!--[if (gte IE 8)&(lt IE 10)]>
+<script src="<%=JS_PATH%>/fileupload/cors/jquery.xdr-transport.js"></script>
+<![endif]-->

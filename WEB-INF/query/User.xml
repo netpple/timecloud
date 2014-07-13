@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-statement>
+    <!--USER_IMAGE-->
+    <query>
+        <id>SELECT_USER_IMAGE_SEQUENCE</id>
+        <value>
+            SELECT SEQ_USER_IMAGE_IDX.NEXTVAL FROM DUAL
+        </value>
+        <description>파일 업로드 시퀀스</description>
+    </query>
+
+    <query>
+        <id>DELETE_USER_IMAGE</id>
+        <value>
+            UPDATE
+                TIMECLOUD_USER_IMAGE
+            SET
+                C_DEL_YN = 'Y'
+            WHERE
+                N_IDX = ? AND N_OWNER_IDX = ?
+        </value>
+        <description>파일 삭제처리</description>
+    </query>
+
+    <query>
+        <id>UPDATE_USER_IMAGE_SELECTED</id>
+        <value>
+            UPDATE
+                TIMECLOUD_USER_IMAGE
+            SET
+                C_SELECTED_YN = ?
+            WHERE
+                N_IDX = ?
+                AND N_OWNER_IDX = ?
+                AND C_DEL_YN = 'N'
+        </value>
+    </query>
+
+    <query>
+        <id>SELECT_USER_IMAGE_LIST</id>
+        <value>
+            SELECT
+                A.N_IDX
+                ,A.V_ORIGIN_NAME
+                ,A.V_SAVE_NAME
+                ,A.V_EXT
+                ,A.N_FILE_SIZE
+                ,A.N_OWNER_IDX
+                ,A.V_REG_DATETIME
+                ,A.C_DEL_YN
+                ,B.V_NAME AS OWNER_NAME
+                ,FN_TIMEGAP(A.V_REG_DATETIME) as timegap
+                ,A.C_SELECTED_YN
+            FROM
+            TIMECLOUD_USER_IMAGE A, TIMECLOUD_USER B
+            WHERE
+                A.C_DEL_YN = 'N'
+                AND A.N_OWNER_IDX = B.N_IDX
+                AND A.N_OWNER_IDX = ?
+            ORDER BY A.N_IDX ASC
+        </value>
+        <description>특정 사용자 이미지 목록 가져오기</description>
+    </query>
+
+    <query>
+        <id>SELECT_USER_IMAGE_INFO</id>
+        <value>
+            SELECT
+                N_IDX,
+                V_ORIGIN_NAME,
+                V_SAVE_NAME,
+                V_EXT,
+                N_FILE_SIZE,
+                N_OWNER_IDX,
+                V_REG_DATETIME,
+                C_SELECTED_YN,
+                C_DEL_YN
+            FROM
+                TIMECLOUD_USER_IMAGE
+            WHERE
+                N_IDX = ?
+        </value>
+        <description>유저이미지 정보 조회</description>
+    </query>
+
+    <query>
+        <id>INSERT_USER_IMAGE</id>
+        <value>
+            INSERT INTO TIMECLOUD_USER_IMAGE (
+                N_IDX,
+                V_ORIGIN_NAME,
+                V_SAVE_NAME,
+                V_EXT,
+                N_FILE_SIZE,
+                N_OWNER_IDX,
+                V_REG_DATETIME
+            ) VALUES (
+                ?,		-- N_IDX
+                ?,		-- V_ORIGIN_NAME
+                ?,		-- V_SAVE_NAME
+                ?,		-- V_EXT
+                ?,		-- N_FIEL_SIZE
+                ?,		-- N_OWNER_IDX
+                TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            )
+        </value>
+        <description>유저이미지 정보 INSERT</description>
+    </query>
+    <!---->
+
+    <query>
+        <id>UPDATE_USER</id>
+        <value>
+            UPDATE TIMECLOUD_USER SET
+                V_NAME = ?,
+                V_TEL = ?,
+                V_NOTI_EMAIL = ?,
+                V_EDT_DATETIME = TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            WHERE
+                N_IDX = ?
+                AND V_PASSWD = FN_CRYPT('1',?,'TT')
+        </value>
+    </query>
+
+    <query>
+        <id>UPDATE_USER_PASSWD</id>
+        <value>
+            UPDATE TIMECLOUD_USER SET
+                V_PASSWD = FN_CRYPT('1',?,'TT')
+            WHERE
+                V_PASSWD = FN_CRYPT('1',?,'TT')
+                AND N_IDX = ?
+        </value>
+    </query>
+
+    <query>
+        <id>SELECT_USER_SEQ</id>
+        <value>
+            SELECT SEQ_USER_IDX.NEXTVAL FROM DUAL
+        </value>
+    </query>
+    <query>
+        <id>INSERT_USER</id>
+        <value>
+            INSERT INTO TIMECLOUD_USER(
+                N_IDX
+                ,V_EMAIL
+                ,V_PASSWD
+                ,V_NAME
+                ,V_REG_DATETIME
+                ,V_EDT_DATETIME
+                ,C_DEL_YN
+                ,C_OFF_YN
+                ,V_TEL
+                ,V_NOTI_EMAIL
+                ,V_LAST_LOGIN_DATETIME
+            ) VALUES (
+            ?
+            ,?
+            ,FN_CRYPT('1',?,'TT')
+            ,?
+            ,TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            ,TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            ,'N'
+            ,'N'
+            ,''
+            ,''
+            ,''
+            )
+        </value>
+    </query>
+    <query>
+        <id>INSERT_DOMAIN_USER</id>
+        <value>
+            INSERT INTO TIMECLOUD_DOMAIN_USER(N_DOMAIN_IDX,N_USER_IDX)
+            VALUES (?,?)
+        </value>
+    </query>
+    <query>
+        <id>SELECT_DOMAIN_USER_LIST</id>
+        <value>
+            SELECT
+            A.N_IDX
+            , A.V_EMAIL
+            , A.V_NAME
+            , A.C_OFF_YN
+            , FN_TIMEGAP(A.V_REG_DATETIME) AS V_REG_DATETIME
+            , FN_TIMEGAP(A.V_EDT_DATETIME) AS V_EDT_DATETIME
+            FROM
+            TIMECLOUD_USER A, TIMECLOUD_DOMAIN_USER X, TIMECLOUD_DOMAIN B
+            WHERE
+            (A.N_IDX = X.N_USER_IDX AND X.N_DOMAIN_IDX = B.N_IDX)
+            AND A.C_DEL_YN = 'N'
+            AND B.N_IDX = ?
+        </value>
+        <description></description>
+    </query>
+    <query>
+        <id>SELECT_USER_LIST</id>
+        <value>
+            SELECT
+            N_IDX
+            , V_EMAIL
+            , V_NAME
+            , C_OFF_YN
+            , FN_TIMEGAP(V_REG_DATETIME) AS V_REG_DATETIME
+            , FN_TIMEGAP(V_EDT_DATETIME) AS V_EDT_DATETIME
+            FROM
+            TIMECLOUD_USER
+            WHERE
+            C_DEL_YN = 'N'
+        </value>
+        <description></description>
+    </query>
+    <query>
+        <id>SELECT_USER_INFO</id>
+        <value>
+            SELECT
+            A.N_IDX,
+            A.V_EMAIL,
+            A.V_NAME,
+            A.C_OFF_YN,
+            A.V_REG_DATETIME,
+            A.V_EDT_DATETIME,
+            FN_CRYPT('2',A.V_PASSWD,'TT'),
+            A.V_TEL,
+            A.V_NOTI_EMAIL
+            FROM TIMECLOUD_USER A
+            WHERE
+            A.N_IDX = ? AND
+            A.C_DEL_YN = 'N'
+        </value>
+        <description>FOR USER LIST</description>
+    </query>
+
+    <query>
+        <id>SELECT_USER_LIST2</id>
+        <value>
+            SELECT N_IDX, V_EMAIL, V_NAME,'' FROM TIMECLOUD_USER
+            WHERE N_IDX != ? AND C_DEL_YN='N' AND C_OFF_YN='N'
+            ORDER BY V_NAME ASC
+        </value>
+        <description>FOR USER COMBO - 본인 계정 제외</description>
+    </query>
+
+    <query>
+        <id>SELECT_USER_LIST3</id>
+        <value>
+            SELECT N_IDX, V_EMAIL, V_NAME FROM TIMECLOUD_USER
+            WHERE C_DEL_YN='N' AND C_OFF_YN='N'
+            ORDER BY V_NAME ASC
+        </value>
+        <description>FOR USER COMBO - 본인 계정 포함</description>
+    </query>
+
+    <query>
+        <id>SELECT_USER_LIST4</id>
+        <value>
+            SELECT A.N_IDX, A.V_EMAIL, A.V_NAME FROM TIMECLOUD_USER A, TIMECLOUD_USER_PARTNER B
+            WHERE A.N_IDX = B.N_PARTNER_IDX AND B.N_OWNER_IDX = ?
+        </value>
+        <description>FOR USER COMBO - 파트너 목록</description>
+    </query>
+    <query>
+        <id>SELECT_USER_LIST4_WITH_ME</id>
+        <value>
+            SELECT X.* FROM (
+            SELECT A.N_IDX, A.V_EMAIL, A.V_NAME FROM TIMECLOUD_USER A, TIMECLOUD_USER_PARTNER B
+            WHERE A.N_IDX = B.N_PARTNER_IDX AND B.N_OWNER_IDX = ?
+            UNION ALL
+            SELECT N_IDX, V_EMAIL, V_NAME FROM TIMECLOUD_USER
+            WHERE N_IDX = ?
+            ) X
+            ORDER BY X.V_NAME
+        </value>
+        <description>FOR USER COMBO - 파트너 목록 (본인 포함)</description>
+    </query>
+
+    <query>
+        <id>SELECT_USER_LIST3</id>
+        <value>
+            SELECT Y.* FROM TIMECLOUD_TASK X, (
+            SELECT
+            N_IDX
+            ,V_EMAIL
+            ,V_NAME
+            ,C_OFF_YN
+            ,C_DEL_YN
+            ,V_REG_DATETIME
+            ,V_EDT_DATETIME
+            FROM TIMECLOUD_USER
+            ) Y WHERE (X.N_OWNER_IDX = Y.N_IDX) AND X.N_LIST = ?
+
+        </value>
+        <description>FOR TASK USER LIST - 해당 태스크 관련자들</description>
+    </query>
+
+    <query>
+        <id>SELECT_TIMECLOUD_LOGIN_USER</id>
+        <value>
+            SELECT N_IDX, V_EMAIL, V_NAME, C_OFF_YN, V_REG_DATETIME, V_EDT_DATETIME, FN_CRYPT('2',V_PASSWD,'TT'),
+            V_NOTI_EMAIL FROM TIMECLOUD_USER
+            WHERE V_EMAIL = ?
+        </value>
+        <description>FOR USER LOGIN - WILL BE REMOVED</description>
+    </query>
+
+    <query>
+        <id>SELECT_TIMECLOUD_LOGIN_DOMAIN_USER</id>
+        <value>
+            SELECT
+            A.N_IDX
+            , A.V_EMAIL
+            , A.V_NAME AS USER_NAME
+            , A.C_OFF_YN
+            , A.V_REG_DATETIME
+            , A.V_EDT_DATETIME
+            , FN_CRYPT('2',V_PASSWD,'TT')
+            , A.V_NOTI_EMAIL
+            , B.V_NAME AS DOMAIN_NAME
+            , B.N_IDX AS DOMAIN_IDX
+            FROM
+            TIMECLOUD_USER A, TIMECLOUD_DOMAIN_USER X, TIMECLOUD_DOMAIN B
+            WHERE
+            (A.N_IDX = X.N_USER_IDX AND X.N_DOMAIN_IDX = B.N_IDX)
+            AND A.V_EMAIL = ? AND X.N_DOMAIN_IDX = ?
+            AND (A.C_DEL_YN = 'N')
+            AND (B.C_OFF_YN = 'N' AND B.C_DEL_YN = 'N')
+        </value>
+        <description>FOR DOMAIN USER LOGIN</description>
+    </query>
+
+    <query>
+        <id>UPDATE_LAST_LOGIN_DATETIME</id>
+        <value>
+            UPDATE TIMECLOUD_USER
+            SET V_LAST_LOGIN_DATETIME = TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            WHERE N_IDX = ?
+        </value>
+        <description>LAST LOGIN DATETIME</description>
+    </query>
+
+    <query>
+        <id>SELECT_USER_SNS_MAP</id>
+        <value>
+            SELECT
+            N_OWNER_IDX,
+            C_SNS_TYPE,
+            V_ACCESS_TOKEN,
+            V_REG_DATETIME
+            FROM
+            TIMECLOUD_USER_SNSMAP
+            WHERE
+            N_OWNER_IDX = ?
+        </value>
+        <description>FOR USER LOGIN</description>
+    </query>
+    <query>
+        <id>UPDATE_USER_OFF</id>
+        <value>
+            UPDATE TIMECLOUD_USER SET C_OFF_YN = 'Y'
+            ,v_edt_datetime=TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            WHERE N_IDX=?
+        </value>
+        <description></description>
+    </query>
+    <query>
+        <id>UPDATE_USER_ON</id>
+        <value>
+            UPDATE TIMECLOUD_USER SET C_OFF_YN = 'N'
+            ,v_edt_datetime=TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            WHERE N_IDX=?
+        </value>
+        <description></description>
+    </query>
+</sql-statement>

@@ -1,0 +1,495 @@
+<%!
+	/* -- ROWSPAN GROUP용 클래스 임-- */
+	//-- 필드 Sum용 VO
+	class SumVO {
+		double buf = 0.00 ;
+		double total = 0.00 ;
+		String out = "" ; // -- ','로 구분
+	}
+	
+	//-- ROWSPAN 용 VO
+	class SpanVO {	// -- setSpan 으로 부터 넘겨받을 Output
+		String[] columns = null ;	// -- ROWSPAN 대상 컬럼
+		String[] sameSpans = null ;	// -- LEVEL1 ROWSPAN 대상 컬럼과 동일한 ROWSPAN수를 갖는 컬럼들
+		
+		/* -- added codes by Sam, Kim - 2011.10.16 -- */
+		String[] sameSpans2 = null ; // -- LEVEL2 ROWSPAN 대상 컬럼과 동일한 ROWSPAN수를 갖는 컬럼들
+		// --
+	}
+	
+	class SpanHandler {
+		int level1Counter = 1 ; // -- level1 이  넘어갈때 마다 증분됨.
+		
+		String rowspanTd = "" ;	// -- level1 row 개수 보관용  예) 1,2,5,2, .... 첫번재 rowspan=2, .. 세번째 rowspan=5 ..
+		String rowspanSubTd = "" ;	// -- level2 row개수 보관용
+	
+		/* -- added codes by Sam, Kim - 2011.10.16 -- */
+		int l1SubRowCounter = 0 ;
+		String l1SubRowTotal = "" ;	// -- level1의 하위 level2 개수 보관용 예) 2,3,4,5,.... 첫번째 level1의 하위level2는 2개 존재 ...
+		
+		// --
+		int startTdCnt = 1 ;
+		int startSubTdCnt = 1 ;
+	
+		// -- looping용 임시 버퍼
+		String tmp1 = "" ;
+		String tmp2 = "" ;
+	
+		ArrayList arrLevel1 = null ;
+		ArrayList arrLevel2 = null ;
+	
+		int rowcnt = 1 ;	// -- level1 row 개수
+		int rowSubCnt = 1 ;	// -- level2 row 개수
+		
+		/* -- span column을 위한 각종 집계값 보유 
+		 * KEY : 컬럼과 컬럼에 적용할 연산을 식별할 수 있는 키 (예)SUM1, MARK2T .. 등
+		 * VALUE : Object (SumVO 등.. 연산에 따라 다름)
+		 */
+		Map map = new TreeMap() ; // -- HashMap() ;	// -- Key 정렬 때문에 TreeMap 사용
+		
+		// -- summary row : 마지막행의 SUM OR ROW
+		String summary = "" ;
+	
+		public SumVO getSumVO( String key ) {
+			if(!map.containsKey(key)) return null ;
+			return (SumVO)map.get(key) ;
+		}
+		
+		public Map getValueMap() {
+			return map ;
+		}
+		
+		// -- refColumn의 total대비 비율을 대상 markColumn에 삽입해 주는 함수
+		public String changeCustomMarkToRate( String trString, String refColumnKey, String markColumnKey ) {
+			String trs = trString ;
+	
+			String[] vals = null ; 
+	
+			SumVO vo = getSumVO( refColumnKey ) ;
+			if(vo == null)return null ;
+			
+			if( vo.out.indexOf(__NUM_DELIM__) < 0 ) vals = new String[] { vo.out } ;
+			else vals = vo.out.split(__NUM_DELIM__) ;
+	
+			double rate = 0.00 ;
+			
+			for ( int j =0 ; j < vals.length ; j++ ) {
+				rate = parseDouble( ( parseDouble(vals[j],0) / parseDouble(vo.total,0) ) * 100.00 ) ;
+				// -- out.println(__NUM_DELIM__+"j="+rate) ;
+				trs = trs.replaceAll( "(" + markColumnKey + (j+1) + "E)", numberFormat( rate ) ) ;
+			}
+			
+			return trs ;
+		}
+	
+		// -- public String[] getCustomMarkValue( String refColumnKey, String markColumnKey ) {
+		public String[] getSumVOValues( String refColumnKey ) {
+			SumVO vo = getSumVO( refColumnKey ) ;
+			if(vo == null)return null ;
+	
+			if( vo.out.indexOf(__NUM_DELIM__) < 0 ) return new String[] { vo.out } ;
+	
+			String[] vals = vo.out.split(__NUM_DELIM__) ;
+			return vals ;
+		}
+	
+		// 예) map.put("level1", "3.3,2.1,3.5,3.9,9.9,9" ) ; // -- level1 필드의 span 단위 집계값 보유
+		// 2중 map 구조로 가야 하네.. map.put("level1", new HashMap() ) ;
+		
+		private void initRowCnt() { this.rowcnt = 1 ; }
+		private void increaseRowCnt() { this.rowcnt++ ; }
+		private void initRowSubCnt() { this.rowSubCnt = 1 ; }
+		private void increaseRowSubCnt() { this.rowSubCnt ++ ; }
+	
+		private boolean isFirstTdValueSame( String column1 ) {
+			return this.tmp1.equals( column1 ) ;
+		}
+		
+		private boolean isSecondTdValueSame( String column2 ) {
+			return this.tmp2.equals( column2 ) ;
+		}
+		
+		public String[] getSummary() {
+			// -- System.out.println(summary) ;	// -- sameSpans1, sameSpans2에 상관없이 SUM처리된 필드들에 대해 순서대로 리턴	
+			if( summary == null || "".equals(summary) )return null ;
+			
+			if( summary.indexOf(__NUM_DELIM__) > -1 ) {
+				return this.summary.split(__NUM_DELIM__) ;
+			}
+			
+			return new String[]{summary} ;	// -- null , "" 
+		}
+		
+		public String getTRs ( String trs ) {	// -- 최종적으로 루핑부분의 마크업을 실제 rowspan으로 치환시켜 돌려주는 부분
+			if(trs == null) return null;
+			
+			Iterator it = map.keySet().iterator() ;
+			String key = null ;
+			String[] vals = null ;
+	
+			String tmp = "" ;
+			while( it.hasNext() ) {
+				key=(String)it.next() ;
+				clearColumnBuffer( key ) ;	// -- 버퍼를 비운다
+				SumVO vo = (SumVO)map.get( key ) ;
+				vals = vo.out.split(__NUM_DELIM__) ;
+				
+				//double rate = 0.00 ;
+				for(int k=0;k<vals.length;k++) {
+					trs = trs.replaceAll("("+key+"_"+(k+1)+"_)", numberFormat ( parseDouble(vals[k]) ) ) ;
+				}
+				
+				if( !this.summary.equals("") ) this.summary += __NUM_DELIM__ ; // -- + this.summary	 ;
+				this.summary += parseDouble( vo.total ) ; // -- + this.summary ;
+			}
+	
+			setRowSpanTd() ;
+			setRowSpanSubTd() ;
+			
+			// -- System.out.println( "level1:"+rowspanTd ) ;
+			// -- System.out.println( "level2:"+rowspanSubTd ) ;
+			String[] rowspans = rowspanTd.split(__NUM_DELIM__) ;
+			for( int k = 1 ; k < rowspans.length ; k++) {
+				trs = trs.replaceAll( getFirstMarkUp(k) , "rowspan='" + rowspans[k] + "'") ;
+	
+				/* -- added codes by Sam, Kim - 2011.10.16 -- */
+				trs = trs.replaceAll( "ROWCOUNT1T"+k+"E", rowspans[k] ) ;	// -- ROW
+			}
+	
+			String[] rowspanSubs = rowspanSubTd.split(__NUM_DELIM__) ;
+			for( int m = 1 ; m < rowspanSubs.length ; m++) {
+				trs = trs.replaceAll( getSecondMarkUp(m), "rowspan='" + rowspanSubs[m] + "'") ;
+			}
+	
+			/* -- added codes by Sam, Kim - 2011.10.16 -- */
+			String[] l1SubRowTotals = getL1SubRowTotal() ;
+			// -- 
+			for ( int n = 1; n < l1SubRowTotals.length ; n++ ) {
+				trs = trs.replaceAll( "SUBLVLCNT1T"+n+"E", l1SubRowTotals[n] ) ;	// -- ROW
+			}
+	
+			return trs ;
+		}
+	
+		// --
+		private void setColumnValue ( int col, String columnValue ) {
+			if( columnValue.indexOf(__SPAN_DELIM__) < 0 ) return ;
+			String[] chunk = columnValue.split(__SPAN_DELIM__) ;
+			
+			if ("SUM".equals(chunk[0]) ) {
+				if ( map.containsKey("SUM" + col) ) {	// -- 키가 있는 경우
+					SumVO sum = (SumVO)map.get ("SUM" + col ) ;
+					sum.buf += parseDouble( chunk[1], 0 ) ;	// -- 20111201
+				}
+				else {	// -- 키가 없는 경우 - 키 생성, row 진입 시 최초 한번만 실행됨
+					// -- 키가 없을 수 없음.
+				}
+			}
+			else if ("FUNC".equals(chunk[0]) ) {
+			}
+		}
+		
+		// -- 최상위 span 카테고리 변경 시 호출되는 함수 - 실제 Value를 찍거나 향후 replace될 마크업을 찍는다.
+		private Object printColumnValue ( int col, String columnValue ) { // -- level1 column의 span column 체킹
+			if( columnValue.indexOf(__SPAN_DELIM__) < 0 ) return columnValue ;
+			columnValue.indexOf (__SPAN_DELIM__) ;
+			
+			String[] chunk = columnValue.split(__SPAN_DELIM__) ;	// -- TODO - 문자열에  ':' 을 포함할 경우 파싱에 문제가 된다.
+	
+			if ("RANK".equals(chunk[0]) ) {				// -- 순번
+				return this.level1Counter ;
+			}
+			else if ("SUM".equals(chunk[0]) ) {
+				if ( map.containsKey("SUM" + col) ) {	// -- 키가 있는 경우
+					SumVO sum = (SumVO)map.get ("SUM" + col ) ;
+		
+					if(!sum.out.equals(""))sum.out += __NUM_DELIM__ ;
+					sum.out += sum.buf ;
+					sum.total += sum.buf ;
+					sum.buf = parseDouble( chunk[1], 0 ) ;// -- 20111201
+				}
+				else {	// -- 키가 없는 경우 - 키 생성, row 진입 시 최초 한번만 실행됨
+					SumVO sum = new SumVO() ;
+					sum.buf = parseDouble( chunk[1], 0 ) ;	// -- 20111201
+					map.put( "SUM"+col, sum ) ;
+				}
+				
+				return "SUM"+col+"_"+this.level1Counter+"_" ;
+			}
+			else if ("FUNC".equals(chunk[0]) ) {			// -- 사용자정의 함수 적용을 위한 코드값 리턴
+				return "FUNC"+col+"("+this.level1Counter+")" ;
+			}
+			else if ("MARK".equals(chunk[0])) {
+				return "MARK"+col+chunk[1]+this.level1Counter+"E" ;	// -- chunk[1] 은 사용자정의 기호
+			}
+			/* -- added codes by Sam, Kim - 2011.10.16 
+				* ROWCOUNT 는 L1에 속한 최하위 ROW 수
+				* SUBLVLCNT 는 L1하위의 L2ROW 개수임.
+				
+				-- */
+			else if ("ROWCOUNT".equals(chunk[0])) {	// -- ROWCOUNT{컬럼번호}{연산:T-Total}{그룹카운터}E
+				// -- TODO - 일반화 해야 한다.. 현재는 LEVEL1, LEVEL2 에 대해서만 유효하다. 
+				if(col == 1) {
+					return "ROWCOUNT"+col+"T"+this.level1Counter+"E" ;	// -- chunk[1] 은 사용자정의 기호
+				}
+			}
+			else if ("SUBLVLCNT".equals(chunk[0])) {	// -- SUBLVLCNT{컬럼번호}{연산:T-Total}{그룹카운터}E
+				// -- TODO - 일반화 해야 한다.. 현재는 LEVEL1, LEVEL2 에 대해서만 유효하다. 
+				if(col == 1) {
+					return "SUBLVLCNT"+col+"T"+this.level1Counter+"E" ;	// -- chunk[1] 은 사용자정의 기호
+				}
+			} 
+			
+			return "" ;
+		}
+		
+		// -- 임시 함수 - SUM 전용
+		public void clearColumnBuffer(String key) {
+			if ( map.containsKey( key) ) {	// -- 키가 있는 경우
+				SumVO sum = (SumVO)map.get ( key ) ;
+				if(!sum.out.equals(""))sum.out += __NUM_DELIM__ ;
+				sum.out += sum.buf ;
+				sum.total += sum.buf ;
+				sum.buf = -1 ;
+			}
+		}
+		/*
+		 * Variables 
+		 * String[] columns	: Span 대상 컬럼 값 
+		 * Map columnMap	: Span 대상 컬럼 값을 키로 하는 대상컬럼과 동일 rowspan값을 가지는 컬럼
+		 */
+		// -- 용례) setSpan( "" + result.get("V_TITLE"), "" + result.get("V_TITLE2"), "" + result.get("R_4")  ) ;
+		private SpanVO setSpan ( String[] columns, Map columnMap ) {
+			if( columns == null ) return null ;
+			// -- value for return
+			String level1Td = "" ;	// -- 지식영역 Td
+			String level2Td = "" ;	// -- 거점명 Td
+	
+			//-- 초기화
+			String level1 = columns[0] ; // -- columns[0] 이 상위 카테고리 개념, columns[1] 은 하위 카테고리 개념 // -- 우선 2단 카테고리 까지만 지원한다.
+			String level2 = columns[1] ; // -- 무조건 2개 병합해야 하네.. // -- TODO - 병합개수 처리
+			
+			// -- 
+			String rowspanTmpl = "" ;
+			String rowspanSubTmpl = "" ;
+			
+			// -- 
+			String[] level1SameSpans = null ;
+			String[] level1SameSpansResult = null ;
+			
+			/* -- added codes by Sam, Kim - 2011.10.16 -- */		
+			// -- level2와 동일한 rowspan 대상 컬럼 정보
+			String[] level2SameSpans = null ;
+			String[] level2SameSpansResult = null ;
+			
+			if(columnMap != null){
+				// -- level1과 동일한 rowspan 대상 컬럼 정보
+				if(columnMap.containsKey(level1)) {
+					level1SameSpans = (String[]) columnMap.get( level1 ) ;	// -- level1과 동일한 rowspan 대상 컬럼 정보
+					level1SameSpansResult = new String[ level1SameSpans.length ] ;	// -- 결과를 반환할 배열 초기화
+					if(level1SameSpansResult != null ) {
+						for( int i =0 ;i<level1SameSpans.length ; i++ ){
+							level1SameSpansResult[i] = "" ;
+						}
+					}
+				}
+				
+				if(columnMap.containsKey(level2)) {
+					level2SameSpans = (String[]) columnMap.get( level2 ) ;	// -- level1과 동일한 rowspan 대상 컬럼 정보
+					level2SameSpansResult = new String[ level2SameSpans.length ] ;	// -- 결과를 반환할 배열 초기화
+					if(level2SameSpansResult != null ) {
+						for( int i =0 ;i<level2SameSpans.length ; i++ ){
+							level2SameSpansResult[i] = "" ;
+						}
+					}
+				}
+			}
+	// --
+			if( isFirstTdValueSame( level1 ) ) {	// -- 윗 행과 영역명이 동일 할 경우.			
+				increaseRowCnt() ;
+				level1 = "" ;
+	
+				// -- loop
+				if(level1SameSpansResult != null ) {
+					for( int i =0 ;i<level1SameSpans.length ; i++ ){
+						setColumnValue( i,level1SameSpans[i] ) ;
+					}
+				}
+				if( isSecondTdValueSame( level2 ) ) {
+					increaseRowSubCnt() ;
+					level2 = "" ;
+					
+					/* -- added codes by Sam, Kim - 2011.10.16 -- */	
+					if(level2SameSpansResult != null ) {
+						for( int i =0 ;i<level2SameSpans.length ; i++ ){
+							setColumnValue( i,level2SameSpans[i] ) ;
+						}
+					}
+					// --
+					
+				}
+				else {	// -- 동일 level1 내에서 level2가 바뀔 경우
+					setRowSpanSubTd() ;
+					initRowSubCnt() ;
+					
+					rowspanSubTmpl = getSecondSpanMarkup() ;
+					level2Td = "<td class='td left' "+ rowspanSubTmpl +">" + level2 + "</td>" ;
+	
+					/* -- added codes by Sam, Kim - 2011.10.16 -- */
+					if(level2SameSpansResult != null ) {
+						String tAlign= "right" ;
+						for( int i =0 ;i<level2SameSpans.length ; i++ ){
+							level2SameSpansResult[i] = "<td class='td "+tAlign+"'" + rowspanSubTmpl + ">" + printColumnValue( i,level2SameSpans[i] ) + "</td>" ;
+						}
+					}
+					// -- 
+					setSecondSpanValue ( level2 ) ;
+					increaseSecondSpanCnt() ;
+				}
+			}
+			else {	// -- l1이 바뀔 경우
+				setRowSpanTd() ;
+				setRowSpanSubTd() ;
+				
+				initRowSubCnt() ;
+				
+				rowspanTmpl = getFirstSpanMarkup() ;
+				rowspanSubTmpl = getSecondSpanMarkup () ;
+				
+				level1Td = "<td class='td left' " + rowspanTmpl + ">" + level1 + "</td>" ;
+				level2Td = "<td class='td left' "+ rowspanSubTmpl +" >" + level2 + "</td>" ;
+				
+				// -- loop
+				if(level1SameSpansResult != null ) {
+					String tAlign="right" ;
+					for( int i =0 ;i<level1SameSpans.length ; i++ ){
+						level1SameSpansResult[i] = "<td class='td "+tAlign+"'" + rowspanTmpl + ">" + printColumnValue( i,level1SameSpans[i] ) + "</td>" ;
+					}
+				}
+				
+				/* -- added codes by Sam, Kim - 2011.10.16 -- */
+				if(level2SameSpansResult != null ) {
+					String tAlign="right" ;
+					for( int i =0 ;i<level2SameSpans.length ; i++ ){
+						level2SameSpansResult[i] = "<td class='td "+tAlign+"'" + rowspanSubTmpl + ">" + printColumnValue( i,level2SameSpans[i] ) + "</td>" ;
+					}
+				}
+				// -- 
+				
+				initRowCnt() ;
+				
+				setFirstSpanValue ( level1 ) ;
+				setSecondSpanValue( level2 ) ;
+				
+				increaseFirstSpanCnt() ;
+				increaseSecondSpanCnt() ;
+				
+				this.level1Counter ++ ; // -- RANK 증분
+			}
+	
+			// -- 
+			SpanVO svo = new SpanVO () ;
+			svo.columns = new String[]{ level1Td, level2Td } ;
+			if(level1SameSpansResult != null) svo.sameSpans = level1SameSpansResult ;
+			
+			/* -- added codes by Sam, Kim - 2011.10.16 -- */
+			if(level2SameSpansResult != null) svo.sameSpans2 = level2SameSpansResult ;
+			// -- 
+			
+			return svo ;
+		}
+	
+		/* -- added codes by Sam, Kim - 2011.10.16 -- */
+		private void setL1SubRowCount() {
+			if(!l1SubRowTotal.equals(""))l1SubRowTotal += __NUM_DELIM__ ;
+			this.l1SubRowTotal += this.l1SubRowCounter ;
+			this.l1SubRowCounter = 0 ;
+		}
+	
+		public String[] getL1SubRowTotal() {
+			// -- System.out.println(l1SubRowTotal) ;
+			if( this.l1SubRowTotal.indexOf(__NUM_DELIM__)>-1 ) return this.l1SubRowTotal.split(__NUM_DELIM__) ;
+			else return new String[] { l1SubRowTotal } ; 
+		}
+		// -- 
+	
+		private void setRowSpanTd() {	// -- LEVEL1 ROW개수를 보관
+			if( !this.rowspanTd.equals("") ) this.rowspanTd += __NUM_DELIM__ ;
+			this.rowspanTd += this.rowcnt ;
+			
+			/* -- added codes by Sam, Kim - 2011.10.16 -- */
+			setL1SubRowCount() ;
+		}
+	
+		private void setRowSpanSubTd() {	// -- LEVEL2 ROW 개수를 보관
+			if(!this.rowspanSubTd.equals("")) this.rowspanSubTd += __NUM_DELIM__ ;
+			this.rowspanSubTd += this.rowSubCnt ;
+			
+			/* -- added codes by Sam, Kim - 2011.10.16 -- */
+			this.l1SubRowCounter ++ ;
+		}
+		
+		public String[] getL1Rowspans() {
+			if(this.rowspanTd == null || "".equals(this.rowspanTd))	return null ;
+			if(this.rowspanTd.indexOf(__NUM_DELIM__)<0) {
+				return new String[]{ rowspanTd } ;
+			}
+			String[] rowspans = this.rowspanTd.split(__NUM_DELIM__) ;
+			return rowspans ;
+		}
+		
+		public String[] getL2RowspanSubs() {
+			if(this.rowspanSubTd == null || "".equals(this.rowspanSubTd))	return null ;
+			if(this.rowspanSubTd.indexOf(__NUM_DELIM__)<0) {
+				return new String[]{ rowspanSubTd } ;
+			}
+			String[] rowspans = this.rowspanSubTd.split(__NUM_DELIM__) ;
+			return rowspans ;
+		}
+		
+		private void setFirstSpanValue( String column1 ) {
+			this.tmp1 = column1 ;
+			if(arrLevel1 == null) {
+				arrLevel1 = new ArrayList() ;
+			}
+			arrLevel1.add( column1 ) ;
+		}
+		
+		private void setSecondSpanValue( String column2 ) {
+			this.tmp2 = column2 ;
+			if(arrLevel2 == null) {
+				arrLevel2 = new ArrayList() ;
+			}
+			arrLevel2.add( column2 ) ;
+		}
+	
+		public ArrayList getLevel1() { return arrLevel1 ; }
+		public ArrayList getLevel2() { return arrLevel2 ; }
+		
+		private void increaseFirstSpanCnt() {
+				this.startTdCnt ++ ;
+		}
+		
+		private void increaseSecondSpanCnt() {
+				this.startSubTdCnt ++ ;
+		}
+		
+		private String getFirstSpanMarkup () {
+			return getFirstMarkUp ( this.startTdCnt ) ;
+		}
+		
+		private String getSecondSpanMarkup () {
+			return getSecondMarkUp ( this.startSubTdCnt ) ;
+		}
+		
+		private String getFirstMarkUp(int tdCnt) {
+			return "_" + tdCnt + "_" ;
+		}
+		
+		private String getSecondMarkUp(int tdCnt) {
+			return "#" + tdCnt + "#" ;
+		}
+		
+		
+	} // -- class END
+%>

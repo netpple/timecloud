@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-statement>
+    <query>
+        <id>SELECT_DOMAIN_TEAM_LIST</id>
+        <value>
+            SELECT
+            A.N_IDX AS N_IDX
+            , A.V_NAME
+            , A.C_OFF_YN
+            , FN_TIMEGAP(A.V_REG_DATETIME) AS V_REG_DATETIME
+            , FN_TIMEGAP(A.V_EDT_DATETIME) AS V_EDT_DATETIME
+            , (SELECT COUNT(*) FROM TIMECLOUD_TEAM_USER WHERE N_TEAM_IDX = N_IDX) AS USER_CNT
+            FROM
+            TIMECLOUD_TEAM A
+            WHERE
+            A.C_DEL_YN = 'N'
+            AND A.N_DOMAIN_IDX = ?
+            ORDER BY
+            A.N_IDX ASC
+        </value>
+        <description></description>
+    </query>
+    <query>
+        <id>INSERT_TEAM</id>
+        <value>
+            INSERT INTO
+            TIMECLOUD_TEAM(N_IDX,V_NAME,V_REG_DATETIME,V_EDT_DATETIME,C_DEL_YN,C_OFF_YN,N_DOMAIN_IDX)
+            VALUES (
+            SEQ_TEAM_IDX.NEXTVAL
+            ,?
+            ,TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            ,TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            ,'N'
+            ,'N'
+            ,?
+            )
+        </value>
+    </query>
+    <query>
+        <id>UPDATE_TEAM_OFF</id>
+        <value>
+            UPDATE TIMECLOUD_TEAM SET C_OFF_YN = 'Y'
+            ,v_edt_datetime=TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            WHERE N_IDX=?
+        </value>
+        <description></description>
+    </query>
+    <query>
+        <id>UPDATE_TEAM_ON</id>
+        <value>
+            UPDATE TIMECLOUD_TEAM SET C_OFF_YN = 'N'
+            ,v_edt_datetime=TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            WHERE N_IDX=?
+        </value>
+        <description></description>
+    </query>
+    <query>
+        <id>DELETE_TEAM</id>
+        <value>
+            UPDATE TIMECLOUD_TEAM SET C_DEL_YN = 'Y'
+            ,v_edt_datetime=TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            WHERE N_IDX=?
+        </value>
+        <description></description>
+    </query>
+    <query>
+        <id>RECOVER_TEAM</id>
+        <value>
+            UPDATE TIMECLOUD_TEAM SET C_DEL_YN = 'N'
+            ,v_edt_datetime=TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            WHERE N_IDX=?
+        </value>
+        <description></description>
+    </query>
+</sql-statement>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Roa Consulting</title>
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<link href="assets/css/bootstrap.css" rel="stylesheet" />
+		<link href="assets/css/bootstrap-responsive.css" rel="stylesheet" />
+		<link rel="stylesheet" href="assets/css/font-awesome.css" />
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
+		<link rel="stylesheet" href="assets/css/ace.css" />
+		<link rel="stylesheet" href="assets/css/ace-responsive.css" />
+		<link rel="stylesheet" href="assets/css/ace-skins.css" />
+	</head>
+
+	<body class="navbar-fixed">
+		<div class="navbar navbar-inverse navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container-fluid">
+					<a href="#" class="brand">
+						<small>
+							Roa Consulting 
+						</small>
+					</a><!--/.brand-->
+					
+					<div id="nav-global-search">
+						<form class="form-search">
+							<span class="input-icon">
+								<input type="text" placeholder="Search Anything" class="input-small search-query nav-global-search-input" id="nav-search-input" autocomplete="off" />
+								<i class="icon-search" id="nav-search-icon"></i>
+							</span>
+						</form>
+					</div><!--#nav-search-->					
+					
+					<ul class="profile nav ace-nav pull-right">
+						<li class="transaprent user-profile">
+							<a data-toggle="dropdown" href="#" class="user-menu dropdown-toggle">
+								<img class="nav-user-photo" src="hwang.png" alt="Profile Photo" />
+								<span id="user_info">
+									<small>활동지수 2위</small>
+									InSeoHwang
+								</span>
+								<i class="icon-caret-down"></i>
+							</a>
+							<ul class="pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer" id="user_menu">
+								<li>
+									<a href="#">
+										<i class="icon-cog"></i>
+										Settings
+									</a>
+								</li>
+
+								<li>
+									<a href="#">
+										<i class="icon-user"></i>
+										Profile
+									</a>
+								</li>
+
+								<li class="divider"></li>
+
+								<li>
+									<a href="#">
+										<i class="icon-off"></i>
+										Logout
+									</a>
+								</li>
+							</ul>
+						</li>
+						<div id="kpi-summary-chart"></div>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid" id="main-container">
+			<a id="menu-toggler" href="#">
+				<span></span>
+			</a>
+
+			<div id="notification" class="fixed" style="background:red">
+				<div class="itemdiv memberdiv notification">
+					<div class="user">
+						<img alt="Profile Photo" src="jykim.png" />
+					</div>
+				
+					<div class="body">
+						<div>
+							<a href="#">김진영</a>님이 <strong>태스크를 할당</strong>했습니다. "B-Camp참가신청 및 자료를 위해 업무 분장을 요청드리..."
+						</div>
+						<div class="time">
+							<i class="icon-time"></i>
+							<span class="green">방금</span>
+						</div>
+					</div>
+				</div>						
+				<div class="itemdiv memberdiv notification">
+					<div class="user">
+						<img alt="Profile Photo" src="jykim.png" />
+					</div>
+				
+					<div class="body">
+						<div>
+							<a href="#">김진영</a>님이 <strong>피드백</strong>을 남겼습니다. "A-Camp에서 여러분과 함께해서 너무 즐거웠습니다! 다음에 기회가.."
+						</div>
+						<div class="time">
+							<i class="icon-time"></i>
+							<span class="green">13분전</span>
+						</div>
+					</div>
+				</div>						
+				<div class="itemdiv memberdiv notification">
+					<div class="user">
+						<img alt="Profile Photo" src="jykim.png" />
+					</div>
+				
+					<div class="body">
+						<div>
+							<a href="#">김진영</a>님이 <strong>파일</strong>을 업로드 했습니다. "IR.ppt"
+						</div>
+						<div class="time">
+							<i class="icon-time"></i>
+							<span class="green">15분전</span>
+						</div>
+					</div>
+				</div>						
+				<div class="itemdiv memberdiv notification">
+					<div class="user">
+						<img alt="Profile Photo" src="jykim.png" />
+					</div>
+				
+					<div class="body">
+						<div>
+							<a href="#">김진영</a>님이 <strong>태스크를 참조</strong>했습니다. "B-Camp 12월"
+						</div>
+						<div class="time">
+							<i class="icon-time"></i>
+							<span class="green">18분전</span>
+						</div>
+					</div>
+				</div>						
+				<div class="itemdiv memberdiv notification">
+					<div class="user">
+						<img alt="Profile Photo" src="hwang.png" />
+					</div>
+				
+					<div class="body">
+						<div>
+							<a href="#">황인서</a>님이 <strong>파일</strong>을 업로드 하였습니다. "SmartSon UI 구성도.ppt"
+						</div>
+						<div class="time">
+							<i class="icon-time"></i>
+							<span class="green">25분전</span>
+						</div>
+					</div>
+				</div>						
+				<div class="itemdiv memberdiv notification">
+					<div class="user">
+						<img alt="Profile Photo" src="jykim.png" />
+					</div>
+				
+					<div class="body">
+						<div>
+							<a href="#">김진영</a>님이 <strong>피드백</strong>을 남겼습니다. "이번에 워크샵은 어디로 가면 좋을까요?"
+						</div>
+						<div class="time">
+							<i class="icon-time"></i>
+							<span class="green">33분전</span>
+						</div>
+					</div>
+				</div>						
+				<div class="itemdiv memberdiv notification">
+					<div class="user">
+						<img alt="Profile Photo" src="jykim.png" />
+					</div>
+				
+					<div class="body">
+						<div>
+							<a href="#">김진영</a>님이 <strong>파일</strong>을 업로드 하셨습니다. "투자심사.ppt"
+						</div>
+						<div class="time">
+							<i class="icon-time"></i>
+							<span class="green">1시간전</span>
+						</div>
+					</div>
+				</div>						
+				<div class="itemdiv memberdiv notification">
+					<div class="user">
+						<img alt="Profile Photo" src="hwang.png" />
+					</div>
+				
+					<div class="body">
+						<div>
+							<a href="#">황인서</a>님이 <strong>피드백을</strong>남겼습니다. "스마트손 프로젝트가 거의다 끝나가네요ㅋㅋ"
+						</div>
+						<div class="time">
+							<i class="icon-time"></i>
+							<span class="green">15분전</span>
+						</div>
+					</div>
+				</div>						
+				<div class="itemdiv memberdiv notification">
+					<div class="user">
+						<img alt="Profile Photo" src="jykim.png" />
+					</div>
+				
+					<div class="body">
+						<div>
+							<a href="#">김진영</a>님이 <strong>태스크를</strong>할당 하셨습니다. "태스크 투게더 보완사항"
+						</div>
+						<div class="time">
+							<i class="icon-time"></i>
+							<span class="green">15분전</span>
+						</div>
+					</div>
+				</div>						
+			</div>
+
+			<div id="main-content" class="clearfix">
+				<div class="span4 no-margin">
+					<div id="task-hierarchy" class="clearfix ">
+						<div class="widget-box transparent">
+							<div class="widget-header">
+								<h4 class="lighter">태스크 구조</h4>
+							</div>
+							
+							<div class="widget-body">
+								<div class="widget-main padding-8">
+									<div id="tree1" class="tree tree-selectable">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="span8 no-margin">
+					<div id="page-content" class="clearfix">
+						<div class="widget-box transparent">
+							<div class="widget-header">
+								<h4 class="lighter">[RTI] Riding Together For Android</h4>
+
+								<div class="widget-toolbar no-border">
+									<ul class="nav nav-tabs" id="myTab2">
+										<li class="active">
+											<a data-toggle="tab" href="#main">홈</a>
+										</li>
+
+										<li class="">
+											<a data-toggle="tab" href="#calendar">일정</a>
+										</li>
+
+										<li class="">
+											<a data-toggle="tab" href="#feedback">피드백</a>
+										</li>
+
+										<li class="">
+											<a data-toggle="tab" href="#file">자료</a>
+										</li>
+
+										<li class="">
+											<a data-toggle="tab" href="#ref">참조</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+
+							<div class="widget-body">
+								<div class="widget-main">
+									<div class="tab-content padding-4">
+										<div id="main" class="tab-pane active">
+											<div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 100px;"><div class="slim-scroll" data-height="100" style="overflow: hidden; width: auto; height: 100px;">
+												<b>홈</b>
+											</div><div class="slimScrollBar ui-draggable" style="background-color: rgb(0, 0, 0); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; height: 45.45454545454545px; background-position: initial initial; background-repeat: initial initial;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; display: none; background-position: initial initial; background-repeat: initial initial;"></div></div>
+										</div>
+										<div id="calendar" class="tab-pane">
+											<div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 100px;"><div class="slim-scroll" data-height="100" style="overflow: hidden; width: auto; height: 100px;">
+												<b>일정</b>
+											</div><div class="slimScrollBar ui-draggable" style="background-color: rgb(0, 0, 0); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: block; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; background-position: initial initial; background-repeat: initial initial;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; background-position: initial initial; background-repeat: initial initial;"></div></div>
+										</div>
+										<div id="feedback" class="tab-pane">
+											<div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 100px;"><div class="slim-scroll" data-height="100" style="overflow: hidden; width: auto; height: 100px;">
+												<b>피드백</b>
+											</div><div class="slimScrollBar ui-draggable" style="background-color: rgb(0, 0, 0); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; height: 45.45454545454545px; background-position: initial initial; background-repeat: initial initial;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; display: none; background-position: initial initial; background-repeat: initial initial;"></div></div>
+										</div>
+										<div id="file" class="tab-pane">
+											<div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 100px;"><div class="slim-scroll" data-height="100" style="overflow: hidden; width: auto; height: 100px;">
+												<b>자료</b>
+											</div><div class="slimScrollBar ui-draggable" style="background-color: rgb(0, 0, 0); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; height: 45.45454545454545px; background-position: initial initial; background-repeat: initial initial;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; display: none; background-position: initial initial; background-repeat: initial initial;"></div></div>
+										</div>
+										<div id="ref" class="tab-pane">
+											<div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 100px;"><div class="slim-scroll" data-height="100" style="overflow: hidden; width: auto; height: 100px;">
+												<b>참조</b>
+											</div><div class="slimScrollBar ui-draggable" style="background-color: rgb(0, 0, 0); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; height: 45.45454545454545px; background-position: initial initial; background-repeat: initial initial;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; background-color: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; display: none; background-position: initial initial; background-repeat: initial initial;"></div></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse">
+			<i class="icon-double-angle-up icon-only bigger-110"></i>
+		</a>
+
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='assets/js/jquery-1.9.1.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="assets/js/bootstrap.min.js"></script>
+		<script src="assets/js/fuelux/data/fuelux.tree-sampledata.js"></script>
+		<script src="assets/js/fuelux/fuelux.tree.min.js"></script>
+		<script src="assets/js/ace-elements.min.js"></script>
+		<script src="assets/js/ace.min.js"></script>
+		<script src="assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+		<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+		<script src="assets/js/jquery.slimscroll.min.js"></script>
+		<script src="assets/js/jquery.easy-pie-chart.min.js"></script>
+		<script src="assets/js/jquery.sparkline.min.js"></script>
+		<script src="assets/js/flot/jquery.flot.min.js"></script>
+		<script src="assets/js/flot/jquery.flot.pie.min.js"></script>
+		<script src="assets/js/flot/jquery.flot.resize.min.js"></script>		
+		<script type="text/javascript">
+			$(document).ready(function() {
+				var data = [
+					{ data: 38.7, color: "#68BC31"},
+					{ data: 24.5, color: "#2091CF"},
+					{ data: 8.2, color: "#AF4E96"},
+					{ data: 18.6, color: "#DA5430"},
+					{ data: 10, color: "#FEE074"}
+				];
+				
+				var placeholder = $('#kpi-summary-chart').css({'width':'30px' , 'min-height':'30px'});
+				$.plot(placeholder, data, {
+					series: {
+						pie: {
+							show: true
+						}
+					}
+				});
+
+				$('#my-task').sortable();
+				$('#my-task input:checkbox').on('click', function(){
+					if(this.checked) $(this).closest('li').addClass('selected');
+					else $(this).closest('li').removeClass('selected');
+				});
+
+				$('#asign-task').sortable();
+				$('#asign-task input:checkbox').on('click', function(){
+					if(this.checked) $(this).closest('li').addClass('selected');
+					else $(this).closest('li').removeClass('selected');
+				});
+
+				$('#ref-task').sortable();
+				$('#ref-task input:checkbox').on('click', function(){
+					if(this.checked) $(this).closest('li').addClass('selected');
+					else $(this).closest('li').removeClass('selected');
+				});
+
+				$('#tree1').ace_tree({
+					dataSource: treeDataSource ,
+					multiSelect:true,
+					loadingHTML:'<div class="offset1"><i class="icon-refresh icon-spin blue"></i></div>',
+					'open-icon' : 'icon-minus',
+					'close-icon' : 'icon-plus',
+					'selectable' : true,
+					'selected-icon' : 'icon-ok',
+					'unselected-icon' : 'icon-remove'
+				});		
+			});
+		</script>
+	</body>
+</html>

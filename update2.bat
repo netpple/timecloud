@@ -1,0 +1,1 @@
+START TortoiseProc.exe /command:update /path:"D:\WebRoot\TimecloudChat" /closeonend:2

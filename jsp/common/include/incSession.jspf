@@ -1,0 +1,62 @@
+<%@page import="com.twobrain.common.core.QueryHandler"%>
+<%@ page import="java.util.Enumeration" %>
+<%
+	int ownerIdx = 0;
+	UserSession oUserSession = null;
+	
+	/* -- redirection 처리부 -- */
+	
+	String requestHost = request.getRequestURL().toString();
+	String queryString = request.getQueryString();
+	
+	if(queryString == null)
+		queryString = "";
+	else
+		queryString = "?" + queryString;
+	
+	
+	try {
+		oUserSession = (UserSession)session.getAttribute("UserSession");
+		
+		if(oUserSession == null) {
+			response.sendRedirect(CONTEXT_PATH + "/theme/1/pages/login/login.jsp?redirectUrl="+requestHost + queryString);
+			return;
+		} else {
+			oUserSession = (UserSession)session.getAttribute("UserSession");
+			ownerIdx = oUserSession.getUserIdx();
+		}
+	} catch (Exception e) {
+		response.sendRedirect(CONTEXT_PATH + "/theme/1/pages/login/login.jsp?redirectUrl="+requestHost + queryString);
+		return;
+	}
+
+    final String USER_IDX = Integer.toString(oUserSession.getUserIdx());
+	final String sessionId = USER_IDX + "@" + request.getSession().getId();
+    final String DOMAIN_IDX = oUserSession.getDomainIdx();
+
+	
+	/* -- request 처리 부 -- */
+	
+	// -- 현재 페이지 URL
+	final String NOW_URL = request.getRequestURL().toString();
+	// -- 현재 페이지 QUERY STRING
+	final String NOW_QRY = (request.getQueryString()!=null)?request.getQueryString().toString():"" ;
+	System.out.println("NOW_URL:"+NOW_URL) ;
+	System.out.println("NOW_QRY:"+NOW_QRY) ;
+ 	
+	final String NOW_URL_FULL = NOW_URL + ( ( "".equals(NOW_QRY) )?"":"?"+NOW_QRY );
+	// --	Access Logging prototype - at 2013.02.21 by Sam Kim
+	QueryHandler.executeUpdate("INSERT_ACCESSLOG", new String[]{ NOW_URL_FULL ,Integer.toString( oUserSession.getUserIdx() ), request.getHeader("User-Agent"), DOMAIN_IDX } );
+	// --
+	
+	RequestHelper req = new RequestHelper(request,response) ;
+	final int TASK_IDX = req.getIntParam("tsk_idx",-1) ;
+	final int TASK_LIST = req.getIntParam("tsk_list", -1) ;	// -- added by Sam Kim for Task All at 20131118
+	
+	int _globalTabNo = -1 ; // -- default - 상시메뉴 탭 (태스크목록, 할당태스크, 전체피드백, 전체자료 .. 등)
+	int _toolTabNo = 0 ; // -- default - 태스크일정 탭
+	
+	// -- search param
+	final String pSearchType = req.getParam("searchType","content") ;
+	final String pSearchValue = req.getParam("searchValue", "") ;		
+%>

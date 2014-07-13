@@ -1,0 +1,405 @@
+<%-- 
+ Task모드 화면에서는 반드시 이 파일을 include 해야 함. 
+ Task모드에서 사용하는 공통함수 및 변수들이 정의돼있음
+ incSession.jspf 다음에 include 할 것 
+ 
+ task.jsp
+ calendar.jsp
+ feedback.jsp
+ file.jsp
+ observer.jsp
+--%><%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><%@page import="com.twobrain.common.session.UserSession"%>
+<%@page import="com.google.gson.Gson"%>
+<%@ page import="lombok.Getter" %>
+<%@ page import="lombok.Setter" %>
+<%@ page import="java.util.*" %>
+<% 
+if(TASK_IDX <= 0 ) { 
+	out.println("Parameter is invalid") ;
+	return ;
+}
+
+final boolean isAll = isAllMode(TASK_LIST) ;
+
+// -- for task hierarchy
+DataSet dsTaskHierarchy = QueryHandler.executeQuery("SELECT_TASK_HIERARCHY", new  Object[]{oUserSession.getUserIdx(), "TIMECLOUD_TASK", TASK_IDX});
+TaskHierarchy oTaskHierarchy = new TaskHierarchy(dsTaskHierarchy, oUserSession, TASK_IDX, TASK_LIST);
+String hierarchyJson = oTaskHierarchy.get();
+final int taskList = oTaskHierarchy.getListIdx() ;
+HierarchyTask  currentTask = oTaskHierarchy.getCurrentTask() ;
+
+String actionUrl = "";
+
+if(request.getRequestURI().contains("file.jsp")) {
+	actionUrl = "file.jsp";
+} else if(request.getRequestURI().contains("observer.jsp")) {
+	actionUrl = "observer.jsp";
+} else if(request.getRequestURI().contains("calendar.jsp")) {
+	actionUrl = "calendar.jsp";
+} else  {
+	actionUrl = "task.jsp";
+}
+%>
+<%!
+	public boolean isAllMode(final int TASK_LIST) {	// -- task 전체보기 여부 
+		return TASK_LIST>0 ;
+	}
+%><%!
+class TaskHierarchy {
+	
+	private DataSet ds;
+	private ArrayList<AxisJTree> oTaskList;
+	private HierarchyTask currentTask = null ;
+	private int list = -1 ;
+	
+	private final int iCurrentTaskIdx;
+	private final boolean isAll ;
+	
+	private final UserSession sess ;
+	
+	public TaskHierarchy(DataSet ds, UserSession oUserSession, int currentTaskIdx, int currentTaskList) {
+		this.sess = oUserSession ;
+		this.iCurrentTaskIdx = currentTaskIdx ;
+		this.isAll = (currentTaskList > 0) ;	// -- TASK LIST가 들어오면 전체조회임 
+		this.ds = ds;
+		this.oTaskList = new ArrayList<AxisJTree>();
+		
+		if(ds != null && ds.size() > 0) {
+			HierarchyTask task = null ;
+			int rowSeq = 0;
+			
+			AxisJTree rootNode = new TopNode("전체", isAll) ;
+			oTaskList.add( rootNode ) ;
+			
+			while(ds.next()) {
+				task = new HierarchyTask(ds, sess, currentTaskIdx, isAll) ;
+				if(list<=0)list = task.getList() ;	// -- 해당 태스크구조의 전체관점 조회에서 필요함.
+				task.setRowSeq(++rowSeq);
+				if( iCurrentTaskIdx == task.getIdx() ) {
+					setCurrentTask(task) ;
+				}
+				oTaskList.add(task);
+			}
+		}
+	}
+	
+	private void setCurrentTask(HierarchyTask task) {
+		this.currentTask = task ;
+	}
+	
+	public HierarchyTask getCurrentTask() {
+		return currentTask ;
+	}
+	
+
+	private void setHierarchyFold(){
+		//구조를 역순으로 검사한다.
+		try{
+			HierarchyTask task = null;		//Task 임시 저장 변수.
+			int index = oTaskList.size();	//TaskList Size.
+			boolean isfind = false;			//currentTask를 찾은 여부.
+			int lvl = 0;					//현재 찾은 Task의 레벨 저장 변수.
+			//최상위 Task가 currentTask일 경우 검사를 종료한다. 최상위 Task가 currentTask와 같지 않고, 종료 처리 된 경우 폴더를 펼쳐준다.
+			task = (HierarchyTask)oTaskList.get(1) ;	// -- 제일 상위에 "전체" 노드를 추가하여, 1부터 검사함 
+			if(task.isOff()){
+				if(task.getIdx() == currentTask.getIdx()){
+					return;
+				}else{
+					task.setOpen(true);
+				}
+			}
+			
+			task = null ;
+			//구조 맨 뒤에 부터 currentTask를 찾을 때 까지 루프를 돈다.
+			while(index-- > 1){
+				task = (HierarchyTask)oTaskList.get(index);
+				//현재 currentTask를 찾은 후에 Task의 Level이 1일 경우 Task를 펼치고 검색을 종료한다.
+				if(isfind && task.getLevel() == 1){
+					task.setOpen(true);
+					return;
+				}else if(task.getIdx() == currentTask.getIdx()){
+					isfind = true;
+					lvl = task.getLevel();
+					//찾아낸  currentTask의 Level이 1일 경우는 더 이상 검색을 할 필요가 없다.
+					if(lvl == 1){
+						return;
+					}
+				//현재 currentTask를 찾은 후에는 상위 계층을 펼쳐 주어야 하는데, 
+				//상위 계층의 Level은 현재 저장된 Level 보다 반드시 낮아야한다. 같은 레벨이 중복으로 있을 경우를 대비해 추가.
+				}else if(isfind && task.getLevel() < lvl){
+					task.setOpen(true);
+					lvl = task.getLevel();
+				}
+			}
+		}catch(Exception e){ e.printStackTrace(); }
+	}
+
+	public String get() {
+		/*
+		StringBuilder sbHierarchyTagString = new StringBuilder();
+		for(HierarchyTask task : oTaskList) {
+			sbHierarchyTagString.append(task.get(iCurrentTaskIdx));
+		}
+		return sbHierarchyTagString.toString();
+		*/
+		setHierarchyFold();
+		return new Gson().toJson(oTaskList);
+	}
+	
+	public int getListIdx() {
+		return this.list ;
+	}
+}
+
+abstract class AxisJTree {
+	public String no = "r1" ;	// -- -1과 0, 00 등은 최상위 노드로 인지하지 못함
+	public String nodeCode = ""  ;
+	public String nodeName = ""  ;
+	public boolean open = true ;
+	public String type = "txt";
+	public int lvl = 0 ;
+	public String pno = "0" ;
+	public String useYn = "Y";
+	public String roleGid = "c0a800273efa1c76813efa6a9d630003";
+	public int rowSeq = 0;
+}
+
+class TopNode extends AxisJTree {
+	public TopNode(String nodeName, boolean isAll) {
+		this ("r1","0",nodeName, isAll) ;
+	}
+	
+	public TopNode(String no, String pno, String nodeName, boolean isAll) {
+		this.nodeName = Html.div(nodeName
+							,"class='topNode'"
+						) ;
+		this.pno = pno ;
+		this.no = no ;
+	}
+}
+
+class HierarchyTask extends AxisJTree {
+	private transient int n_idx;
+	private transient int iRidx;
+	private transient int iParentIdx;
+	private transient int iList;
+	private transient int iLevel;
+	private int iOwnerIdx;
+	private transient int iAssignerIdx;
+
+	private transient String sDesc;
+	private transient String sRegDateTime;
+	private transient String sEdtDateTime;
+	private transient String sOwnerEmail;
+	private transient String sOwnerName;
+	private transient String sAssignerName;
+	private transient String sAssignerEmail;
+	private transient String sHide;
+	
+	private transient boolean bOff ;	// -- task 종료 여부
+	private transient boolean bDel ;	// -- task 삭제 여부
+	
+	private transient String c_status ;	 // -- task 상태
+	
+	private transient final UserSession sess ;
+	
+	private int currentTaskIdx = 0;
+	private boolean favorite = false;
+	
+	private final boolean isAll ;
+	
+	// -- public String no = "";
+	// -- public String nodeCode = "";
+	// -- public String nodeName = "";
+	// -- private boolean open = true;
+	// -- public String type = "txt";
+	// -- private int lvl = 0;
+	// -- public String pno = "";
+	// -- public String useYn = "Y";
+	// -- public String roleGid = "c0a800273efa1c76813efa6a9d630003";
+	// -- public int rowseq = 0;
+	
+	
+	public void setRowSeq(int rowSeq) {
+		this.rowSeq = rowSeq;
+	}
+	
+	public void setOpen(boolean open) {
+		this.open = open;
+	}
+	
+	public HierarchyTask (DataSet ds, UserSession sess, int currentTaskIdx, boolean isAll) {
+		this.isAll = isAll ;
+		this.n_idx = ds.getInt(1);
+		this.iParentIdx = ds.getInt(2);
+		this.iList = ds.getInt(3);
+		this.iLevel = ds.getInt(4) ;
+		this.iRidx = ds.getInt(5);
+		this.sDesc = ds.getString(6);
+		this.sRegDateTime = ds.getString(7);
+		this.sEdtDateTime = ds.getString(8);
+		this.iOwnerIdx = ds.getInt(9);
+		this.sOwnerEmail = ds.getString(10);
+		this.sOwnerName = ds.getString(11);
+		this.iAssignerIdx = ds.getInt(12);
+		this.sAssignerEmail = ds.getString(13);
+		this.sAssignerName = ds.getString(14);
+		this.currentTaskIdx = currentTaskIdx;
+		this.sHide = ds.getString(10);
+		
+		this.bOff = ( "Y".equals(ds.getString(15)) ) ;
+		this.bDel = ( "Y".equals(ds.getString(16)) ) ;
+		if(this.bOff) { this.open = false; };
+		
+		this.c_status = ds.getString(17) ;
+		
+		this.sHide = ds.getString(18);
+		this.favorite = !"".equals(ds.getString(19));
+		
+		this.sess = sess ;
+		
+		this.nodeName = get(currentTaskIdx);
+		this.no = Integer.toString(n_idx);
+		this.lvl = iLevel;
+		
+
+		if(n_idx == iParentIdx) {
+			this.pno = "r1";
+		} else {
+			this.pno = Integer.toString(iParentIdx);	
+		}
+	}
+	
+	public boolean isHide() {
+		return "Y".equals(sHide);
+	}
+	
+	public String getHideControl() {
+		StringBuffer sb = new StringBuffer();
+		if(isHide()) {
+			sb.append(" <img src='/html/images/EyeClose.gif' onClick=\"javascript:onTaskHideControl('"+n_idx+"','N');\" style='cursor:hand;cursor:pointer;'>");
+		} else {
+			sb.append(" <img src='/html/images/EyeOpen.gif' onClick=\"javascript:onTaskHideControl('"+n_idx+"','Y');\" style='cursor:hand;cursor:pointer;'>");
+		}
+		
+		return ""; // -- sb.toString(); // -- 사용성 재검토 필요 - 20131109 By Sam Kim
+	}
+	
+	public boolean isOff(){ return bOff ; }
+	public boolean isDel(){ return bDel ; }
+	
+	public String get(int currentTaskIdx) {
+		String sFormat = null ;
+		String hideControl = "";
+
+		int photoSize = 30;
+		
+		String css = "" ;
+		//if(n_idx == currentTaskIdx) css = "" ;
+		if(bOff)css += " offTask" ;
+		String url = Html.span(stringToHTMLString( sDesc ),String.format("id='TASK_%d' class='%s'",n_idx, css)) ;
+		
+		if(iOwnerIdx == sess.getUserIdx()){	
+			hideControl = getHideControl();
+		}
+		
+		StringBuffer sbOut = new StringBuffer() ;
+		
+		String cssClass = "taskHierarchy";
+		
+		sbOut.append("<dl>");
+		sbOut.append(	"<dt class='img'>");
+		sbOut.append(		getProfileImage(sess.getDomainIdx(), iOwnerIdx, photoSize, ImageShape.NORMAL, bOff));
+		sbOut.append(	"</dt>");
+		sbOut.append(	"<dd class=taskTitle>");
+		sbOut.append(		url	).append(Html.trueString(favorite, Html.Icon.FAVORITE) );
+		sbOut.append(	"</dd>");
+		sbOut.append(	"<dd>");
+		if(bOff) {
+			sbOut.append(	sEdtDateTime + hideControl	);	
+		} else {
+			sbOut.append(	sEdtDateTime + getOffStatus() +  hideControl	);
+		}
+		sbOut.append(	"</dd>");
+		sbOut.append("</dl>");
+		
+		
+		return Html.div(sbOut.toString(),"class='"+cssClass+"'");
+	}
+	
+	public int getIdx() {
+		return n_idx;
+	}
+	
+	public int getRidx() {
+		return iRidx;
+	}
+	
+	public int getParentIdx() {
+		return iParentIdx;
+	}
+	
+	public int getList() {
+		return iList;
+	}
+	
+	public int getOwnerIdx() {
+		return iOwnerIdx;
+	}
+	
+	public String getDesc() {
+		return sDesc;
+	}
+	
+	public String getRegDateTime() {
+		return sRegDateTime;
+	}
+	
+	public String getEdtDateTime() {
+		return sEdtDateTime;
+	}
+	
+	public String getOwnerEmail() {
+		return sOwnerEmail;
+	}
+	
+	public String getOwnerName() {
+		return sOwnerName;
+	}
+	
+	// -- Task Status
+	private String getOffStatus() {
+		String status = "" ;
+		if(bOff) {
+			status = "<span class='badge badge-important'>종료</span>" ;
+		} else {
+			status = "<span class='badge badge-success'>진행중</span>" ;
+		}
+		
+		return status ;
+	}
+	
+	// -- Task Status
+	private String getStatus() {
+		String status = "" ;
+		if( "01".equals(c_status) ) {
+			status = "<span class='badge badge-warning'>지연</span>" ;
+		}
+		else if( "02".equals(c_status) ) {
+			status = "<span class='badge badge-warning'>이슈</span>" ;
+		}
+		else if( "03".equals(c_status) ) {
+			status = "<span class='badge badge-important'>중단</span>" ;	// -- 혹은 보류?
+		}
+		else if( "04".equals(c_status) ) {
+			status = "<span class='badge badge-important'>실패</span>" ;
+		}
+		
+		return status ;
+	}
+	
+	public int getLevel() {
+		return lvl;
+	}
+}
+%>

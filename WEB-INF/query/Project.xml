@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-statement>
+	<query>
+		<id>SELECT_PROJECT_INFO</id>
+		<value>
+			SELECT 
+				N_IDX
+				, V_DESC
+				, V_START_DATETIME
+				, V_END_DATETIME
+				, V_REG_DATETIME
+				, V_EDT_DATETIME
+				, C_STATUS			
+				, C_OFF_YN
+				, N_OWNER_IDX
+			FROM TIMECLOUD_PROJECT 
+			WHERE N_TASK_IDX = (SELECT N_LIST FROM TIMECLOUD_TASK WHERE N_IDX = ?) 
+			AND C_DEL_YN = 'N'
+		</value>
+		<description>프로젝트 정보</description>	    
+	</query>
+	<query>
+	    <id>SELECT_PROJECT_SEQ</id>
+	    <value>
+	        SELECT SEQ_PROJECT_IDX.nextval FROM DUAL
+	    </value>
+	    <description>프로젝트 시퀀스 생성</description>
+	</query>
+	<query>
+		<id>INSERT_PROJECT</id>
+		<value>
+			INSERT INTO TIMECLOUD_PROJECT(
+				N_IDX, 
+				N_TASK_IDX, 
+				V_DESC, 
+				V_START_DATETIME, 
+				V_END_DATETIME, 
+				V_REG_DATETIME, 
+				V_EDT_DATETIME, 
+				N_OWNER_IDX,
+                N_DOMAIN_IDX
+			) VALUES (
+				SEQ_PROJECT_IDX.nextval,		
+				?,		
+				?,
+				?,
+				?,	
+				TO_CHAR(sysdate,'YYYYMMDDHH24MISS'),
+				TO_CHAR(sysdate,'YYYYMMDDHH24MISS'),
+				?,
+                ?
+			)
+		</value>
+		<description>프로젝트 등록</description>
+	</query>
+	<query>
+	    <id>UPDATE_PROJECT</id>
+	    <value>
+	        UPDATE TIMECLOUD_PROJECT SET
+	        	v_desc=?,
+	        	v_start_datetime=?,
+	        	v_end_datetime=?,
+	        	v_edt_datetime=to_char(sysdate,'YYYYMMDDHH24MISS')
+	        WHERE N_IDX=? AND N_OWNER_IDX=?
+	    </value>
+	    <description>프로젝트 기간 수정</description>
+	</query>
+	<query>
+		<id>UPDATE_PROJECT_STATUS</id>
+		<value>
+			UPDATE TIMECLOUD_PROJECT SET 
+				C_STATUS=?
+				,v_edt_datetime=TO_CHAR(sysdate,'YYYYMMDDHH24MISS') 
+			WHERE N_IDX = ? 
+			AND N_OWNER_IDX = ? 
+			AND C_DEL_YN='N' 
+			AND C_OFF_YN = 'N'		
+		</value>
+		<description>프로젝트 상태 수정</description>
+	</query>
+	<query>
+	    <id>UPDATE_PROJECT_OFF</id>
+	    <value>
+	        UPDATE TIMECLOUD_PROJECT SET C_OFF_YN = 'Y' 
+	        	,v_edt_datetime=TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+	        WHERE N_IDX=? AND N_OWNER_IDX=?
+	    </value>
+	    <description>프로젝트 종료</description>
+	</query>
+	<query>
+	    <id>UPDATE_PROJECT_ON</id>
+	    <value>
+	        UPDATE TIMECLOUD_PROJECT SET C_OFF_YN = 'N' 
+	        	,v_edt_datetime=TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+	        WHERE N_IDX=? AND N_OWNER_IDX=?
+	    </value>
+	    <description>프로젝트 재활성</description>
+	</query>
+	<query>
+		<id>SELECT_PROJECT_ALL</id>
+		<value>
+			SELECT 
+				X.N_IDX
+				, X.V_DESC
+				, X.V_START_DATETIME
+				, X.V_END_DATETIME
+				, X.V_REG_DATETIME
+				, X.V_EDT_DATETIME
+				, X.C_STATUS			
+				, X.C_OFF_YN
+				, X.N_OWNER_IDX		
+				,(SELECT V_NAME FROM TIMECLOUD_USER WHERE N_IDX=X.N_OWNER_IDX) AS V_PROJECT_OWNER
+				, X.N_TASK_IDX
+			FROM TIMECLOUD_PROJECT X,
+			( SELECT N_LIST FROM TIMECLOUD_TASK WHERE N_OWNER_IDX=? GROUP BY N_LIST ) Y
+			WHERE X.N_TASK_IDX = Y.N_LIST		    
+		</value>
+		<description>내 모든 프로젝트 조회</description>
+	</query>
+</sql-statement>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<locale-config>
+    <locale code="ko" language="ko" country="KR" encoding="utf8" file-encoding="utf8" display-name="\ud55c\uad6d\uc5b4" default="Y" />
+    <locale code="en" language="en" country="US" encoding="utf8" file-encoding="utf8" display-name="English" default="N" /> 
+    <locale code="zh" language="zh" country="ZH" encoding="utf8" file-encoding="utf8" display-name="Chinese" default="N" /> 
+    <resource-bundle code="kpi"       resource="com.twobrain.chart.locale.resources.kpi"/>
+</locale-config>

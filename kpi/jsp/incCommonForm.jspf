@@ -1,0 +1,120 @@
+<%@ page import="java.text.SimpleDateFormat
+			,java.util.Calendar
+			,java.util.Date
+			,java.util.TimeZone" 
+%>
+<!-- 
+	2012.01.18
+	추가적으로 사용되는 자바스크립트나 FORM은 아래에 설정하여 사용 하시기 바랍니다.
+ -->
+<script type="text/javascript">/*<![[cdata*/
+	var prevChartId = ''; // kpi_risk_06에서 사용하는 변수
+	
+	function fnGetReport(report,params) {
+		var url = 'kpi_main.jsp?report=' + report ;
+		// --
+		var f = document.getElementById("reqF") ;//document.getElementById("popF") ;
+		if(!fn_onCheckDateField(f.pStartDate, f.pEndDate)) return;
+
+		f.params.value = params ;
+		
+		var sdate = document.getElementById("pStartDate") ;
+		var edate = document.getElementById("pEndDate") ;
+		
+		f.sdate.value = sdate.value ;
+		f.edate.value = edate.value ;	
+		
+		f.action = url ;	
+		f.target = "_self";
+		f.submit() ;
+	}
+
+	// -- Excel 출력
+	function getExcelUrl(url){
+		
+		var f = document.getElementById("reqF")
+		
+		f.action = url;
+		f.target = "ifrExcel"; 
+		f.submit(); 
+			
+	}
+
+	// -- 2012.01.18 추가
+	// -- Popup2(Pupup에서 또 다른 Popup을 띄울 때. target을 받아서 처리)
+	function getReportPopup(report, params, ftarget) { // -- 예) kpi_process_01 의 경우 'kpi_process_01','P_1.1.2'
+		var url = 'kpi_main.jsp?report=' + report ;
+		// --
+		var f = document.getElementById("reqF") ;//document.getElementById("popF") ;
+		if(!fn_onCheckDateField(f.pStartDate, f.pEndDate)) return;
+
+		f.params.value = params ;
+		
+		var sdate = document.getElementById("pStartDate") ;
+		var edate = document.getElementById("pEndDate") ;
+		
+		f.sdate.value = sdate.value ;
+		f.edate.value = edate.value ;
+		
+		var pop = window.open('', ftarget,"width=900,height=600,scrollbars=yes,resizable=yes") ;
+		f.popup.value = "1" ;
+		f.action = url ;
+		f.target = ftarget ;		
+		f.submit() ;
+
+		pop.focus() ;
+	}
+
+	// -- 2012.01.20 추가 by RinoA
+	// -- 여러개의 차트중 클릭한 차트만 SHOW
+	function onChartView(id) {
+
+		if(prevChartId != '') {
+			document.getElementById("CHART_"+prevChartId).style.display = 'none';
+			prevChartId = id;
+		} else {
+			prevChartId = id;
+		}		
+
+		var chart = document.getElementById("CHART_"+id) ;
+		chart.style.display = '';		
+	}
+
+    // -- enter key 입력 확인
+    function enterChk()  { 
+		if(event.keyCode == 13) {
+			changeRates(); 
+		} 
+	}
+	
+	// -- 2012.02.08(Work 등록 현황 , Activity 처리 현황, 표준프로세스활용율, Activity진행현황, 프로세스 조회수&조회자수, Template util. status Popup 실행)
+	function commonFormPopOptOut(wName, cw, ch, frm, opt){
+	    px=100;
+	    py=100; 
+	    var newWin=window.open('about:blank', wName ,'left='+px+',top='+py+',width='+cw+',height='+ch+',toolbar=no,menubar=no,location=no,status=no,scrollbars=no,resizable=yes');
+	    frm.target = wName;
+	    frm.submit();
+	    newWin.focus();
+	}
+
+
+	//*paging
+	function fn_goPage(pg,page) {
+		var f = document.getElementById("reqF") ;
+		f.currentPage.value = page;
+		f.currentPageGroup.value = pg;
+		
+		fn_onSearch();		
+	}
+	 
+/*]]>*/</script>
+
+<!-- 
+	Excel Form
+ -->
+<form id='excelFrm' method='post' action='<%=excelUrl%>'>
+	<input type="hidden" name="sdate" value="<%=startDate %>" />
+	<input type="hidden" name="edate" value="<%=endDate %>" />
+	<input type="hidden" name="todayTime" value="<%=todayTime %>" />
+	<input type="hidden" name="params" value="<%=params %>" />
+</form>

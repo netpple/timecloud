@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-statement>
+    <query>
+        <id>INSERT_ACCESSLOG</id>
+        <value>INSERT INTO TIMECLOUD_ACCESSLOG(v_url,n_owner_idx,v_access_datetime, v_agent,
+            n_domain_idx)VALUES(?,?,TO_CHAR(sysdate,'YYYYMMDDHH24MISS'),?,?)
+        </value>
+        <description></description>
+    </query>
+
+    <query>
+        <id>SELECT_USER_NOTI_EMAIL</id>
+        <value>SELECT V_NOTI_EMAIL FROM TIMECLOUD_USER WHERE N_IDX = ?</value>
+        <description></description>
+    </query>
+
+    <query>
+        <id>DELETE_PARTNER</id>
+        <value>DELETE FROM TIMECLOUD_USER_PARTNER WHERE N_OWNER_IDX = ?</value>
+        <description></description>
+    </query>
+
+    <query>
+        <id>INSERT_PARTNER</id>
+        <value>INSERT INTO TIMECLOUD_USER_PARTNER (N_OWNER_IDX, N_PARTNER_IDX, V_REG_DATETIME) VALUES
+            (?,?,TO_CHAR(sysdate,'YYYYMMDDHH24MISS'))
+        </value>
+        <description></description>
+    </query>
+</sql-statement>

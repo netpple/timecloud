@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-statement>
+
+	<query>
+	    <id>GET_TIME_GAP</id>
+	    <value>
+	        SELECT FN_TIMEGAP( ? ) FROM DUAL
+	    </value>
+	    <description>피드백 등록</description>
+	</query>	
+	<query>
+	    <id>GET_SERVER_TIME</id>
+	    <value>
+	        SELECT TO_CHAR(sysdate,'YYYYMMDDHH24MISS') FROM DUAL
+	    </value>
+	    <description>피드백 등록</description>
+	</query>	
+
+	<query>
+	    <id>TEST_INSERT_FEEDBACK</id>
+	    <value>
+	        INSERT INTO TIMECLOUD_FEEDBACK(
+	        	N_IDX,
+	        	V_DESC,
+	        	N_OWNER_IDX, 
+	        	N_TASK_IDX, 
+	        	V_REG_DATETIME,
+                N_DOMAIN_IDX
+	        ) VALUES(
+	        	?,
+	        	?,
+	        	?,
+	        	?,
+	        	?,
+                ?
+	        )
+	    </value>
+	    <description>피드백 등록</description>
+	</query>
+
+
+
+	<query>
+		<id>TEST_SELECT_MYTASK</id>
+		<value>
+			SELECT n_idx, v_desc, c_off_yn, timegap, rownum FROM (
+				SELECT
+					X.N_IDX 
+					,X.V_DESC
+					,X.C_OFF_YN
+					, FN_TIMEGAP(v_edt_datetime) AS timegap
+				FROM TIMECLOUD_TASK X 
+				WHERE X.N_OWNER_IDX = ?
+				ORDER BY V_EDT_DATETIME DESC
+			) WHERE ROWNUM BETWEEN 1 AND 20
+		</value>
+		<description>메인 내 태스크 목록</description>	    
+	</query>
+	<query>
+		<id>TEST_SELECT_MYCOMMAND</id>
+		<value>
+		SELECT n_idx, v_desc, c_off_yn, timegap, ROWNUM FROM (
+			SELECT 
+				X.N_IDX, X.V_DESC, X.C_OFF_YN, FN_TIMEGAP(v_edt_datetime) AS timegap			
+			FROM TIMECLOUD_TASK X,
+			(
+				SELECT 
+					N_IDX, N_OWNER_IDX 
+				FROM TIMECLOUD_TASK 
+				WHERE N_OWNER_IDX = ?
+			) Y
+			WHERE 
+				X.N_PARENT_IDX = Y.N_IDX AND (X.N_OWNER_IDX != ?) AND X.N_LEVEL>0
+			ORDER BY X.V_EDT_DATETIME DESC
+		) WHERE ROWNUM BETWEEN 1 AND 10
+		</value>
+		<description>메인 내가 할당한 태스크(COMMAND) 목록</description>	    
+	</query>
+	<query>
+		<id>TEST_SELECT_MYOBSERVED</id>
+		<value>
+		SELECT n_idx, v_desc, c_off_yn, timegap, ROWNUM FROM (
+			SELECT 
+				X.N_IDX, X.V_DESC, X.C_OFF_YN, FN_TIMEGAP(v_edt_datetime) AS timegap
+			FROM TIMECLOUD_TASK X, TIMECLOUD_OBSERVER Y
+			WHERE 
+				X.N_IDX = Y.N_TASK_IDX AND Y.N_OWNER_IDX = ?
+			ORDER BY X.V_EDT_DATETIME DESC
+		) WHERE ROWNUM BETWEEN 1 AND 10
+		</value>
+		<description>MAIN 내가 할당한 태스크(COMMAND) 목록</description>	    
+	</query> 			
+	<query>
+		<id>TEST_SELECT_RECENTLY</id>
+		<value>
+		SELECT Z.*, ROWNUM FROM(	
+			SELECT n_idx, n_task_idx, v_desc, timegap, tooltype  FROM (
+				SELECT N_IDX, N_TASK_IDX, V_DESC, FN_TIMEGAP(V_EDT_DATETIME) as timegap, V_EDT_DATETIME AS recent, 'ACTIVITY' AS tooltype, N_OWNER_IDX, C_DEL_YN FROM TIMECLOUD_ACTIVITY
+				UNION
+				SELECT N_IDX, N_TASK_IDX, V_DESC, FN_TIMEGAP(V_REG_DATETIME) as timegap, V_REG_DATETIME AS recent,  'FEEDBACK' AS tooltype, N_OWNER_IDX, C_DEL_YN FROM TIMECLOUD_FEEDBACK 
+				UNION
+				SELECT N_IDX, N_TASK_IDX, V_ORIGIN_NAME AS V_DESC, FN_TIMEGAP(V_REG_DATETIME) as timegap, V_REG_DATETIME AS recent, 'FILE' AS tooltype, N_OWNER_IDX, C_DEL_YN FROM TIMECLOUD_FILE
+			)
+			WHERE N_OWNER_IDX = ? AND C_DEL_YN = 'N'
+			ORDER BY recent DESC
+		)Z WHERE ROWNUM BETWEEN 1 AND 5
+		</value>
+		<description>메인 내 태스크 목록</description>	    
+	</query>
+
+
+	<query>
+	    <id>TEST_SELECT_MYFAVORITE</id>
+	    <value>
+		SELECT n_idx, n_task_idx, v_desc, v_tbl_nm, n_tbl_idx FROM TIMECLOUD_FAVORITE
+		WHERE n_owner_idx = ?
+		ORDER BY n_sort ASC, v_reg_datetime DESC	    
+	    </value>
+	    <description>메인 my favorite</description>
+	</query>	   
+	<query>
+		<id>TEST_SELECT_PROJECT_ON</id>
+		<value>
+			SELECT X.N_IDX
+				,X.N_TASK_IDX 
+				,X.V_DESC
+				,X.C_OFF_YN
+				,''
+			FROM TIMECLOUD_PROJECT X,
+			( SELECT N_LIST FROM TIMECLOUD_TASK WHERE N_OWNER_IDX=? GROUP BY N_LIST ) Y
+			WHERE X.N_TASK_IDX = Y.N_LIST AND X.C_DEL_YN='N' AND X.C_OFF_YN='N'
+			ORDER BY X.N_IDX ASC
+		</value>
+		<description>메인_활성 프로젝트 목록</description>	    
+	</query>
+	<query>
+	    <id>UPDATE_TASK_EDIT_DATETIME</id>
+	    <value>
+	        UPDATE TIMECLOUD_TASK SET v_edt_datetime = TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+	        WHERE N_IDX = ?
+	    </value>
+	    <description>태스크 최근 수정 시간 업데이트</description>
+	</query>
+	<query>
+	    <id>TEST_SELECT_MYNOTIFICATION</id>
+	    <value>
+	        SELECT
+				n_task_idx
+				,v_desc
+				,n_creator_idx
+				,FN_TIMEGAP(v_reg_datetime) as timegap				
+				,v_tbl_nm
+				,n_tbl_idx
+				,c_chk_yn
+			FROM TIMECLOUD_NOTIFICATION
+			WHERE n_owner_idx = ?
+			ORDER BY v_reg_datetime DESC      	
+	    </value>
+	    <descripti>알림 메시지 쿼리</descripti>
+	</query>
+	<query>
+	    <id>TEST_INSERT_NOTIFICATION</id>
+	    <value>
+	        INSERT INTO TIMECLOUD_NOTIFICATION (
+	        n_idx
+	        , v_desc
+	        , n_creator_idx, n_owner_idx
+	        , v_tbl_nm, n_tbl_idx
+	        , n_task_idx
+	        , v_reg_datetime
+            , n_domain_idx
+	        )VALUES(
+	        SEQ_NOTIFICATION_IDX.nextval
+	        , ?
+	        , ?, ?
+	        , ?, ?
+	        , ?
+	        ,TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            , ?
+	        )
+	    </value>
+	    <description>알림 입력 - By Machine</description>
+	</query>
+
+
+	<query>
+	    <id>TEST_INSERT_FAVORITE</id>
+	    <value>
+	        INSERT INTO TIMECLOUD_FAVORITE (
+	        n_idx
+	        , v_desc
+	        , v_reg_datetime
+	        , n_owner_idx
+	        , v_tbl_nm
+	        , n_tbl_idx
+	        , n_task_idx
+	        , n_sort
+            , n_domain_idx
+	        )VALUES(
+	        seq_favorite_idx.nextval
+	        , ?
+	        , TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+	        , ?
+	        , ?
+	        , ?
+	        , ?
+	        , ?
+            , ?
+	        )
+	    </value>
+	    <description>즐겨 찾기 추가</description>
+	</query>	
+	
+	<query>
+	    <id>TEST_DELETE_FAVORITE</id>
+	    <value>
+	        DELETE FROM
+	        	TIMECLOUD_FAVORITE 
+	        WHERE
+	        	v_tbl_nm = ?
+	        	AND n_task_idx = ?
+	        	AND n_owner_idx = ?
+	        	
+	    </value>
+	    <description>즐겨 찾기 삭제</description>
+	</query>	
+	
+	<query>
+	    <id>TEST_SELECT_TASK_TOOL</id>
+	    <value>
+			SELECT X.*, Y.V_NAME FROM (
+				SELECT N_IDX, N_TASK_IDX, N_OWNER_IDX, V_DESC, FN_TIMEGAP(V_EDT_DATETIME) as timegap, V_EDT_DATETIME AS recent, 'ACTIVITY', C_DEL_YN FROM TIMECLOUD_ACTIVITY
+				UNION
+				SELECT N_IDX, N_TASK_IDX, N_OWNER_IDX, V_DESC, FN_TIMEGAP(V_REG_DATETIME) as timegap, V_REG_DATETIME AS recent,  'FEEDBACK', C_DEL_YN FROM TIMECLOUD_FEEDBACK 
+				UNION
+				SELECT N_IDX, N_TASK_IDX, N_OWNER_IDX, V_ORIGIN_NAME AS V_DESC, FN_TIMEGAP(V_REG_DATETIME) as timegap, V_REG_DATETIME AS recent, 'FILE', C_DEL_YN FROM TIMECLOUD_FILE
+			) X, TIMECLOUD_USER Y WHERE (X.N_OWNER_IDX = Y.N_IDX) AND X.N_TASK_IDX = ? AND X.C_DEL_YN = 'N'
+			ORDER BY X.recent DESC	        
+	    </value>
+	    <description>태스크 홈</description>
+	</query>
+	
+	<query>
+		<id>TEST_SELECT_TASK_TOOL_ALL</id>
+		<value>
+			SELECT X.*, Y.V_NAME FROM (
+				SELECT N_IDX, N_TASK_IDX, N_OWNER_IDX, V_DESC, FN_TIMEGAP(V_EDT_DATETIME) as timegap, V_EDT_DATETIME AS recent, 'ACTIVITY', C_DEL_YN FROM TIMECLOUD_ACTIVITY
+				UNION
+				SELECT N_IDX, N_TASK_IDX, N_OWNER_IDX, V_DESC, FN_TIMEGAP(V_REG_DATETIME) as timegap, V_REG_DATETIME AS recent,  'FEEDBACK', C_DEL_YN FROM TIMECLOUD_FEEDBACK 
+				UNION
+				SELECT N_IDX, N_TASK_IDX, N_OWNER_IDX, V_ORIGIN_NAME AS V_DESC, FN_TIMEGAP(V_REG_DATETIME) as timegap, V_REG_DATETIME AS recent, 'FILE', C_DEL_YN FROM TIMECLOUD_FILE
+			) X, TIMECLOUD_USER Y, TIMECLOUD_TASK Z 
+			WHERE (X.N_OWNER_IDX = Y.N_IDX) 
+			AND (X.N_TASK_IDX = Z.N_IDX)
+			AND Z.N_LIST = ? AND X.C_DEL_YN = 'N'
+			ORDER BY X.recent DESC			    
+		</value>
+		<description>태스크 홈 - 전체</description>    
+	</query>
+		
+	<query>
+	    <id>TEST_SELECT_TASK_OBSERVER</id>
+	    <value>
+	    	SELECT 
+				X.N_IDX
+				, X.N_OWNER_IDX
+				, X.N_TASK_IDX
+				, Z.N_OWNER_IDX as n_task_owner_idx
+				, X.MESSAGE
+				, X.timegap
+				, X.V_TYPE
+				, Y.V_NAME
+				, Z.V_DESC AS TASK_NAME
+			FROM (
+				SELECT N_IDX, N_OWNER_IDX, N_TASK_IDX, V_DESC AS MESSAGE, FN_TIMEGAP(V_REG_DATETIME) AS timegap, 'OBSERVER' as V_TYPE, C_DEL_YN FROM TIMECLOUD_OBSERVER 
+				UNION ALL
+				SELECT N_IDX, N_OWNER_IDX, N_IDX as N_TASK_IDX, 'Task Owner' AS MESSAGE, FN_TIMEGAP(V_EDT_DATETIME) AS timegap, 'TASK' AS V_TYPE, C_DEL_YN FROM TIMECLOUD_TASK
+			) X, TIMECLOUD_USER Y, TIMECLOUD_TASK Z 
+			WHERE (X.N_OWNER_IDX = Y.N_IDX) AND (X.N_TASK_IDX = Z.N_IDX)
+			AND X.C_DEL_YN = 'N' 
+			$0$
+			ORDER BY X.V_TYPE DESC, Y.V_NAME, X.N_TASK_IDX     
+	    </value>
+	    <description>참조도구</description>
+	</query>
+	
+	<query>
+	    <id>TEST_SELECT_TASK_OBSERVER_ALL</id>
+	    <value>
+			SELECT N_OWNER_IDX, V_NAME, V_TYPE, COUNT(*) AS CNT FROM (
+				    	SELECT 
+							X.N_IDX
+							, X.N_OWNER_IDX
+							, X.N_TASK_IDX
+							, Z.N_OWNER_IDX as n_task_owner_idx
+							, X.V_DESC
+							, X.timegap
+							, X.V_TYPE
+							, Y.V_NAME
+							, Z.V_DESC AS TASK_NAME
+						FROM (
+							SELECT N_IDX, N_OWNER_IDX, N_TASK_IDX, V_DESC, FN_TIMEGAP(V_REG_DATETIME) AS timegap, 'OBSERVER' as V_TYPE, C_DEL_YN FROM TIMECLOUD_OBSERVER 
+							UNION ALL
+							SELECT N_IDX, N_OWNER_IDX, N_IDX as N_TASK_IDX, V_DESC, FN_TIMEGAP(V_EDT_DATETIME) AS timegap, 'TASK' AS V_TYPE, C_DEL_YN FROM TIMECLOUD_TASK
+							UNION ALL
+							SELECT N_IDX, N_OWNER_IDX, N_TASK_IDX, V_DESC,FN_TIMEGAP(V_EDT_DATETIME) AS timegap, 'ACTIVITY' AS V_TYPE, C_DEL_YN FROM TIMECLOUD_ACTIVITY
+							UNION ALL
+							SELECT N_IDX, N_OWNER_IDX, N_TASK_IDX, V_DESC, FN_TIMEGAP(V_REG_DATETIME) AS timegap, 'FEEDBACK' AS V_TYPE, C_DEL_YN FROM TIMECLOUD_FEEDBACK
+							UNION ALL
+							SELECT N_IDX, N_OWNER_IDX, N_TASK_IDX, V_ORIGIN_NAME AS V_DESC, FN_TIMEGAP(V_REG_DATETIME) AS timegap, 'FILE' AS V_TYPE, C_DEL_YN FROM TIMECLOUD_FILE
+						) X, TIMECLOUD_USER Y, TIMECLOUD_TASK Z 
+						WHERE (X.N_OWNER_IDX = Y.N_IDX) AND (X.N_TASK_IDX = Z.N_IDX)
+						AND X.C_DEL_YN = 'N' 
+						AND Z.N_LIST=?
+			) GROUP BY N_OWNER_IDX, V_NAME, V_TYPE ORDER BY V_NAME ASC	        
+	    </value>
+	    <description>참조 all 서머리 </description>
+	</query>
+
+	<query>
+	    <id>TEST_SELECT_USER_FOR_OBSERVER</id>
+	    <value>
+			SELECT 
+				DECODE(X.N_OWNER_IDX,Y.N_IDX,'Y','N') as CHK_YN
+				,Y.N_IDX
+				,Y.V_EMAIL
+				,Y.V_NAME 
+			FROM TIMECLOUD_OBSERVER X,
+			(	
+				SELECT  A.N_IDX, A.V_EMAIL, A.V_NAME 
+				FROM TIMECLOUD_USER A, TIMECLOUD_USER_PARTNER B 
+				WHERE (A.N_IDX = B.N_PARTNER_IDX)
+				AND A.C_DEL_YN = 'N'
+				AND B.N_OWNER_IDX=?
+			) Y 
+			WHERE X.N_OWNER_IDX(+) = Y.N_IDX
+			AND X.N_TASK_IDX(+) = ?
+			AND X.C_DEL_YN(+) = 'N'
+			ORDER BY Y.V_NAME ASC
+	    </value>
+	    <description>참조자 선택 쿼리</description>
+	</query>	
+	
+	<query>
+	    <id>TEST_DELETE_NOTIFICATION</id>
+	    <value>
+			DELETE FROM TIMECLOUD_NOTIFICATION
+			WHERE TRUNC(sysdate - TO_DATE(V_REG_DATETIME,'YYYYMMDDHH24MISS')) > 4
+	    </value>
+	    <description>알림 삭제 쿼리 5일 이상</description>
+	</query>
+	<query>
+	    <id>TEST_SELECT_SEARCH</id>
+	    <value>
+			SELECT 
+				X.N_IDX
+				,X.N_TASK_IDX
+				,X.N_OWNER_IDX
+				,X.V_DESC
+				,X.V_TIMEGAP
+				,X.V_RECENT
+				,X.V_TYPE
+				,Z.C_OFF_YN
+				,Y.V_NAME
+				,Z.V_DESC AS V_TASK 
+			FROM (
+				SELECT 'TASK' AS V_TYPE,N_IDX, N_IDX AS N_TASK_IDX, N_OWNER_IDX, V_DESC, FN_TIMEGAP(V_EDT_DATETIME) AS V_TIMEGAP,V_EDT_DATETIME AS V_RECENT, C_DEL_YN FROM TIMECLOUD_TASK 
+				UNION
+				SELECT 'ACTIVITY' AS V_TYPE,N_IDX, N_TASK_IDX, N_OWNER_IDX, V_DESC, FN_TIMEGAP(V_EDT_DATETIME) AS V_TIMEGAP,V_EDT_DATETIME AS V_RECENT, C_DEL_YN FROM TIMECLOUD_ACTIVITY 
+				UNION
+				SELECT 'FEEDBACK' AS V_TYPE,N_IDX, N_TASK_IDX, N_OWNER_IDX, V_DESC, FN_TIMEGAP(V_REG_DATETIME) AS V_TIMEGAP,V_REG_DATETIME AS V_RECENT, C_DEL_YN FROM TIMECLOUD_FEEDBACK 
+				UNION
+				SELECT 'FILE' AS V_TYPE,N_IDX, N_TASK_IDX, N_OWNER_IDX, V_ORIGIN_NAME AS V_DESC, FN_TIMEGAP(V_REG_DATETIME) AS V_TIMEGAP,V_REG_DATETIME AS V_RECENT, C_DEL_YN FROM TIMECLOUD_FILE 
+			) X, TIMECLOUD_USER Y, TIMECLOUD_TASK Z WHERE (X.N_OWNER_IDX = Y.N_IDX) AND (X.N_TASK_IDX = Z.N_IDX) AND X.C_DEL_YN='N'
+			$0$
+			ORDER BY V_TYPE ASC, V_RECENT DESC	        
+	    </value>
+	    <description>검색 쿼리</description>
+	</query>
+	
+	<query>
+		<id>TEST_SELECT_TASK_FILE_ALL</id>
+		<value>
+			SELECT 
+				X.N_IDX
+				, X.V_ORIGIN_NAME AS V_DESC
+				, X.V_SAVE_NAME
+				, X.V_EXT
+				, X.N_FILE_SIZE
+				, X.N_OWNER_IDX
+				, X.V_REG_DATETIME AS recent
+				, X. C_DEL_YN 
+				, Y.V_NAME 
+				, X.N_TASK_IDX
+				, X.N_DOWNLOAD_COUNT
+				, FN_TIMEGAP(X.V_REG_DATETIME) as timegap
+			FROM TIMECLOUD_FILE X, TIMECLOUD_USER Y, TIMECLOUD_TASK Z 
+			WHERE (X.N_OWNER_IDX = Y.N_IDX) 
+			AND (X.N_TASK_IDX = Z.N_IDX)
+			AND Z.N_LIST = ? AND X.C_DEL_YN = 'N'
+			ORDER BY X.V_REG_DATETIME DESC				    
+		</value>
+		<description>태스크 홈 - 전체</description>    
+	</query>	
+	<query>
+		<id>TEST_UDPATE_TASK_DESC</id>
+		<value>
+		    UPDATE TIMECLOUD_TASK 
+		    SET V_DESC=?
+		    WHERE N_IDX = ? 
+		    AND N_OWNER_IDX=? 
+		    AND C_DEL_YN='N' 
+		    AND C_OFF_YN='N'
+		</value>
+		<description>태스크 수정</description>    
+	</query>		
+	
+</sql-statement>
