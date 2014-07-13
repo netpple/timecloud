@@ -10,7 +10,8 @@
 	DataSet ds = QueryHandler.executeQuery("TEST_SELECT_MYNOTIFICATION", oUserSession.getUserIdx()) ;
 	
 	StringBuffer result = new StringBuffer() ;
-	String task_idx, desc, creator_idx, timegap ;	
+	String task_idx, desc, timegap ;
+    int creator_idx = -1;
 
 	if(ds.numOfRow <= listCnt){
 		out.print(-1);
@@ -26,14 +27,14 @@
 		ds.next();
 		task_idx = ds.getString(1) ;
 		desc = ds.getString(2) ;
-		creator_idx = ds.getString(3) ;
+		creator_idx = ds.getInt(3) ;
 		timegap = ds.getString(4) ;
 		
-		String sUserInfo = String.format(Config.getProperty("init", Cs.USER_PROFILE_IMAGE_URN), oUserSession.getDomainIdx(), creator_idx, oUserSession.getDomainIdx()) ;
+		String profileImageUrl = getProfileImageUrl(creator_idx); //String.format(Config.getProperty("init", Cs.USER_PROFILE_IMAGE_URN), creator_idx) ;
 		result.append(
 			Html.li(
 			    Html.a( 
-			    	Html.img_("class='media-object' src='"+sUserInfo+"' width='40px'")
+			    	Html.img_("class='media-object' src='"+profileImageUrl+"' width='40px'")
 			    ,"class='pull-left'" )+
 			    Html.div(
 			      // Html.h4(creator_idx,"class='media-heading'")+

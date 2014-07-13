@@ -118,7 +118,7 @@
                             <div><%=photo%>
                                 <%
 //                                    final String FILE_UPLOAD_BASE_REPOSITORY = Config.getProperty("init", "FILE_UPLOAD_BASE_REPOSITORY");    //업로드 위치
-//                                    String uploadPath = FILE_UPLOAD_BASE_REPOSITORY + DOMAIN_IDX + "/profile/";   // 프로필 원본 저장할 필요있나 ? 일단 하자.
+//                                    String uploadPath = FILE_UPLOAD_BASE_REPOSITORY + "/profile/";   // 프로필 원본 저장할 필요있나 ? 일단 하자.
 //                                    System.out.println(String.format("%s%s", uploadPath, USER_IDX));
 //                                    File myPhoto = new File(String.format("%s%s", uploadPath, USER_IDX));
 //                                    boolean hasMyPhoto = myPhoto.exists();

@@ -135,19 +135,16 @@
 		
 		if(imageShape == null || "".equals(imageShape)) imageShape = ImageShape.NORMAL ;	// -- rounded, polaroid, circle
 		
-		String sUserInfo = "";
-		
+		String profileImageUrl = getProfileImageUrl(n_owner_idx) ;
 		if(isGrayScale) {
-			sUserInfo = String.format(Config.getProperty("init", Cs.USER_PROFILE_IMAGE_URN), domain_idx, n_owner_idx + "_g", domain_idx) ;
-		} else {
-			sUserInfo = String.format(Config.getProperty("init", Cs.USER_PROFILE_IMAGE_URN), domain_idx, n_owner_idx, domain_idx) ;
+			profileImageUrl += "_g";
 		}
 		
-		return String.format("<img src='%s' onerror=\"this.src='/html/images/avatar.png'\" class='%s' width='%spx' height='%spx' />", sUserInfo, imageShape, width, width) ;
+		return String.format("<img src='%s' onerror=\"this.src='/html/images/avatar.png'\" class='%s' width='%spx' height='%spx' />", profileImageUrl, imageShape, width, width) ;
 	}
 	
-	public static String getProfileImageUrl(String domain, int n_owner_idx) {
-		return String.format(Config.getProperty("init", Cs.USER_PROFILE_IMAGE_URN), domain, n_owner_idx, domain) ;
+	public static String getProfileImageUrl(int n_owner_idx) {
+		return String.format(Config.getProperty("init", Cs.USER_PROFILE_IMAGE_URN), n_owner_idx) ;
 	}
 	
 	public static class ImageShape {
@@ -273,7 +270,7 @@ private String getNotification(UserSession oUserSession, String Class) {
 			}
 			else {}
 			
-			String sProfileImageSrc = getProfileImageSrc(oUserSession,creator_idx) ;
+			String sProfileImageSrc = getProfileImageUrl(creator_idx) ;
 			result.append(
 				Html.li(
 				    Html.a(Html.img_("class='media-object' src='"+sProfileImageSrc+"' width=50"),"class='pull-left'" )+
@@ -292,14 +289,7 @@ private String getNotification(UserSession oUserSession, String Class) {
 	return  "<div class='"+Class+"' style='margin-left:0px;position:fixed;top:0px;right:0px' listCount='" + notifiCount + "'> "  + Html.ul( result.toString() ,"class='media-list'") + Loading +  "</div>";
 }
 
-public static String getProfileImageSrc(UserSession oUserSession, int n_owner_idx) {
-	return String.format(
-			Config.getProperty("init", Cs.USER_PROFILE_IMAGE_URN)
-			, oUserSession.getDomainIdx()
-			, n_owner_idx) ;
-}
-
-// -- 
+// --
 private String getVertNav(RequestHelper req, UserSession oUserSession) {
 	final String type = req.getParam("type", "") ;
 	final int idx = req.getIntParam("idx", -1)	 ;

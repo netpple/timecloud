@@ -24,7 +24,7 @@
 				
 				
 				if( t_owner_idx != n_owner_idx ) {
-					String sProfileImageSrc = getProfileImageSrc(oUserSession,t_owner_idx) ;
+					String sProfileImageSrc = getProfileImageUrl(t_owner_idx) ;
 					li.append(
 							Html.li(
 								Html.a(Html.img_("class='media-object' src='"+sProfileImageSrc+"' width=50"),"class='pull-left'" )+
@@ -41,7 +41,7 @@
 				
 				t_stats += Html.Icon.get(v_type) + n_cnt + " " ;
 			}
-			String sProfileImageSrc = getProfileImageSrc(oUserSession,t_owner_idx) ;
+			String sProfileImageSrc = getProfileImageUrl(t_owner_idx) ;
 			li.append(
 					Html.li(
 						Html.a(Html.img_("class='media-object' src='"+sProfileImageSrc+"' width=50"),"class='pull-left'" )+

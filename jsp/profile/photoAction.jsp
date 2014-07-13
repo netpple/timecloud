@@ -1,30 +1,23 @@
-<%@page import="com.google.gson.Gson" %>
-<%@page import="com.google.gson.JsonElement" %>
-<%@page import="com.google.gson.JsonObject" %>
 <%@page import="com.sun.image.codec.jpeg.JPEGCodec" %>
-<%@page import="com.twobrain.common.object.JsonUserImage" %>
 <%@page import="com.twobrain.common.util.JpegReader" %>
 <%@page import="org.apache.commons.fileupload.FileItem" %>
-<%@ page import="org.apache.commons.fileupload.FileUploadException" %>
-<%@ page import="org.apache.commons.fileupload.disk.DiskFileItemFactory" %>
-<%@ page import="org.apache.commons.fileupload.servlet.ServletFileUpload" %>
+<%@page import="org.apache.commons.fileupload.FileUploadException" %>
+<%@page import="org.apache.commons.fileupload.disk.DiskFileItemFactory" %>
+<%@page import="org.apache.commons.fileupload.servlet.ServletFileUpload" %>
+<%@page import="javax.imageio.IIOException" %>
+<%@ page import="javax.imageio.ImageIO" %>
+<%@ page import="javax.servlet.ServletException" %>
+<%@ page import="javax.servlet.http.HttpServletRequest" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="../common/include/incInit.jspf" %>
 <%@ include file="../common/include/incSession.jspf" %>
 
-<%@ page import="javax.imageio.IIOException" %>
-<%@ page import="javax.imageio.ImageIO" %>
-<%@ page import="javax.servlet.ServletException" %>
-<%@ page import="javax.servlet.ServletOutputStream" %>
-<%@ page import="javax.servlet.http.HttpServletRequest" %>
-<%@ page import="javax.servlet.http.HttpServletResponse" %>
 <%@ page import="java.awt.*" %>
 <%@ page import="java.awt.geom.AffineTransform" %>
 <%@ page import="java.awt.image.BufferedImage" %>
-<%@ page import="java.io.*" %>
-<%@ page import="java.net.URLEncoder" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="java.util.Hashtable" %>
+<%@ page import="java.io.File" %>
+<%@ page import="java.io.FileInputStream" %>
+<%@ page import="java.io.IOException" %>
 <%@ page import="java.util.List" %>
 <%
     //GetOutputStream 에러를 방지하기 위함 (jspWriter error) -> 서블렛으로 이동시 필요 없음
@@ -37,21 +30,21 @@
     String sMethod = req.getMethod();
     String sAction = req.getParam("pAction", "");
 
+    String msg = "" ;
     if ("GET".equals(sMethod)) {
-        if ("DownloadFile".equals(sAction)) {
-            oFileHandler.downloadProfileImage();
-        } else if ("GetProfileImage".equals(sAction)) {
-            oFileHandler.getProfileImage();
-        } else if ("DeleteFile".equals(sAction)) {
+        if ("DeleteFile".equals(sAction)) {
             oFileHandler.deleteProfileImage();
+            msg = "삭제되었습니다.";
         }
     } else if ("POST".equals(sMethod)) {
         oFileHandler.uploadFile();
+        msg = "저장되었습니다.";
     }
 
     // GetOutputStream 에러를 방지하기 위함 (jspWriter error) -> 서블렛으로 이동시 필요 없음
     out.clear();
-    out = pageContext.pushBody();
+//    out = pageContext.pushBody();
+    out.print(String.format("<script>alert('%s');location.replace('view.jsp')</script>",msg));
 %>
 
 <%!
@@ -59,12 +52,9 @@
         private final String FILE_UPLOAD_BASE_REPOSITORY = Config.getProperty("init", "FILE_UPLOAD_BASE_REPOSITORY");    //업로드 위치
         final private int USER_IDX;
 
-        private int iThumbSize = 75;
         private int iThumbNailSize = 60;
 
         private String uploadPath = ""; // 원본 저장 경로
-
-        private String sActionJspName = "";
         private RequestHelper oReqHelper = null;
         private UserSession oUserSession = null;
 
@@ -73,9 +63,6 @@
             this.USER_IDX = oUserSession.getUserIdx();
             this.oReqHelper = req;
             this.uploadPath = FILE_UPLOAD_BASE_REPOSITORY + "/profile/";   // 프로필 원본 저장할 필요있나 ? 일단 하자.
-            // TODO - MAKE A GRAY IMAGE
-
-            sActionJspName = oReqHelper.getRequestObject().getContextPath() + "/jsp/profile/upload.jsp";
             checkUploadDirectory();
         }
 
@@ -101,36 +88,7 @@
             return isImage;
         }
 
-        private void downloadProfileImage() throws ServletException, IOException {
-            HttpServletResponse response = oReqHelper.getResponseObject();
-            try {
-                File thumb = new File(String.format("%s%d", uploadPath, USER_IDX));
-                File gray = new File(String.format("%s%d_g", uploadPath, USER_IDX));
-
-                if (thumb.exists()) {
-                    int bytes = 0;
-
-                    ServletOutputStream oSevletOutputStream = response.getOutputStream();
-                    response.setContentType("Content-type: application/octet-stream; charset=utf-8");
-                    response.setContentLength((int) thumb.length());
-                    response.setHeader("Content-Disposition", "attachment; filename=\"" + HTMLEntities.htmlentities(URLEncoder.encode(this.oUserSession.getUserName() + ".png", "UTF-8")) + "\"");
-
-                    byte[] buffer = new byte[2048];
-                    DataInputStream oDataInputStream = new DataInputStream(new FileInputStream(thumb));
-
-                    while ((oDataInputStream != null) && ((bytes = oDataInputStream.read(buffer)) != -1)) {
-                        oSevletOutputStream.write(buffer, 0, bytes);
-                    }
-
-                    oDataInputStream.close();
-                    oSevletOutputStream.flush();
-                    oSevletOutputStream.close();
-                }
-            } catch (Exception e) {
-
-            }
-        }
-
+        // 삭제
         private void deleteProfileImage() {
             try {
                 File thumb = new File(String.format("%s%d", uploadPath, USER_IDX));
@@ -142,40 +100,6 @@
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-
-        private File getProfileFile(){
-            File file = new File(String.format("%s%d",uploadPath,USER_IDX));
-            return file;
-        }
-
-        private void getProfileImage()  throws ServletException, IOException {
-
-            File file = getProfileFile();
-            if(!file.exists())return;
-
-            ArrayList<JsonUserImage> files = new ArrayList<JsonUserImage>();
-            JsonUserImage userImage = new JsonUserImage();
-            userImage.setOwnerIdx(USER_IDX);
-            userImage.setName(String.format("%s.png", oUserSession.getUserName()));
-            String sFileSize = Long.toString(file.length());
-            userImage.setSize(sFileSize);
-            userImage.setUrl(sActionJspName + "?pAction=DownloadFile");
-            userImage.setDeleteUrl(sActionJspName + "?pAction=DeleteFile");
-            files.add(userImage);
-
-            HttpServletResponse response = oReqHelper.getResponseObject();
-            Gson gson = new Gson();
-            JsonElement element = gson.toJsonTree(files);
-            JsonObject object = new JsonObject();
-            object.add("files", element);
-
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("application/json");
-            PrintWriter oPrintWriter = response.getWriter();
-            oPrintWriter.write(object.toString());
-            oPrintWriter.close();
-
         }
 
         private void makeNewThumbNail(File file, String fileName) throws ServletException, IOException {
@@ -233,28 +157,18 @@
             }
         }
 
+        // 업로드 구현
         private void uploadFile() throws ServletException, IOException {
-            HttpServletResponse response = oReqHelper.getResponseObject();
             HttpServletRequest request = oReqHelper.getRequestObject();
 
             if (!ServletFileUpload.isMultipartContent(request))
                 throw new IllegalArgumentException("Plz..'multipart/form-data' enctype for your form.");
 
-            ArrayList<JsonUserImage> files = new ArrayList<JsonUserImage>();
             try {
                 DiskFileItemFactory oDiskItemFactory = new DiskFileItemFactory();
 
                 ServletFileUpload oUploadFileHandler = new ServletFileUpload(oDiskItemFactory);
                 List<FileItem> items = oUploadFileHandler.parseRequest(request);
-
-                FileUploadInfo oFileUploadInfo = new FileUploadInfo();
-
-                for (FileItem item : items) {
-                    if (item.isFormField())
-                        oFileUploadInfo.addParam(item.getFieldName(), item.getString());
-                }
-
-                StringBuffer sb = new StringBuffer();
 
                 for (FileItem item : items) {
                     if (item.isFormField()) continue;
@@ -267,7 +181,6 @@
                         continue;
                     }
                     String userImageSaveName = String.format("%d", USER_IDX);    //썸네일은 무조건 png로 생성됨
-                    String sFileSize = Long.toString(item.getSize());
 
                     // 원본파일 임시저장하는 부분
                     File file = new File(uploadPath + String.format("%d_ori.%s", USER_IDX, sExt)); // _ori 원본
@@ -277,18 +190,6 @@
                     makeNewThumbNail(file, userImageSaveName);
                     // 원본 삭제 (임시파일)
                     file.delete();
-
-                    JsonUserImage userImage = new JsonUserImage();
-
-                    userImage.setOwnerIdx(USER_IDX);
-                    userImage.setName(String.format("%s.png", oUserSession.getUserName()));
-                    userImage.setSize(sFileSize);
-                    userImage.setUrl(sActionJspName + "?pAction=DownloadFile");
-                    userImage.setDeleteUrl(sActionJspName + "?pAction=DeleteFile");
-                    files.add(userImage);
-
-                    sb.append(sOriginFileName);
-
                 }
 
             } catch (FileUploadException e) {
@@ -296,20 +197,10 @@
             } catch (Exception e) {
                 throw new RuntimeException(e);
             } finally {
-                Gson gson = new Gson();
-
-                JsonElement element = gson.toJsonTree(files);
-                JsonObject object = new JsonObject();
-                object.add("files", element);
-
-                response.setCharacterEncoding("UTF-8");
-                response.setContentType("application/json");
-                PrintWriter oPrintWriter = response.getWriter();
-                oPrintWriter.write(object.toString());
-                oPrintWriter.close();
             }
         }
 
+        // 확장자 구하기
         private String getExtention(String filename) {
             String suffix = "";
             int pos = filename.lastIndexOf('.');
@@ -317,41 +208,6 @@
                 suffix = filename.substring(pos + 1);
             }
             return suffix.toLowerCase();
-        }
-    }
-
-    class FileUploadInfo {
-        private Hashtable<String, String> oFileUploadInfo;
-
-        public FileUploadInfo() {
-            oFileUploadInfo = new Hashtable<String, String>();
-        }
-
-        public String getParam(String key, String defaultValue) {
-            String sValue = defaultValue;
-
-            try {
-                if (oFileUploadInfo.containsKey(key)) {
-                    sValue = oFileUploadInfo.get(key);
-
-                    if (sValue == null || sValue.equals(""))
-                        sValue = defaultValue;
-                }
-            } catch (Exception e) {
-            }
-
-            return sValue;
-        }
-
-        public String getParam(String key) {
-            return getParam(key, "");
-        }
-
-        public void addParam(String key, String value) {
-            try {
-                oFileUploadInfo.put(key, value);
-            } catch (Exception e) {
-            }
         }
     }
 %>

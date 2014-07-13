@@ -26,41 +26,6 @@
 		}
 	}
 	
-	/*
-	List<FileItem> fileItems = mReq.getFileItems();
-	
-	for(FileItem item : fileItems) {
-		String fileName = item.getName();
-		String extention = getExtention(fileName);
-		
-		if("".equals(fileName) == false){
-			if(extention.toLowerCase().contains("jpg")) {
-				String baseUploadPath = Config.getProperty("init", "FILE_UPLOAD_BASE_REPOSITORY") + oUserSession.getDomainIdx() + "/profile";
-
-				File dir = new File(baseUploadPath);
-				
-				if(dir.exists() == false) {
-					dir.mkdirs();
-				}
-				
-				String path = String.format("%s/%s@%s",baseUploadPath, oUserSession.getUserIdx(), oUserSessigetDomainIdx()n() + ".jpg");
-				
-				File file = new File(path);
-				item.write(file);
-				
-				BufferedImage im = ImageIO.read(file);
-				BufferedImage thumb = Scalr.resize(im, 48); 
-				
-				ImageIO.write(thumb , "jpg", file);
-				
-			} else {
-				out.print(JavaScript.write("alert('JPG파일만 가능합니다.'); history.back(1);"));
-				return;
-			}
-		}
-	}
-	*/
-	
 	String key = "INSERT_USER" ; // -- QUERY KEY
 	String[] param = null ;
 	
