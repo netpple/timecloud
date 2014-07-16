@@ -130,11 +130,13 @@
 			<input type="text" name='searchValue' value="<%=pSearchValue %>" class="search-query" placeholder="Search">
 		</form>
         <ul class="nav pull-right">
-          <li><a href='/jsp/userInfo.jsp?user_idx=<%=oUserSession.getUserIdx()%>'><img src="<%=getProfileImageUrl(oUserSession.getUserIdx())%>" width="30px" style="float:left;position:absolute; top:5px; left:-17px;"/> &nbsp;<%=oUserSession.getUserName() %>님</a></li>
+          <li><a href='/jsp/userInfo.jsp?user_idx=<%=oUserSession.getUserIdx()%>'>
+              <img src="<%=getProfileImageUrl(oUserSession.getUserIdx())%>" style="height:30px; float:left;position:absolute; top:5px; left:-17px;"/> &nbsp;<%=oUserSession.getUserName() %>님</a>
+          </li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="<%=IMG_PATH %>/setting_icon.png"/></a>
             <ul class="dropdown-menu">
-              <li><a href='/jsp/userList.jsp'>사용자 목록</a></li>
+              <li><a href='/jsp/profile/view.jsp'>Profile</a></li>
               <li class="divider"></li>
               <li><a href="javascript:onLogout();">로그아웃</a></li>
             </ul>

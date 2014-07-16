@@ -79,6 +79,30 @@ function getBrowserType() {
           <button id="login-submit" type="submit" class="login-button">Login</button>
         </form>
       </div>
+        <div id="register" class="login-wrapper animated" style="display: none;">
+            <form action="/jsp/join/action.jsp" method="post">
+                <div class="input-group">
+                    <input type="text" name="user_email" placeholder="이메일" class="input-transparent" />
+                    <input type="text" name="user_name" placeholder="이름" class="input-transparent"/>
+                    <input type="password" name="user_passwd" placeholder="비밀번호" class="input-transparent"/>
+                    <input type="password" name="user_passwd2" placeholder="비밀번호 확인" class="input-transparent"/>
+                </div>
+                <button id="register-submit" type="submit" class="login-button">Register</button>
+            </form>
+        </div>
+        <div id="forgot" class="login-wrapper animated" style="display: none;">
+            <form action="../dashboard/stats.html" method="get">
+                <div class="input-group">
+                    <input type="text" placeholder="email" class="input-transparent" />
+                </div>
+                <button id="forgot-submit" type="submit" class="login-button">Recover</button>
+            </form>
+        </div>
+        <div class="inner-well" style="text-align: center; margin: 20px 0;">
+            <a href="#" id="login-link" class="button mini rounded gray"><i class="icon-signin"></i> Login</a>
+            <a href="#" id="register-link" class="button mini rounded gray"><i class="icon-plus"></i> Register</a>
+            <a href="#" id="forgot-link" class="button mini rounded gray"><i class="icon-question-sign"></i> Forgot Password?</a>
+        </div>
 <%--
  
       <div id="register" class="login-wrapper animated" style="display: none;">
