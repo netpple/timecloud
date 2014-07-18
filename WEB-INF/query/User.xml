@@ -132,6 +132,14 @@
                 AND N_IDX = ?
         </value>
     </query>
+    <query>
+        <id>UPDATE_USER_PASSWD_BY_EMAIL</id>
+        <value>
+            UPDATE TIMECLOUD_USER SET
+            V_PASSWD = FN_CRYPT('1',?,'TT')
+            WHERE V_EMAIL = ?
+        </value>
+    </query>
 
     <query>
         <id>SELECT_USER_SEQ</id>
@@ -168,6 +176,43 @@
             ,''
             )
         </value>
+        <description>관리자용 사용자추가</description>
+    </query>
+    <query>
+        <id>INSERT_USER_JOIN</id>
+        <value>
+            INSERT INTO TIMECLOUD_USER(
+            N_IDX
+            ,V_EMAIL
+            ,V_PASSWD
+            ,V_NAME
+            ,V_REG_DATETIME
+            ,V_EDT_DATETIME
+            ,C_DEL_YN
+            ,C_OFF_YN
+            ,V_TEL
+            ,V_NOTI_EMAIL
+            ,V_LAST_LOGIN_DATETIME
+            ) VALUES (
+            ?
+            ,?
+            ,FN_CRYPT('1',?,'TT')
+            ,?
+            ,TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            ,TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            ,'N'
+            ,'N'
+            ,''
+            ,?
+            ,''
+            )
+        </value>
+        <description>회원가입용</description>
+    </query>
+    <query>
+        <id>SELECT_USERCNT_BY_EMAIL</id>
+        <value>SELECT COUNT(*) FROM TIMECLOUD_USER WHERE v_email=?</value>
+        <description>사용자이메일조회 - 비번찾기용,등록된 이메일여부 확인용</description>
     </query>
     <query>
         <id>INSERT_DOMAIN_USER</id>
