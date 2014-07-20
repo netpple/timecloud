@@ -498,14 +498,14 @@
 			String photo = null;
 			String[] asUser = v_parent_user.split("-");
 			if (!isTop() && asUser != null && asUser.length == 2) {
-				photo = getProfileImage(sess.getDomainIdx(),Integer.parseInt(asUser[0]),20);
+				photo = getProfileImage(Integer.parseInt(asUser[0]),20);
 				
 				if(sess.getUserIdx() != Integer.parseInt(asUser[0])) {
 					desc += " <small class='badge badge-info'>from</small> "
 							+ asUser[1] ;
 				}
 			} else {
-				photo = getProfileImage(sess.getDomainIdx(), sess.getUserIdx(),20);
+				photo = getProfileImage(sess.getUserIdx(),20);
 			}
 
 			out = "<td>" + n_idx + "</td>" + "<td>" + photo + "</td>" 

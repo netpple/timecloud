@@ -123,7 +123,7 @@ class Feedback {
 			
 			sbOut.append("<div class='feedback'><dl>");
 			sbOut.append(	"<dt class='img'>");
-			sbOut.append(		getProfileImage(sess.getDomainIdx(), n_owner_idx));
+			sbOut.append(		getProfileImage(n_owner_idx));
 			sbOut.append(	"</dt>");
 			sbOut.append(	"<dd>");
 			sbOut.append(		v_feedback_owner);

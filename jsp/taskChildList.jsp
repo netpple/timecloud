@@ -159,7 +159,7 @@ class Task {
 		String photo = null ;
 		String[] asUser = v_child_user.split("-") ;
 		if(asUser != null && asUser.length ==2) {
-			photo = getProfileImage(sess.getDomainIdx(), Integer.parseInt(asUser[0]),20) ;
+			photo = getProfileImage(Integer.parseInt(asUser[0]),20) ;
 			desc += " <small class='badge'>To</small> "+Html.small(asUser[1]) ;
 		}
 		

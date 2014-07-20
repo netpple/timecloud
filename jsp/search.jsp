@@ -193,7 +193,7 @@ class Search {	// class Tool과 v_task 빼고 동일함
 			
 			sbOut.append("<div class='search'><dl>");
 			sbOut.append(	"<dt class='img'>");
-			sbOut.append(		getProfileImage(sess.getDomainIdx(), n_owner_idx));
+			sbOut.append(		getProfileImage(n_owner_idx));
 			sbOut.append(	"</dt>");
 			sbOut.append(	"<dd><small>");
 			sbOut.append(		message );

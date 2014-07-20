@@ -309,7 +309,7 @@ class HierarchyTask extends AxisJTree {
 		
 		sbOut.append("<dl>");
 		sbOut.append(	"<dt class='img'>");
-		sbOut.append(		getProfileImage(sess.getDomainIdx(), iOwnerIdx, photoSize, ImageShape.NORMAL, bOff));
+		sbOut.append(		getProfileImage(iOwnerIdx, photoSize, ImageShape.NORMAL, bOff));
 		sbOut.append(	"</dt>");
 		sbOut.append(	"<dd class=taskTitle>");
 		sbOut.append(		url	).append(Html.trueString(favorite, Html.Icon.FAVORITE) );

@@ -124,7 +124,7 @@ class Activity {
 		
 		sbOut.append("<div style='float:left'>") 
 				.append("<div style='float:left'>")
-				.append( getProfileImage(sess.getDomainIdx(), n_owner_idx) )
+				.append( getProfileImage(n_owner_idx) )
 				.append("</div>")
 				.append("<div style='float:right;padding:0 0 0 10px'>")
 					.append(v_activity_owner).append("<br />")

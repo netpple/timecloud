@@ -150,7 +150,7 @@ class Project {
 		}
 		
 		String photo = null ;
-		photo = getProfileImage(sess.getDomainIdx(), n_owner_idx) ;
+		photo = getProfileImage(n_owner_idx) ;
 		
 		out = 	"<tr><td>"+n_idx+"</td>"
 				+ "<td>" +photo+"</td>"

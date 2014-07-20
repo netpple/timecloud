@@ -16,7 +16,7 @@
 
             tr = Html.td(idx)
                 +Html.td(user.getName())
-                +Html.td(getProfileImage(DOMAIN_IDX, Integer.parseInt(user.getIdx()) ))
+                +Html.td(getProfileImage(user.getIdx()))
                 +Html.td(user.getEmail())
                 +Html.td(team)
                 +Html.td(user.getEdtDatetime())

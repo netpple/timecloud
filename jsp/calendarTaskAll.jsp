@@ -40,7 +40,7 @@
 	StringBuffer _observerImages = new StringBuffer() ;	// -- TODO - include된 파일에서 사용될 변수명은 _를 붙이면 어떨까? (현재 파일 외에 다른 파일 영역에서도 사용됨을 의미)
 	if(ds != null && ds.size()>0) {
 		while(ds.next()){
-			_observerImages.append(" " + getProfileImage( oUserSession.getDomainIdx(), ds.getInt(1), 30 ) );
+			_observerImages.append(" " + getProfileImage(ds.getInt(1), 30 ) );
 		}
 	}
 	else _observerImages.append("없음") ;
@@ -176,11 +176,11 @@ class Task {
 		if(asParentUser != null && asParentUser.length ==2) {
 			int n_parent_idx = Integer.parseInt(asParentUser[0]) ;
 			if(n_owner_idx !=n_parent_idx) {
-				path.append(getProfileImage(sess.getDomainIdx(), n_parent_idx, 30)) ;
+				path.append(getProfileImage(n_parent_idx, 30)) ;
 				path.append("<i class='icon-hand-right'></i>") ;
 			}
 		}
-		path.append( getProfileImage(sess.getDomainIdx(), n_owner_idx, 30) ) ;
+		path.append( getProfileImage(n_owner_idx, 30) ) ;
 		
 		String outFormat = "%s %s %s" ;
 		return String.format(

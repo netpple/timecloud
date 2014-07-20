@@ -110,36 +110,6 @@ function getBrowserType() {
                 <a href="#" id="register-link" class="button mini rounded gray"><i class="icon-plus"></i> 회원가입</a>
                 <a href="#" id="forgot-link" class="button mini rounded gray"><i class="icon-question-sign"></i> 비밀번호 찾기</a>
             </div>
-            <%--
-
-                  <div id="register" class="login-wrapper animated" style="display: none;">
-                    <form action="../dashboard/stats.html" method="get">
-                      <div class="input-group">
-                        <input type="text" placeholder="email" class="input-transparent" />
-                        <input type="text" placeholder="first name" class="input-transparent"/>
-                        <input type="text" placeholder="last name" class="input-transparent"/>
-                        <input type="email" placeholder="confirm password" class="input-transparent"/>
-                        <input type="password" placeholder="password" class="input-transparent"/>
-                      </div>
-                      <button id="register-submit" type="submit" class="login-button">Register</button>
-                    </form>
-                  </div>
-
-                  <div id="forgot" class="login-wrapper animated" style="display: none;">
-                    <form action="../dashboard/stats.html" method="get">
-                      <div class="input-group">
-                        <input type="text" placeholder="email" class="input-transparent" />
-                      </div>
-                      <button id="forgot-submit" type="submit" class="login-button">Recover</button>
-                    </form>
-                  </div>
-
-                  <div class="inner-well" style="text-align: center; margin: 20px 0;">
-                    <a href="#" id="login-link" class="button mini rounded gray"><i class="icon-signin"></i> Login</a>
-                    <a href="#" id="register-link" class="button mini rounded gray"><i class="icon-plus"></i> Register</a>
-                    <a href="#" id="forgot-link" class="button mini rounded gray"><i class="icon-question-sign"></i> Forgot Password?</a>
-                  </div>
-             --%>
         </div>
     </div>
 </div>
@@ -152,7 +122,6 @@ function getBrowserType() {
             <div class="inner">{{ item.text }}</div>
             <div class="time">{{ item.time }}</div>
         </div>
-
         <i class="icon-remove-sign hide"></i>
     </div>
 </script>

@@ -18,7 +18,7 @@
 <body>
 <div class='row-fluid'>
     <div>
-        <div><%=getProfileImage(oUserSession.getDomainIdx(), oUserSession.getUserIdx())%>
+        <div><%=getProfileImage(USER_IDX)%>
             <%--<div class="row fileupload-buttonbar" style="margin-left:5px;">--%>
                 <%
                     if (!hasMyPhoto) {

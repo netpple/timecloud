@@ -272,10 +272,30 @@
             A.V_NOTI_EMAIL
             FROM TIMECLOUD_USER A
             WHERE
-            A.N_IDX = ? AND
-            A.C_DEL_YN = 'N'
+            A.N_IDX = ?
+            AND A.C_DEL_YN = 'N'
         </value>
-        <description>FOR USER LIST</description>
+        <description>USER BY IDX</description>
+    </query>
+    <query>
+        <id>SELECT_USER_INFO2</id>
+        <value>
+            SELECT
+            A.N_IDX,
+            A.V_EMAIL,
+            A.V_NAME,
+            A.C_OFF_YN,
+            A.V_REG_DATETIME,
+            A.V_EDT_DATETIME,
+            FN_CRYPT('2',A.V_PASSWD,'TT'),
+            A.V_TEL,
+            A.V_NOTI_EMAIL
+            FROM TIMECLOUD_USER A
+            WHERE
+            A.V_EMAIL = ?
+            AND A.C_DEL_YN = 'N'
+        </value>
+        <description>USER BY EMAIL</description>
     </query>
 
     <query>

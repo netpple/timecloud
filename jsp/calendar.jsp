@@ -460,11 +460,11 @@ class Task {
 		if(asParentUser != null && asParentUser.length ==2) {
 			int n_parent_idx = Integer.parseInt(asParentUser[0]) ;
 			if(n_owner_idx !=n_parent_idx) {
-				path.append(getProfileImage(sess.getDomainIdx(), n_parent_idx, 30)) ;
+				path.append(getProfileImage(n_parent_idx, 30)) ;
 				path.append("<i class='icon-hand-right'></i>") ;
 			}
 		}
-		path.append( getProfileImage(sess.getDomainIdx(), n_owner_idx, 30) ) ;
+		path.append( getProfileImage(n_owner_idx, 30) ) ;
 		
 		String outFormat = "%s %s %s" ;
 		return String.format(

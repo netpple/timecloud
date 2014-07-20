@@ -357,7 +357,7 @@ class Tool {
 			
 			sbOut.append("<div id='"+v_type+"_"+n_idx+"' class='tool'><dl>");
 			sbOut.append(	"<dt class='img'>");
-			sbOut.append(		getProfileImage(sess.getDomainIdx(), n_owner_idx));
+			sbOut.append(		getProfileImage(n_owner_idx));
 			sbOut.append(	"</dt>");
 			sbOut.append(	"<dd><small>");
 			sbOut.append(		message );

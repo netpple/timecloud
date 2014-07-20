@@ -407,7 +407,7 @@ class Project {
 		projectStatus = getStatusControl() ;
 		
 		String photo = null ;
-		photo = getProfileImage(sess.getDomainIdx(), n_owner_idx) ;
+		photo = getProfileImage(n_owner_idx) ;
 		
 		out = 	"<tr><td>"+n_idx+"</td>"
 				+ "<td>" +photo+"</td>"
@@ -511,7 +511,7 @@ class Task {
 		
 		sbOut.append("<div style='float:left'>") 
 				.append("<div style='float:left'>")
-				.append( getProfileImage(segetDomainIdx()n(), n_owner_idx) )
+				.append( getProfileImage(n_owner_idx) )
 				.append("</div>")
 				.append("<div style='float:right;padding:0 0 0 10px'>")
 					.append(task_owner).append("<i class='icon-cog'></i><sub>최상위태스크오너</sub>").append("<br />")

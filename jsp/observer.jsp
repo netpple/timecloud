@@ -176,7 +176,7 @@ class Observer {
 		return n_owner_idx ;
 	}
 	public String getImage() {
-		return getProfileImage(sess.getDomainIdx(), n_owner_idx) ;
+		return getProfileImage(n_owner_idx) ;
 	}
 	
 	public String getName() {

@@ -54,7 +54,7 @@ $(document).ready(function() {
 					</tr>
 					<tr>
 						<td>사진:</td>
-						<td><%=getProfileImage(oUserSession.getDomainIdx(), Integer.parseInt(pUserIdx)) %></td>
+						<td><%=getProfileImage(Integer.parseInt(pUserIdx)) %></td>
 					</tr>
 					<tr><td>연락처:</td><td><input type="text" name="pTel" value="<%=user.getTel()%>"/></td></tr>
 					<tr><td>알람 이메일:</td><td><input type="text" name="pNotiEmail" value="<%=user.getNotiEmail()%>" placeholder="예) dlstj3039@gmail.com"/><br/>

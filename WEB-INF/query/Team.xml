@@ -1,6 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sql-statement>
     <query>
+        <id>SELECT_TEAM_USER_LIST</id>
+        <value>
+            SELECT
+            A.N_IDX,
+            A.V_EMAIL,
+            A.V_NAME,
+            A.C_OFF_YN,
+            A.V_REG_DATETIME,
+            A.V_EDT_DATETIME,
+            FN_CRYPT('2',A.V_PASSWD,'TT'),
+            A.V_TEL,
+            A.V_NOTI_EMAIL
+            FROM TIMECLOUD_USER A, TIMECLOUD_TEAM_USER B
+            WHERE
+            (A.N_IDX = B.N_USER_IDX)
+            AND B.N_TEAM_IDX = ? AND B.N_DOMAIN_IDX = ?
+            AND A.C_DEL_YN = 'N'
+        </value>
+        <description>팀 소속 유저리스트</description>
+    </query>
+    <query>
+        <id>DELETE_TEAM_USER</id>
+        <value>
+            DELETE FROM TIMECLOUD_TEAM_USER
+            WHERE
+                N_USER_IDX = ? AND
+                N_TEAM_IDX = ? AND
+                N_DOMAIN_IDX = ?
+        </value>
+    </query>
+    <query>
+        <id>SELECT_TEAM_INFO</id>
+        <value>
+            SELECT
+            A.N_IDX AS N_IDX
+            , A.V_NAME
+            , A.C_OFF_YN
+            , FN_TIMEGAP(A.V_REG_DATETIME) AS V_REG_DATETIME
+            , FN_TIMEGAP(A.V_EDT_DATETIME) AS V_EDT_DATETIME
+            , (SELECT COUNT(*) FROM TIMECLOUD_TEAM_USER WHERE N_TEAM_IDX = N_IDX) AS USER_CNT
+            , N_OWNER_IDX
+            , (SELECT V_NAME FROM TIMECLOUD_USER WHERE N_IDX = N_OWNER_IDX) AS OWNER_NAME
+            FROM
+            TIMECLOUD_TEAM A, TIMECLOUD_TEAM_USER B
+            WHERE
+            A.N_IDX = B.N_TEAM_IDX
+            AND A.C_DEL_YN = 'N'
+            AND B.N_USER_IDX = ?
+            AND A.N_DOMAIN_IDX = ?
+            AND A.N_IDX = ?
+        </value>
+        <description></description>
+    </query>
+    <query>
         <id>SELECT_DOMAIN_TEAM_LIST</id>
         <value>
             SELECT
@@ -10,6 +64,8 @@
             , FN_TIMEGAP(A.V_REG_DATETIME) AS V_REG_DATETIME
             , FN_TIMEGAP(A.V_EDT_DATETIME) AS V_EDT_DATETIME
             , (SELECT COUNT(*) FROM TIMECLOUD_TEAM_USER WHERE N_TEAM_IDX = N_IDX) AS USER_CNT
+            , N_OWNER_IDX
+            , (SELECT V_NAME FROM TIMECLOUD_USER WHERE N_IDX = N_OWNER_IDX) AS OWNER_NAME
             FROM
             TIMECLOUD_TEAM A
             WHERE
@@ -18,13 +74,37 @@
             ORDER BY
             A.N_IDX ASC
         </value>
-        <description></description>
+        <description>도메인 소속팀</description>
+    </query>
+    <query>
+        <id>SELECT_USER_TEAM_LIST</id>
+        <value>
+            SELECT
+            A.N_IDX AS N_IDX
+            , A.V_NAME
+            , A.C_OFF_YN
+            , FN_TIMEGAP(A.V_REG_DATETIME) AS V_REG_DATETIME
+            , FN_TIMEGAP(A.V_EDT_DATETIME) AS V_EDT_DATETIME
+            , (SELECT COUNT(*) FROM TIMECLOUD_TEAM_USER WHERE N_TEAM_IDX = N_IDX) AS USER_CNT
+            , N_OWNER_IDX
+            , (SELECT V_NAME FROM TIMECLOUD_USER WHERE N_IDX = N_OWNER_IDX) AS OWNER_NAME
+            FROM
+            TIMECLOUD_TEAM A, TIMECLOUD_TEAM_USER B
+            WHERE
+            A.N_IDX = B.N_TEAM_IDX
+            AND A.C_DEL_YN = 'N'
+            AND B.N_USER_IDX = ?
+            AND A.N_DOMAIN_IDX = ?
+            ORDER BY
+            A.N_IDX ASC
+        </value>
+        <description>유저 소속팀</description>
     </query>
     <query>
         <id>INSERT_TEAM</id>
         <value>
             INSERT INTO
-            TIMECLOUD_TEAM(N_IDX,V_NAME,V_REG_DATETIME,V_EDT_DATETIME,C_DEL_YN,C_OFF_YN,N_DOMAIN_IDX)
+            TIMECLOUD_TEAM(N_IDX,V_NAME,V_REG_DATETIME,V_EDT_DATETIME,C_DEL_YN,C_OFF_YN,N_OWNER_IDX,N_DOMAIN_IDX)
             VALUES (
             SEQ_TEAM_IDX.NEXTVAL
             ,?
@@ -33,9 +113,48 @@
             ,'N'
             ,'N'
             ,?
+            ,?
             )
         </value>
     </query>
+    <query>
+        <id>SELECT_TEAM_SEQ_NEXTVAL</id>
+        <value>
+            SELECT SEQ_TEAM_IDX.NEXTVAL FROM DUAL
+        </value>
+    </query>
+    <query>
+        <id>INSERT_TEAM2</id>
+        <value>
+            INSERT INTO
+            TIMECLOUD_TEAM(N_IDX,V_NAME,V_REG_DATETIME,V_EDT_DATETIME,C_DEL_YN,C_OFF_YN,N_OWNER_IDX,N_DOMAIN_IDX)
+            VALUES (
+            ?
+            ,?
+            ,TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            ,TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            ,'N'
+            ,'N'
+            ,?
+            ,?
+            )
+        </value>
+    </query>
+    <query>
+        <id>INSERT_TEAM_USER</id>
+        <value>
+            INSERT INTO
+            TIMECLOUD_TEAM_USER(
+                N_TEAM_IDX,N_USER_IDX,N_DOMAIN_IDX,V_REG_DATETIME)VALUES (
+            ?
+            ,?
+            ,?
+            ,TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
+            )
+        </value>
+    </query>
+
+
     <query>
         <id>UPDATE_TEAM_OFF</id>
         <value>

@@ -1,6 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.util.*" %>
-<%@ page import="java.io.File" %>
 <%@ include file="../common/include/incInit.jspf" %>
 <%@ include file="../common/include/incSession.jspf" %>
 <%
@@ -20,7 +18,7 @@
 
     final String email = user.getEmail();
     final String name = user.getName();
-    final String photo = getProfileImage(oUserSession.getDomainIdx(), oUserSession.getUserIdx());
+    final String photo = getProfileImage(USER_IDX);
     final String tel = user.getTel();
     final String noti_email = user.getNotiEmail();
     String regdate = user.getRegDateTime();

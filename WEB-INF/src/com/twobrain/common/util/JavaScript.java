@@ -4,7 +4,7 @@ public class JavaScript {
 
 	private static String SCRIPT_PREFIX = "<script type=\"text/javascript\">";
 	private static String SCRIPT_SUFFIX = "</script>";
-	
+	private JavaScript(){}
 	public static String redirect(String msg, String url) {
 		String out = "" ;
 		out = alert( msg ) ;
