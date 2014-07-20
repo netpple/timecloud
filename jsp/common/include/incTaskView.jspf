@@ -53,14 +53,14 @@ class TaskHierarchy {
 	private int list = -1 ;
 	
 	private final int iCurrentTaskIdx;
-	private final boolean isAll ;
+	private final boolean isAllTask;
 	
 	private final UserSession sess ;
 	
 	public TaskHierarchy(DataSet ds, UserSession oUserSession, int currentTaskIdx, int currentTaskList) {
 		this.sess = oUserSession ;
 		this.iCurrentTaskIdx = currentTaskIdx ;
-		this.isAll = (currentTaskList > 0) ;	// -- TASK LIST가 들어오면 전체조회임 
+		this.isAllTask = (currentTaskList > 0) ;	// -- TASK LIST가 들어오면 전체조회임
 		this.ds = ds;
 		this.oTaskList = new ArrayList<AxisJTree>();
 		
@@ -68,11 +68,11 @@ class TaskHierarchy {
 			HierarchyTask task = null ;
 			int rowSeq = 0;
 			
-			AxisJTree rootNode = new TopNode("전체", isAll) ;
+			AxisJTree rootNode = new TopNode("전체", isAllTask) ;
 			oTaskList.add( rootNode ) ;
 			
 			while(ds.next()) {
-				task = new HierarchyTask(ds, sess, currentTaskIdx, isAll) ;
+				task = new HierarchyTask(ds, sess, currentTaskIdx, isAllTask) ;
 				if(list<=0)list = task.getList() ;	// -- 해당 태스크구조의 전체관점 조회에서 필요함.
 				task.setRowSeq(++rowSeq);
 				if( iCurrentTaskIdx == task.getIdx() ) {
@@ -205,8 +205,8 @@ class HierarchyTask extends AxisJTree {
 	
 	private int currentTaskIdx = 0;
 	private boolean favorite = false;
-	
-	private final boolean isAll ;
+
+	private boolean isAllTask ;
 	
 	// -- public String no = "";
 	// -- public String nodeCode = "";
@@ -228,8 +228,8 @@ class HierarchyTask extends AxisJTree {
 		this.open = open;
 	}
 	
-	public HierarchyTask (DataSet ds, UserSession sess, int currentTaskIdx, boolean isAll) {
-		this.isAll = isAll ;
+	public HierarchyTask (DataSet ds, UserSession sess, int currentTaskIdx, boolean isAllTask) {
+		this.isAllTask = isAllTask ;
 		this.n_idx = ds.getInt(1);
 		this.iParentIdx = ds.getInt(2);
 		this.iList = ds.getInt(3);

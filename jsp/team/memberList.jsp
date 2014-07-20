@@ -13,8 +13,7 @@
     }
 
     // 멤버여부 확인 (멤버와 관리자만 목록조회 됨)
-    int cnt = QueryHandler.executeQueryInt("SELECT_IS_MEMBER", new String[]{USER_IDX, team_idx, DOMAIN_IDX});
-    if (cnt <= 0) {
+    if (!TeamInfo.isTeamMember(USER_IDX,team_idx,DOMAIN_IDX)) {
         out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}", Cs.FAIL_READ, Cs.FAIL_MSG_2));
         return;
     }

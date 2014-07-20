@@ -76,7 +76,7 @@
 <%@ include file="taskHierarchyInfo.jsp" %><%
 	// -- Task Owner 확인을 해야 하므로, taskHierarchyInfo.jsp 밑에 와야 함.
 	if(!isAll && oTaskHierarchy.getCurrentTask().getOwnerIdx() == oUserSession.getUserIdx() ){
-		String userCombo = getUserCheckBox(oUserSession,TASK_IDX) ;
+		String userCombo = UserComponent.getInstance(USER_IDX,DOMAIN_IDX).getUserCheckBox() ;
 		StringBuffer sbForm = new StringBuffer() ;
 			sbForm.append("<form method='post' action='observerAction.jsp' class='form-inline' onSubmit='javascript:onSubmitObserver(this) ; return false;'><input type='hidden' name='tsk_idx' value='").append(TASK_IDX).append("'/>")
 			.append(userCombo)

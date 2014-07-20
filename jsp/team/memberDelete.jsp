@@ -12,10 +12,12 @@
         return;
     }
 
-    // 권한체크 - 관리자, 팀장만 수행할 수 있다.
-    if (QueryHandler.executeQueryInt("SELECT_IS_TEAM_OWNER", new String[]{USER_IDX, team_idx, DOMAIN_IDX}) < 1) {
-        out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}", Cs.FAIL_AUTH, Cs.FAIL_MSG_2)); // 권한 없음
-        return;
+    // 권한체크 - 관리자, 팀장만 수행할 수 있다. 단, 본인꺼는 삭제가능(탈퇴)
+    if(!StringUtils.equals(USER_IDX,user_idx)){
+        if (QueryHandler.executeQueryInt("SELECT_IS_TEAM_OWNER", new String[]{USER_IDX, team_idx, DOMAIN_IDX}) < 1) {
+            out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}", Cs.FAIL_AUTH, Cs.FAIL_MSG_2)); // 권한 없음
+            return;
+        }
     }
 
     // 삭제

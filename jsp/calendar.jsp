@@ -35,6 +35,10 @@
 	final boolean IS_TASK_ON = ( !currentTask.isOff() && !currentTask.isDel() ) ;
 	
 	boolean readonly = ( isAll || ! IS_TASK_OWNER || ! IS_TASK_ON ) ; // 내 태스크이고, 전체모드가 아니고, 태스크가 활성 상태이다.
+
+    UserComponent component = UserComponent.getInstance(USER_IDX,DOMAIN_IDX);
+    String userCombo = component.getUserCombo();
+    String userCheckbox = component.getUserCheckBox();
 %><!DOCTYPE html> 
 <html lang="en">
 <head>
@@ -377,17 +381,16 @@ Number.prototype.zf = function(len){return this.toString().zf(len);};
 			<div class="control-group">
 				<label class="control-label" for="taskAssign">태스크 할당</label>
 				<div class="controls">
-					<select id="taskAssign" name="pTaskAssignUserId" onChange="javascript:onChangeTaskAssign(this);"><%=getUserCombo(oUserSession)%></select>
+					<select id="taskAssign" name="pTaskAssignUserId" onChange="javascript:onChangeTaskAssign(this);"><%=userCombo%></select>
 				</div>
 			</div>
 			<div class="control-group" id="observerDesc" style="display:none;">
-				<label class="control-label" for="desc">참조내용</label>
+				<label class="control-label" for="desc">메시지</label>
 				<div class="controls">
-					<textarea name="pComment" id="observerComment" rows=3 placeholder="참조자에게 남길 메시지를 적어주세요."></textarea>
+					<textarea name="pComment" id="observerComment" rows=3 placeholder="참고할 내용을 적어주세요."></textarea>
 				</div>
 			</div>
-			
-			<%=getUserCheckBox(oUserSession,TASK_IDX) %>
+			<%=userCheckbox %>
 		</form>		
 		</div>
 		<div class="modal-footer">

@@ -134,7 +134,7 @@
 </script>
 </head>
 <body>
-	<%@ include file="./menuTool.jsp" %>
+	<%--<%@ include file="./menuTool.jsp" %>--%>
 	
 	<%	if(project != null) { 
 		if(project.isOwner()){	// -- project owner만 수정 가능

@@ -1,11 +1,11 @@
 <%@ page import="com.twobrain.common.util.Html" %>
-<%@ page import="com.twobrain.common.core.QueryHandler" %>
-<%@ page import="com.twobrain.common.core.DataSet" %>
 <%@ page import="org.apache.commons.lang3.StringUtils" %>
+<%@ page import="java.util.Iterator" %>
+<%@ page import="java.util.List" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../common/include/incInit.jspf" %>
 <%@ include file="../common/include/incSession.jspf" %><%
-	DataSet ds = QueryHandler.executeQuery("SELECT_USER_TEAM_LIST", new String[]{USER_IDX, DOMAIN_IDX}) ;
+    List<TeamInfo> teams = TeamInfo.getTeams(USER_IDX, DOMAIN_IDX);
 
     final String thead = "<thead><tr><th>#</th><th>팀</th><th>팀원수</th><th>팀장</th><th>lastModified</th><th>최초등록</th><th>상태</th><th>&nbsp;</th></tr></thead>";
     String nodata = Html.tr(Html.td("데이터가 없습니다.", "style='text-align:center' colspan=8"));
@@ -16,11 +16,12 @@
     String tabOn = "<small class='label label-warning'>ON</small>" ;
     int offcnt = 0, oncnt = 0;
     String trash = "";
-	if(ds != null) {
+	if(teams != null && teams.size()>0) {
 		TeamInfo team = null ;
+        Iterator<TeamInfo> it = teams.iterator();
         String row ="", status="",idx="", n_owner_idx = "", owner_name = "";
- 	 	while (ds.next()) {
- 	 		team = new TeamInfo(ds) ;
+ 	 	while (it.hasNext()) {
+ 	 		team = it.next();
             idx = team.getIdx();
             n_owner_idx = team.getOwnerIdx();
             owner_name = team.getOwnerName();
@@ -147,45 +148,4 @@
 	<%=getNotification(oUserSession, "span2 noti") %>		
 </div>
 </body>
-</html><%!
-class TeamInfo {
-	final private String n_idx ;
-    final private String v_name ;
-    final private String v_reg_datetime ;
-    final private String v_edt_datetime ;
-    final private String c_off_yn ;
-    final private String n_user_cnt;
-    final private String n_owner_idx;
-    final private String owner_name;
-
-	TeamInfo (DataSet ds) {
-		this.n_idx = ds.getString(1) ;
-		this.v_name = ds.getString(2) ;
-		this.c_off_yn = ds.getString(3) ;
-		this.v_reg_datetime = ds.getString(4) ;
-		this.v_edt_datetime = ds.getString(5) ;
-        this.n_user_cnt = ds.getString(6);
-        this.n_owner_idx = ds.getString(7);
-        this.owner_name = ds.getString(8);
-	}
-	public boolean isOFF(){
-		return "Y".equals(c_off_yn) ;
-	}
-    public String getName() {
-        return v_name;
-    }
-    public String getRegDatetime(){return v_reg_datetime;}
-    public String getEdtDatetime(){return v_edt_datetime;}
-    public String getOffYn(){
-        return c_off_yn;
-    }
-    public String getIdx(){
-        return n_idx;
-    }
-    public String getUserCnt(){
-        return n_user_cnt;
-    }
-    public String getOwnerIdx(){ return n_owner_idx;}
-    public String getOwnerName(){ return owner_name;}
-}
-%>
+</html>

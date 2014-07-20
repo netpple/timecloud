@@ -1,11 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><%@ page import="java.util.*,java.io.*" %><%@ include file="./common/include/incInit.jspf" %><%@ include file="./common/include/incSession.jspf" %><%@ include file="./common/include/incTaskView.jspf" %><%!
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="./common/include/incInit.jspf" %><%@ include file="./common/include/incSession.jspf" %><%@ include file="./common/include/incTaskView.jspf" %><%!
 
 // -- 해당 태스크에 필요한 내용을 다들고 와서 시간 순으로 다 뿌려야 돼
 // -- Activity , Feedback, File, Observer
 
-%><% 
+%><%
 	_toolTabNo = 0 ;
-	
+
 	DataSet dsTool = null ;
 	String qkey = "TEST_SELECT_TASK_TOOL" ;
 	int param = TASK_IDX ;
@@ -13,17 +14,17 @@
 		qkey = "TEST_SELECT_TASK_TOOL_ALL" ;
 		param = TASK_LIST ;
 	}
-	
+
 	dsTool = QueryHandler.executeQuery(qkey, param ) ;
 	DataSet dsTaskInfo = QueryHandler.executeQuery("SELECT_TASK_INFO2", TASK_IDX);
 	String isTaskOff = "";
-	
+
 	int taskOwner = -1;
 	if(dsTaskInfo != null && dsTaskInfo.next()) {
 		taskOwner = dsTaskInfo.getInt("N_OWNER_IDX");
 		isTaskOff = dsTaskInfo.getString("C_OFF_YN");
 	}
-	
+
 	StringBuffer sb = new StringBuffer();
 	if(dsTool != null) {
 		while(dsTool.next()) {
@@ -54,7 +55,7 @@
 	.tool dd {
 		margin-left:70px;
 	}
-	
+
 	.animated {
 		-webkit-transition: height 0.2s;
 		-moz-transition: height 0.2s;
@@ -63,7 +64,7 @@
 </style>
 <script type="text/javascript">
 var taskIdx = "<%=TASK_IDX%>";
-$(document).ready(function(){ 
+$(document).ready(function(){
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload({
         // Uncomment the following to send cross-domain cookies:
@@ -80,19 +81,19 @@ $(document).ready(function(){
             '/cors/result.html?%s'
         )
     );
-    
+
     $('#pFeedback').autosize();
-    
+
     if(getBrowserType() == 'Safari') {
     	$(".nav-tabs img").css("top","29px");		// -- for safari rendering
     }
-    
+
     $(".nav-tabs > li" ).click(function() {
     	if($(this).find("a").attr("href") == '#activityTab') {
     		var tskIdx = $(this).find("a").attr("task_idx");
     		location.href="/jsp/calendar.jsp?tsk_idx="+ tskIdx +"&modal=Y"
     	}
-    	
+
     	$('.nav-tabs > li').find('img').attr('src','/html/images/arrow_blank.png');
     	$(this).find('img').attr('src','/html/images/arrow_top_type2.png');
     });
@@ -100,25 +101,25 @@ $(document).ready(function(){
 
 function getBrowserType() {
 	var agt = navigator.userAgent.toLowerCase();
-	if (agt.indexOf("chrome") != -1) return 'Chrome'; 
-	if (agt.indexOf("opera") != -1) return 'Opera'; 
-	if (agt.indexOf("staroffice") != -1) return 'Star Office'; 
-	if (agt.indexOf("webtv") != -1) return 'WebTV'; 
-	if (agt.indexOf("beonex") != -1) return 'Beonex'; 
-	if (agt.indexOf("chimera") != -1) return 'Chimera'; 
-	if (agt.indexOf("netpositive") != -1) return 'NetPositive'; 
-	if (agt.indexOf("phoenix") != -1) return 'Phoenix'; 
-	if (agt.indexOf("firefox") != -1) return 'Firefox'; 
-	if (agt.indexOf("safari") != -1) return 'Safari'; 
-	if (agt.indexOf("skipstone") != -1) return 'SkipStone'; 
-	if (agt.indexOf("msie") != -1) return 'Internet Explorer'; 
-	if (agt.indexOf("netscape") != -1) return 'Netscape'; 
-	if (agt.indexOf("mozilla/5.0") != -1) return 'Mozilla'; 
+	if (agt.indexOf("chrome") != -1) return 'Chrome';
+	if (agt.indexOf("opera") != -1) return 'Opera';
+	if (agt.indexOf("staroffice") != -1) return 'Star Office';
+	if (agt.indexOf("webtv") != -1) return 'WebTV';
+	if (agt.indexOf("beonex") != -1) return 'Beonex';
+	if (agt.indexOf("chimera") != -1) return 'Chimera';
+	if (agt.indexOf("netpositive") != -1) return 'NetPositive';
+	if (agt.indexOf("phoenix") != -1) return 'Phoenix';
+	if (agt.indexOf("firefox") != -1) return 'Firefox';
+	if (agt.indexOf("safari") != -1) return 'Safari';
+	if (agt.indexOf("skipstone") != -1) return 'SkipStone';
+	if (agt.indexOf("msie") != -1) return 'Internet Explorer';
+	if (agt.indexOf("netscape") != -1) return 'Netscape';
+	if (agt.indexOf("mozilla/5.0") != -1) return 'Mozilla';
 }
 
 function tool_delete(taskIdx, toolIdx, toolType) {
 	if(confirm("삭제하시겠습니까?")) {
-		location.href = "taskHomeAction.jsp?task_idx="+taskIdx+"&tool_idx="+toolIdx+"&tool_type="+toolType;	
+		location.href = "taskHomeAction.jsp?task_idx="+taskIdx+"&tool_idx="+toolIdx+"&tool_type="+toolType;
 	}
 }
 </script>
@@ -127,7 +128,7 @@ function tool_delete(taskIdx, toolIdx, toolType) {
 <div class="row-fluid">
 	<div class='span10'><%@ include file="./menuGlobal.jsp" %>
 		<div class="row-fluid">
-			<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>		
+			<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>
 			<div class="span4" id="hierarchy" style="height:100%;"></div>
 			<div class="span6"><%@ include file="./menuTool.jsp" %>
 				<%-- Contents Editor Starter--%>
@@ -194,11 +195,11 @@ function tool_delete(taskIdx, toolIdx, toolType) {
 						</div>
 					</div>
 				</div>
-				<% } %>				
+				<% } %>
 				<%-- Contents Editor End --%>
 				<div class='contentArea'><%=sb.toString()%></div>
 			</div>
-		</div>	
+		</div>
 	</div>
 	<%=getNotification(oUserSession, "span2 noti") %>
 </div>
@@ -289,16 +290,16 @@ class Tool {
 	int n_idx = -1 ;
 	int n_task_idx = -1 ;
 	int n_owner_idx = -1 ;
-	
+
 	String v_desc ;
 	String v_timegap ;
 	String v_recent ;
 	String v_type ; // -- FEEDBACK, FILE, ACTIVITY
-	
+
 	String v_owner ;
-	
+
 	UserSession sess ;
-	
+
 	public Tool (DataSet ds, UserSession sess) {
 		this.n_idx = ds.getInt(1) ;
 		this.n_task_idx = ds.getInt(2) ;
@@ -308,14 +309,14 @@ class Tool {
 		this.v_recent = ds.getString(6) ;
 		this.v_type = ds.getString(7) ;
 		this.v_owner = ds.getString(9) ;
-		
+
 		this.sess = sess ;
 	}
-	
+
 	private boolean isMe() {
-		return (n_owner_idx == sess.getUserIdx()) ; 
+		return (n_owner_idx == sess.getUserIdx()) ;
 	}
-	
+
 	private String getActionMessage() {
 		String msg = "" ;
 		if("ACTIVITY".equals(v_type)) {
@@ -330,19 +331,19 @@ class Tool {
 		else {
 			msg = "" ;
 		}
-		
+
 		return msg ;
 	}
-	
+
 	public String get() {
 		StringBuffer sbOut = new StringBuffer() ;
 
 		try {
-			
+
 			// -- TODO - 사용자 사진은 사용자 인식값(PK등)으로 가져올 수 있으면, DB부하 없이도 쓸 수 있어.. 그게 아니면, 썸네일 정도는 경로정보를 N_OWNER_IDX와 매핑하여 서버 메모리에 로딩 시켜 놓고 쓰는게 유리함.
-			
+
 			// -- String sUserInfo = new User(n_owner_idx).get();
-			
+
 			String component = "" ;
 			String message = null ;
 			if(isMe()) {	// -- my feedback
@@ -353,8 +354,8 @@ class Tool {
 				message = "<strong>"+v_owner + "</strong>님이 " + getActionMessage() ;
 			}
 			message += " " + v_timegap ;
-			
-			
+
+
 			sbOut.append("<div id='"+v_type+"_"+n_idx+"' class='tool'><dl>");
 			sbOut.append(	"<dt class='img'>");
 			sbOut.append(		getProfileImage(n_owner_idx));
@@ -364,12 +365,12 @@ class Tool {
 			sbOut.append(	"</small></dd>");
 			sbOut.append(	"<dd class=messageBody>");
 			if("FILE".equals(v_type)) {
-				sbOut.append( 
+				sbOut.append(
 					Html.a(
 						Html.img_(String.format( "onerror=\"this.src='/repos/"+sess.getDomainIdx()+"/thumbnail/file_icon.png'\" src='/jsp/common/fileupload/fileAction.jsp?pAction=DownloadFile&pFileIdx=%d&pThumbnail=true'",n_idx ) )
 						+ Html.br_("") + v_desc
-					, String.format("href='/jsp/common/fileupload/fileAction.jsp?pAction=DownloadFile&pFileIdx=%d'",n_idx) ) 
-				) ;				
+					, String.format("href='/jsp/common/fileupload/fileAction.jsp?pAction=DownloadFile&pFileIdx=%d'",n_idx) )
+				) ;
 			}
 			else {
 				sbOut.append( addLink( stringToHTMLString(v_desc) ) );
@@ -379,7 +380,7 @@ class Tool {
 			sbOut.append( component );
 			sbOut.append(	"</dd>");
 			sbOut.append("</dl></div>");
-			
+
 		} catch (Exception e) {}
 		return sbOut.toString() ;
 	}

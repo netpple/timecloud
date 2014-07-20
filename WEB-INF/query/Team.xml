@@ -11,7 +11,7 @@
         <description>팀원여부확인</description>
     </query>
     <query>
-        <id>SELECT_IS_MEMBER</id>
+        <id>SELECT_IS_TEAM_MEMBER</id>
         <value>
             SELECT COUNT(*) FROM TIMECLOUD_TEAM_USER
             WHERE N_USER_IDX=?

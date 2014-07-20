@@ -89,14 +89,15 @@ var fnObj = {
 				    {isOpen:true, label:"태스크 종료", className:"minus", onclick:function(){onTaskUrlAction("taskCloseAction.jsp",this.sendObj.no)}},
 					{isOpen:false, label:"태스크 재시작", className:"plus", onclick:function(){onTaskUrlAction("taskReOpenAction.jsp",this.sendObj.no)}},
 					{isFavorite:true, label:"즐겨찾기 삭제", className:"unlink", onclick:function(){onTaskUrlAction("favoriteDeleteAction.jsp",this.sendObj.no,"&tbl_name=TASK")}},
-					{isFavorite:false, label:"즐겨찾기 추가", className:"link", onclick:function(){onTaskUrlAction("favoriteAddAction.jsp",this.sendObj.no,"&tbl_name=TASK")}},
+					{isFavorite:false, label:"즐겨찾기 추가", className:"link", onclick:function(){onTaskUrlAction("favoriteAddAction.jsp",this.sendObj.no,"&tbl_name=TASK")}}
 				],
 				filter:function(id){
 					if(this.sendObj.no =="r1") return ;
 					
 					if(this.sendObj.iOwnerIdx == <%= oUserSession.getUserIdx() %>){
 						return (this.menu.isOpen == this.sendObj.open || this.menu.isFavorite == this.sendObj.favorite)
-					}else{ 
+					}
+                    else{
 						return (this.menu.isFavorite == this.sendObj.favorite)
 					}
 				}
@@ -112,6 +113,12 @@ var fnObj = {
 $(document.body).ready(function(){
 	fnObj.pageStart();
 });
+
+function onTeamTask(idx){
+    $.getJSON("/jsp/team/teamTaskInsert.jsp?task_idx="+idx,function(data){
+
+    }).done().fail().always();
+}
 
 function onTaskUrlAction(url,idx,repl) {
 	if(repl == undefined){

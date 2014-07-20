@@ -9,7 +9,9 @@
     <%@ include file="../common/include/incFileUpload.jspf" %>
     <script type="text/javascript">
         var TEAM_IDX = -1;
-        function getTeamIdx(){return TEAM_IDX;}
+        function getTeamIdx() {
+            return TEAM_IDX;
+        }
         $(document).ready(function () {
             TEAM_IDX = getURLParameter("team_idx");
             getTeamInfo();
@@ -18,7 +20,7 @@
         });
 
         function getTeamInfo() {
-            $.getJSON("info.jsp?team_idx="+getTeamIdx(), function (data) {
+            $.getJSON("info.jsp?team_idx=" + getTeamIdx(), function (data) {
                 if (data.result != "<%=Cs.SUCCESS%>") {
                     console.log(data.msg);
                     return false;
@@ -26,14 +28,16 @@
                 // 데이터 뿌림
                 var team = $("#team_info td");
                 team.eq(0).text(data.team_name); //팀명
-                team.eq(1).html("<img src='"+data.owner_photo+"' onerror=\"this.src='/html/images/avatar.png'\" />"+data.owner_name); //팀장
+                team.eq(1).html("<img src='" + data.owner_photo + "' onerror=\"this.src='/html/images/avatar.png'\" />" + data.owner_name); //팀장
                 team.eq(2).text(data.regdate); //등록일
                 team.eq(3).text(data.upddate); //갱신
-            }).fail(function(){console.log("fail");});
+            }).fail(function () {
+                console.log("fail");
+            });
         }
 
         function getMemberList() {
-            $.getJSON("memberList.jsp?team_idx="+getTeamIdx(), function (data) {
+            $.getJSON("memberList.jsp?team_idx=" + getTeamIdx(), function (data) {
                 if (data.result != "<%=Cs.SUCCESS%>") {
                     console.log(data.msg);
                     return false;
@@ -130,8 +134,14 @@
             });
         }
 
+        function deleteMe(){    // 팀탈퇴
+            deleteItem(<%=USER_IDX%>);
+            alert("탈퇴하셨습니다.");
+            location.replace("/");
+        }
+
         function deleteItem(user_idx) {
-            $.getJSON("memberDelete.jsp?team_idx="+getTeamIdx()+"&user_idx=" + user_idx, function (data) {
+            $.getJSON("memberDelete.jsp?team_idx=" + getTeamIdx() + "&user_idx=" + user_idx, function (data) {
                 alert(data.msg);
                 if (data.result == "<%=Cs.SUCCESS%>") { // 삭제 성공 시
                     $("#user_" + user_idx).remove();
@@ -171,16 +181,23 @@
                 }
             }
 
-            $.getJSON("memberInsert.jsp?team_idx="+getTeamIdx()+"&user_idx=" + user_id, function (json) {
-                if (json.result != "<%=Cs.SUCCESS%>")
+            // 서버에 팀원 등록 요청
+            $.getJSON("memberInsert.jsp?team_idx=" + getTeamIdx() + "&user_idx=" + user_id, function (json) {
+                if (json.result != "<%=Cs.SUCCESS%>"){
                     alert(json.msg);
+                    return false;
+                }
+
+                $("tbody", list).append(getMemberRow(user_id, photo_url, name, email, tel));
             }).done(function () {
+                resetMemberInfo(info);
             }).fail(function () {
             }).always(function () {
             });
 
-            $("tbody", list).append(getMemberRow(user_id, photo_url, name, email, tel));
-            resetMemberInfo(info);
+
+
+
         }
 
         function resetMemberInfo(info) {
@@ -202,7 +219,13 @@
             </div>
             <div class='span10 all'>
                 <%-- --%>
-                <h3>Team</h3>
+                <div class="row-fluid">
+                    <div class="span6"><h3>Team</h3></div>
+                    <div class="span6">
+                        <button type="button" class="btn pull-right" onclick="javascript:if(confirm('탈퇴하시겠습니까?')){deleteMe();};">팀탈퇴</button>
+                    </div>
+                </div>
+
                 <table class="table table-bordered">
                     <tbody id="team_info">
                     <tr>

@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %><%@ page trimDirectiveWhitespaces="true" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page trimDirectiveWhitespaces="true" %>
 <%@page import="com.twobrain.common.session.UserMonitor" %>
 <%@ page import="com.twobrain.common.core.DataSet" %>
 <%@ page import="com.twobrain.common.core.QueryHandler" %>
@@ -7,7 +8,8 @@
 <%@ page import="com.twobrain.common.constants.Cs" %>
 <%@ page import="java.util.Vector,java.util.regex.*" %>
 <%@ page import="com.twobrain.common.util.*" %>
-<%@ page import="com.twobrain.dao.*"%>
+<%@ page import="com.twobrain.dao.*" %>
+<%@ page import="java.util.List" %>
 <%
     final String CONTEXT_PATH = request.getContextPath();
     final String CONTEXT_REAL_PATH = request.getRealPath(CONTEXT_PATH);
@@ -107,9 +109,10 @@
     }
 
     // -- TODO - ProfileImage Class 필요 - 태스크 온/오프 사용자 표시, 사용자 온/오프 표시 일괄처리 필요
-    public static String getProfileImage(String n_owner_idx){
+    public static String getProfileImage(String n_owner_idx) {
         return getProfileImage(Integer.parseInt(n_owner_idx));
     }
+
     public static String getProfileImage(int n_owner_idx) {
         return getProfileImage(n_owner_idx, 50, "", false);
     }
@@ -317,51 +320,46 @@
         }
 
         final int myIdx = oUserSession.getUserIdx();
-        DataSet ds = QueryHandler.executeQuery("TEST_SELECT_PROJECT_ON", myIdx);
-        String myProject = getLi(ds, "PROJECT", pIdx);
+//        DataSet ds = QueryHandler.executeQuery("TEST_SELECT_PROJECT_ON", myIdx);
+//        String myProject = getLi(ds, "PROJECT", pIdx);
 
         // ds = QueryHandler.executeQuery("TEST_SELECT_MYFAVORITE", myIdx) ;
         String myFavorite = getLiFavorite(myIdx, req); //getLi(ds,"FAVORITE",fIdx) ;
         String myRecently = getLiRecently(myIdx, req);
 
-        return Html.ul(
-                Html.li(Html.a(Html.Icon.HOME + "Home", "href='/'"), "class='" + homeActive + "'")
+        // TODO - 복수처리 필요
+        StringBuffer sbTeam = new StringBuffer();
+        List<TeamInfo> teams = TeamInfo.getTeams(Integer.toString(oUserSession.getUserIdx()), oUserSession.getDomainIdx());
+        TeamInfo team = null;
+        if (teams != null && teams.size() > 0) {
+            team = teams.get(0);
+            sbTeam.append(Html.h3(
+                    Html.a(
+                            String.format("%s 팀", team.getName())
+                            , "href='/jsp/team/view.jsp?team_idx=" + team.getIdx() + "'")
+                    , "class=nav-header"));
+        } else {
+            sbTeam.append(Html.h4("등록된 팀이 없습니다"));
+        }
+
+        return sbTeam+Html.ul(
+                        Html.li(Html.a(Html.Icon.HOME + "Home", "href='/'"), "class='" + homeActive + "'")
                         + Html.li(Html.a(Html.Icon.ACTIVITY + "Calendar", "href='/jsp/calendarAll.jsp'"), "class='" + calendarActive + "'")
                         + Html.li(Html.a(Html.Icon.FEEDBACK + "Feedback", "href='/jsp/feedbackAll.jsp'"), "class='" + feedbackActive + "'")
                         + Html.li(Html.a(Html.Icon.FILE + "File", "href='/jsp/fileAll.jsp'"), "class='" + fileActive + "'")
                         + Html.li(Html.a(Html.Icon.TASK + "Task", "href='/jsp/taskList.jsp'"), "class='" + taskActive + "'")
                         + Html.li("", "class='divider'")
-                        + Html.li(Html.a("Team","href='/jsp/team/list.jsp'"), "class='nav-header'")
-                        + Html.li("", "class='divider'")
                         + Html.li(Html.Icon.FAVORITE + "Favorite", "class='nav-header'")
                         + myFavorite
-                        + Html.li("", "class='divider'")
-                        + Html.li("Project", "class='nav-header'")
-                        + myProject
+//                        + Html.li("", "class='divider'")
+//                        + Html.li("Project", "class='nav-header'")
+//                        + myProject
                         + Html.li("", "class='divider'")
                         + Html.li("Recently", "class='nav-header'")
                         + myRecently
                         + Html.li("", "class='divider'")
                 , "class='nav nav-list'");
     }
-
-/*
-private String getTypeFromTable(String v_tbl_nm) {	// -- TODO -  임시.. 도구코드로 통일예정 
-	if("TIMECLOUD_TASK".equals(v_tbl_nm)) {
-		return "TASK" ;
-	}
-	else if("TIMECLOUD_ACTIVITY".equals(v_tbl_nm)) {
-		return "ACTIVITY" ;
-	}
-	else if("TIMECLOUD_FILE".equals(v_tbl_nm)) {
-		return "FILE" ;
-	}
-	else if("TIMECLOUD_FEEDBACK".equals(v_tbl_nm)) {
-		return "FEEDBACK" ;
-	}
-	else return "" ;
-}
-*/
 
     private String getLiFavorite(int myIdx, RequestHelper req) {
         DataSet ds = QueryHandler.executeQuery("TEST_SELECT_MYFAVORITE", myIdx);
@@ -488,87 +486,5 @@ private String getTypeFromTable(String v_tbl_nm) {	// -- TODO -  임시.. 도구
         return buf.toString();
     }
 %><%!
-    // -- same with calendarEnabled
-// -- for user combo
-    class UserCombo {
-        String n_idx;
-        String v_email;
-        String v_name;
 
-        public UserCombo(DataSet ds) {
-            this.n_idx = ds.getString(1);
-            this.v_email = ds.getString(2);
-            this.v_name = ds.getString(3);
-        }
-
-        public String get() {
-            // -- task_idx를 경로에 노출하지 않는 방법은?
-            return "<option value='" + n_idx + "'>" + v_name + "(" + v_email + ")</option>";
-        }
-    }
-
-    //-- for user combo
-    class User {
-        boolean isChecked;
-        String n_idx;
-        String v_email;
-        String v_name;
-
-        public User(DataSet ds) {
-            this.isChecked = "Y".equals(ds.getString(1));
-            this.n_idx = ds.getString(2);
-            this.v_email = ds.getString(3);
-            this.v_name = ds.getString(4);
-        }
-
-        public String get() {
-            // -- return "<label class='checkbox inline'><input name='pObserver' type='checkbox' value='"+n_idx+"' id='inlineCheckbox1' "+Html.trueString(isChecked," checked")+"/>"+ v_name+  " </label>";
-            return // Html.trueString(!isChecked,);	// 로직 수정 필요 우선 스킵
-                    "<label class='checkbox inline'><input name='pObserver' type='checkbox' value='" + n_idx + "' id='inlineCheckbox1'/>" + v_name + " </label>";
-        }
-    }
-
-    //-- user combo
-    public String getUserCheckBox(UserSession oUserSession, int TASK_IDX) {    // -- 이미 참조자로 등록돼 있는 사람과 본인은 참조자에서 제외돼야 함.
-        Object[] param = new Object[]{oUserSession.getUserIdx(), TASK_IDX};
-        DataSet dsUsers = QueryHandler.executeQuery("TEST_SELECT_USER_FOR_OBSERVER", param);
-        StringBuffer combo = new StringBuffer();
-        combo.append("<div id='observerCheckList' class='control-group'>")
-                .append("<label class='control-label' for='userCombo'>참조자 할당</label>")
-                .append("<div class='controls'>");
-        String userList = "";
-
-        if (dsUsers != null) {
-            User user = null;
-            while (dsUsers.next()) {
-                user = new User(dsUsers);
-                userList += user.get();
-            }
-            dsUsers = null;
-        }
-
-        combo.append(userList)
-
-                .append("</div>")
-                .append("</div>");
-        return combo.toString();
-    }
-
-    public String getUserCombo(UserSession oUserSession) {
-        // -- TODO - 사용자 정보 가져오기 - 이거 자주 쓰는건데 매번 쿼리해오기 부담되네. 사용자 정보가 바뀔 때만 파일로 떨구는건 어떨까.
-        DataSet dsUsers = QueryHandler.executeQuery("SELECT_USER_LIST4_WITH_ME"
-                , new Object[]{oUserSession.getUserIdx(), oUserSession.getUserIdx()});
-
-        String userList = "<option value='-1'>없음</option>";
-        if (dsUsers != null) {
-            UserCombo user = null;
-            while (dsUsers.next()) {
-                user = new UserCombo(dsUsers);
-                userList += user.get();
-            }
-            dsUsers = null;
-        }
-
-        return userList;
-    }
 %>
