@@ -4,13 +4,13 @@
     final String email = mReq.getParam("email","");
     String result = "0"; // 성공, 나머지는 실패코드임
     if(StringUtils.isEmpty(email)){
-        out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}",Cs.FAIL_USER_GET_PARAM,"이메일을 입력해주세요."));
+        out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}",Cs.FAIL_PARAM,"이메일을 입력해주세요."));
         return;
     }
 
     UserInfo userInfo = UserInfo.getUserByEmail(email);
     if(userInfo == null){
-        out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}",Cs.FAIL_USER_GET_NONE,"등록되지 않은 사용자입니다.")); //결과없음(0) - GET에만 해당
+        out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}",Cs.FAIL_READ,"등록되지 않은 사용자입니다.")); //결과없음(0) - GET에만 해당
         return;
     }
 %>

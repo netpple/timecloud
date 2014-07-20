@@ -1,19 +1,29 @@
 <%@ page import="org.apache.commons.lang3.StringUtils" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %><%@ include file="../common/include/incInit.jspf" %><%@ include file="../common/include/incSession.jspf" %><%
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ include file="../common/include/incInit.jspf" %>
+<%@ include file="../common/include/incSession.jspf" %>
+<%
     RequestHelper mReq = new RequestHelper(request, response);
-    final String team_idx = mReq.getParam("team_idx","");
-    final String user_idx = mReq.getParam("user_idx","");
-    String result = "0"; // 성공, 나머지는 실패코드임
-    if(StringUtils.isEmpty(user_idx) || StringUtils.isEmpty(team_idx) ){
-        out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}",Cs.FAIL_TEAMUSER_DEL_PARAM,"잘못된 접근입니다..")); // 파라메터 이상
+    final String team_idx = mReq.getParam("team_idx", "");
+    final String user_idx = mReq.getParam("user_idx", "");
+
+    if (StringUtils.isEmpty(user_idx) || StringUtils.isEmpty(team_idx)) {    // 파라메터 체크
+        out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}", Cs.FAIL_PARAM, Cs.FAIL_MSG_2)); // 파라메터 이상
         return;
     }
 
-    int cnt = QueryHandler.executeUpdate("DELETE_TEAM_USER",new String[]{user_idx, team_idx, DOMAIN_IDX});
-    if(cnt<=0){
-        out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}",Cs.FAIL_TEAMUSER_DEL_ERROR,"삭제에 실패하였습니다.")); // 처리실패
+    // 권한체크 - 관리자, 팀장만 수행할 수 있다.
+    if (QueryHandler.executeQueryInt("SELECT_IS_TEAM_OWNER", new String[]{USER_IDX, team_idx, DOMAIN_IDX}) < 1) {
+        out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}", Cs.FAIL_AUTH, Cs.FAIL_MSG_2)); // 권한 없음
         return;
     }
 
-    out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}",Cs.SUCCESS,"삭제되었습니다.")); // 처리실패
+    // 삭제
+    int cnt = QueryHandler.executeUpdate("DELETE_TEAM_USER", new String[]{user_idx, team_idx, DOMAIN_IDX});
+    if (cnt <= 0) { // 삭제 실패
+        out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}", Cs.FAIL_DELETE, Cs.FAIL_MSG_1)); // 처리실패
+        return;
+    }
+
+    out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}", Cs.SUCCESS, "삭제되었습니다.")); // 처리실패
 %>

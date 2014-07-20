@@ -1,42 +1,58 @@
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.Iterator" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="../common/include/incInit.jspf" %>
 <%@ include file="../common/include/incSession.jspf" %>
-<%
-    RequestHelper mReq = new RequestHelper(request, response);
-    int idx = mReq.getIntParam("team_idx", -1);
-    if (idx < 1) {
-        out.print(JavaScript.write("alert('잘못된 접근입니다.');location.replace('list.jsp');"));
-        return;
-    }
-
-    DataSet ds = QueryHandler.executeQuery("SELECT_TEAM_INFO", new String[]{USER_IDX, DOMAIN_IDX, Integer.toString(idx)});
-    TeamInfo team = null;
-    if (ds != null && ds.next()) team = new TeamInfo(ds);
-
-    if (team == null) {
-        out.print(JavaScript.write("alert('접근권한이 없습니다.');location.replace('list.jsp');"));
-        return;
-    }
-
-    final String team_idx = team.getIdx();
-    final String team_name = team.getName();
-    final String owner_name = team.getOwnerName();
-    final String owner_idx = team.getOwnerIdx();
-    final String owner_photo = getProfileImage(owner_idx);
-    String regdate = team.getRegDatetime();
-    String upddate = team.getEdtDatetime();
-%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>User List</title>
     <%@ include file="../common/include/incHead.jspf" %>
     <%@ include file="../common/include/incFileUpload.jspf" %>
-
     <script type="text/javascript">
+        var TEAM_IDX = -1;
+        function getTeamIdx(){return TEAM_IDX;}
         $(document).ready(function () {
+            TEAM_IDX = getURLParameter("team_idx");
+            getTeamInfo();
+            getMemberList();
+            setMemberSearch(); // click method set
+        });
+
+        function getTeamInfo() {
+            $.getJSON("info.jsp?team_idx="+getTeamIdx(), function (data) {
+                if (data.result != "<%=Cs.SUCCESS%>") {
+                    console.log(data.msg);
+                    return false;
+                }
+                // 데이터 뿌림
+                var team = $("#team_info td");
+                team.eq(0).text(data.team_name); //팀명
+                team.eq(1).html("<img src='"+data.owner_photo+"' onerror=\"this.src='/html/images/avatar.png'\" />"+data.owner_name); //팀장
+                team.eq(2).text(data.regdate); //등록일
+                team.eq(3).text(data.upddate); //갱신
+            }).fail(function(){console.log("fail");});
+        }
+
+        function getMemberList() {
+            $.getJSON("memberList.jsp?team_idx="+getTeamIdx(), function (data) {
+                if (data.result != "<%=Cs.SUCCESS%>") {
+                    console.log(data.msg);
+                    return false;
+                }
+                var tbody = $("#memberList tbody");
+
+                if (data.count < 0) {
+                    console.log(data.msg);
+                    return false;
+                }
+
+                $(data.list).each(function () {
+                    tbody.append(getMemberRow(this.idx, this.photo, this.name, this.email, this.tel));
+                });
+            }).done().fail(function () {
+            }).always();
+        }
+
+        function setMemberSearch() {
             $("#memberSearch").on("click", function (event) {
                 var email = $("#memberModal form.form-inline>input[name=email]").val();
                 if (email.length <= 0) {
@@ -44,50 +60,81 @@
                     return false;
                 }
 
-                var existUser = false;
-                $("#memberList td.email").each(function () { // 등록된 사용자 목록 들고와서 비교. 있으면 끝낸다.
-                    if ($(this).text() == email) {
-                        alert("이미 등록된 사용자입니다.");
-                        existUser = true;
-                        return false;
-                    }
-                });
-                if (existUser)return false;
+                if (isMember(email))return false;
 
-                // 이미 조회된 사용자면 스킵한다.
-                var info = $("#memberInfo td");
-                if (email == info.eq(0).text()) {
-                    if(confirm("등록하시겠습니까?"))
-                        addItem();
+                if (isSearchedUser(email))return false;
+                // 이미 조회된 사용자면 다시 검색하지 않음. 등록진행
+
+                if (!validEmail(email))return false;
+
+                memberSearch(email);
+            });
+        }
+
+    </script>
+    <script type="text/javascript">
+        function getMemberRow(idx, photo, name, email, tel) {
+            tr = "<tr id=user_" + idx + ">" +
+                    "<td><img src='" + photo + "' onerror=\"this.src='/html/images/avatar.png'\" /></td>" +
+                    "<td>" + name + "</td>" +
+                    "<td class=email>" + email + "</td>" +
+                    "<td>" + tel + "</td>" +
+                    "<td><a href='javascript:deleteItem(" + idx + ");'><i class=icon-trash></i></a></td>" +
+                    "</tr>";
+
+            return tr;
+        }
+
+        function isSearchedUser(email) {
+            var info = $("#memberInfo td");
+            if (email == info.eq(0).text()) {
+                if (confirm("등록하시겠습니까?"))
+                    addItem();
+
+                return true;
+            }
+            return false;
+        }
+
+        function isMember(email) {
+            var existUser = false;
+            $("#memberList td.email").each(function () { // 등록된 사용자 목록 들고와서 비교. 있으면 끝낸다.
+                if ($(this).text() == email) {
+                    alert("이미 등록된 사용자입니다.");
+                    existUser = true;
                     return false;
                 }
-
-                // TODO - email validation
-
-                // ajax request for json result
-                $.getJSON("member.jsp?email=" + email, function (data) {
-                    if (data.result != '0') {
-                        alert(data.msg);
-                        return false;
-                    }
-
-                    info.eq(0).text(data.email);
-                    info.eq(0).attr({id: data.idx});
-                    info.eq(1).text(data.name);
-                    info.eq(2).html("<img src='" + data.photo + "' onerror=\"this.src='/html/images/avatar.png'\">");
-                    info.eq(3).text(data.tel);
-                }).done(function () {
-                }).fail(function () {
-                }).always(function () {
-                });
             });
-        });
+            return existUser;
+        }
+
+        function validEmail(email) {
+            // TODO - CODING
+            return true;
+        }
+        function memberSearch(email) {
+            var info = $("#memberInfo td");
+            $.getJSON("member.jsp?email=" + email, function (data) {
+                if (data.result != '0') {
+                    alert(data.msg);
+                    return false;
+                }
+                info.eq(0).text(data.email);
+                info.eq(0).attr({id: data.idx});
+                info.eq(1).text(data.name);
+                info.eq(2).html("<img src='" + data.photo + "' onerror=\"this.src='/html/images/avatar.png'\">");
+                info.eq(3).text(data.tel);
+            }).done(function () {
+            }).fail(function () {
+            }).always(function () {
+            });
+        }
 
         function deleteItem(user_idx) {
-            $.getJSON("memberDelete.jsp?team_idx=<%=team_idx%>&user_idx=" + user_idx, function (data) {
+            $.getJSON("memberDelete.jsp?team_idx="+getTeamIdx()+"&user_idx=" + user_idx, function (data) {
                 alert(data.msg);
                 if (data.result == "<%=Cs.SUCCESS%>") { // 삭제 성공 시
-                    $("#user_"+user_idx).remove();
+                    $("#user_" + user_idx).remove();
                 }
             }).done().fail().always();
         }
@@ -124,20 +171,15 @@
                 }
             }
 
-            $.getJSON("memberInsert.jsp?team_idx=<%=team_idx%>&user_idx=" + user_id, function (json) {
-                if(json.result != "<%=Cs.SUCCESS%>")
+            $.getJSON("memberInsert.jsp?team_idx="+getTeamIdx()+"&user_idx=" + user_id, function (json) {
+                if (json.result != "<%=Cs.SUCCESS%>")
                     alert(json.msg);
             }).done(function () {
             }).fail(function () {
             }).always(function () {
             });
 
-            $("tbody", list).append("<tr id='user_"+user_id+"'><td><img src='"
-                    + photo_url + "' onerror=\"this.src='/html/images/avatar.png'\"/></td><td>"
-                    + name + "</td><td class=email>"
-                    + email + "</td><td>"
-                    + tel + "</td><td><a href='javascript:deleteItem(" + user_id + ");'><i class=icon-trash></i></a></td></tr>");
-
+            $("tbody", list).append(getMemberRow(user_id, photo_url, name, email, tel));
             resetMemberInfo(info);
         }
 
@@ -162,26 +204,24 @@
                 <%-- --%>
                 <h3>Team</h3>
                 <table class="table table-bordered">
+                    <tbody id="team_info">
                     <tr>
                         <th width="80px">팀 명</th>
-                        <td><%=team_name%>
-                        </td>
+                        <td></td>
                     </tr>
                     <tr>
                         <th>팀 장</th>
-                        <td><%=owner_photo + " " + Html.span(owner_name)%>
-                        </td>
+                        <td></td>
                     </tr>
                     <tr>
                         <th>등록일</th>
-                        <td><%=regdate%>
-                        </td>
+                        <td></td>
                     </tr>
                     <tr>
                         <th>갱신일</th>
-                        <td><%=upddate%>
-                        </td>
+                        <td></td>
                     </tr>
+                    </tbody>
                 </table>
                 <div class="form-actions">
                     <button type="button" class="btn pull-right" data-toggle="modal" data-target="#memberModal">팀원 등록
@@ -199,31 +239,7 @@
                             <th>&nbsp;</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <%
-                            List<UserInfo> list = UserInfo.getTeamUsers(team_idx, DOMAIN_IDX);
-                            if (list != null && list.size() > 0) {
-                                Iterator<UserInfo> it = list.iterator();
-                                StringBuffer sbTr = new StringBuffer();
-                                while (it.hasNext()) {
-                                    UserInfo info = it.next();
-                                    sbTr.append(Html.tr(Html.td(getProfileImage(info.getIdx()))
-                                                    + Html.td(info.getName())
-                                                    + Html.td(info.getEmail(), "class=email")
-                                                    + Html.td(info.getTel())
-                                                    + Html.td("<a href='javascript:deleteItem(" + info.getIdx() + ");'><i class=icon-trash></i></a>"), "id=user_"+info.getIdx())
-                                    );
-                                }
-                                out.print(sbTr.toString());
-                            } else {
-                        %>
-                        <tr class="none">
-                            <td style='text-align:center' colspan=6>데이터가 없습니다.</td>
-                        </tr>
-                        <%
-                            }
-                        %>
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
@@ -270,7 +286,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="javascript:resetMemberInfo($('#memberInfo td'))">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"
+                        onclick="javascript:resetMemberInfo($('#memberInfo td'))">Close
+                </button>
                 <button type="button" class="btn btn-primary" onclick="javascript:addItem();">Add</button>
             </div>
         </div>
