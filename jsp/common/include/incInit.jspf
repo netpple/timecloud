@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %><%@ page trimDirectiveWhitespaces="true" %>
 <%@page import="com.twobrain.common.session.UserMonitor" %>
 <%@ page import="com.twobrain.common.core.DataSet" %>
 <%@ page import="com.twobrain.common.core.QueryHandler" %>

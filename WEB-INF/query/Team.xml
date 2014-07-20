@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sql-statement>
     <query>
+        <id>SELECT_IS_TEAM_OWNER</id>
+        <value>
+            SELECT COUNT(*) FROM TIMECLOUD_TEAM
+            WHERE N_OWNER_IDX=?
+            AND N_IDX=?
+            AND N_DOMAIN_IDX=?
+        </value>
+        <description>팀원여부확인</description>
+    </query>
+    <query>
+        <id>SELECT_IS_MEMBER</id>
+        <value>
+            SELECT COUNT(*) FROM TIMECLOUD_TEAM_USER
+            WHERE N_USER_IDX=?
+            AND N_TEAM_IDX=?
+            AND N_DOMAIN_IDX=?
+        </value>
+        <description>팀원여부확인</description>
+    </query>
+    <query>
         <id>SELECT_TEAM_USER_LIST</id>
         <value>
             SELECT

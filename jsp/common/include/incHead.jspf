@@ -69,3 +69,15 @@ $(function() {
 	chatSocket.onmessage = receiveEvent;
 });
 </script>
+<script type="text/javascript">
+    /**
+     * GET PARAMETER FROM BROWSER URL
+     * @param name
+     * @returns {string}
+     */
+    function getURLParameter(name) {
+        return decodeURI(
+                (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
+        );
+    }
+</script>

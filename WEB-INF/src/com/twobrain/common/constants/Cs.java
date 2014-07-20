@@ -15,19 +15,42 @@ public class Cs {
 	public static final String TIMECLOUD_LOGIN_EMAIL = "TIMECLOUD_LOGIN_EMAIL";
 	public static final String TIMECLOUD_LOGIN_PWD = "TIMECLOUD_LOGIN_PWD";
 
+// ACTION TYPE
+    public static final String PARAM = "0";
+    public static final String CREATE = "1";
+    public static final String READ = "2";
+    public static final String UPDATE = "3";
+    public static final String DELETE = "4";
+    public static final String AUTH = "5";
+
+// CODE FORMAT
+    public static final String FORMAT_CODE = "%s%s";
+
 // SUCCESS CODE
     public static final String SUCCESS = "0";
-// FAIL CODE (0 is SUCCESS)
+    public static final String SUCCESS_PARAM = String.format(FORMAT_CODE,SUCCESS,PARAM);
+    public static final String SUCCESS_CREATE = String.format(FORMAT_CODE,SUCCESS,CREATE);
+    public static final String SUCCESS_READ = String.format(FORMAT_CODE,SUCCESS,READ);
+    public static final String SUCCESS_UPDATE = String.format(FORMAT_CODE,SUCCESS,UPDATE);
+    public static final String SUCCESS_DELETE = String.format(FORMAT_CODE,SUCCESS,DELETE);
+    public static final String SUCCESS_AUTH = String.format(FORMAT_CODE,SUCCESS,AUTH);
+
+// FAIL CODE
     public static final String FAIL = "1"; // 그냥 에러
-    public static final String FAIL_USER = "11"; // 에러 사유 : USER관련 에러
-    public static final String FAIL_USER_GET_NONE = "1110"; // 에러(1)고, USER(1)에서 GET(1)하다 났고, USER정보가 없다.(결과없음)
-    public static final String FAIL_USER_GET_PARAM = "1111"; // 파라메터이상
-    public static final String FAIL_USER_GET_ERROR = "1112"; // 에러(1)고, USER(1)에서 GET하다 났고, 가져오다 실패했다.
+    public static final String FAIL_PARAM = String.format(FORMAT_CODE,FAIL,PARAM);
+    public static final String FAIL_CREATE = String.format(FORMAT_CODE,FAIL,CREATE);
+    public static final String FAIL_READ = String.format(FORMAT_CODE,FAIL,READ);
+    public static final String FAIL_UPDATE = String.format(FORMAT_CODE,FAIL,UPDATE);
+    public static final String FAIL_DELETE = String.format(FORMAT_CODE,FAIL,DELETE);
+    public static final String FAIL_AUTH = String.format(FORMAT_CODE,FAIL,AUTH);
 
-    public static final String FAIL_TEAMUSER = "12"; //에러(1)고 TEAMUSER(2)에서 났다.
+// FAIL MESSAGE
+    public static final String FAIL_MSG_1 = "처리실패";
+    public static final String FAIL_MSG_2 = "잘못된 접근입니다.";
+    public static final String FAIL_MSG_3 = "요청하신 정보가 없습니다.";
 
-    public static final String FAIL_TEAMUSER_ADD_PARAM = "1221"; // 파라메터 이상
-    public static final String FAIL_TEAMUSER_ADD_ERROR = "1222"; //에러(1)고, TEAMUSER(2)에서 DEL(3)하다 났다.
-    public static final String FAIL_TEAMUSER_DEL_PARAM = "1231"; // 파라메터 이상
-    public static final String FAIL_TEAMUSER_DEL_ERROR = "1232"; //에러(1)고, TEAMUSER(2)에서 DEL(3)하다 났다.
+// SUCCESS MESSAGE
+    public static final String SUCCESS_MSG_1 = "처리되었습니다.";
+    public static final String SUCCESS_MSG_2 = "저장되었습니다.";
+    public static final String SUCCESS_MSG_3 = "삭제되었습니다.";
 }
