@@ -9,7 +9,7 @@
 	ds = QueryHandler.executeQuery("SELECT_TASK_ALL_ACTIVITY_LIST", TASK_IDX) ; // -- ("SELECT_ACTIVITY_LIST", new String[]{""+TASK_IDX, ""+currentTask.getOwnerIdx()}) ;
 	String sLastEndDateTime = "";
 	String events = "" ;
-	if(ds != null) {
+	if(ds != null && ds.size()>0) {
 		Activity activity = null ;
 		
 		long lastEndDateTime = 0;

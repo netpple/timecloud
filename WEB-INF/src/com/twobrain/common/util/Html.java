@@ -87,6 +87,8 @@ public class Html {
         public static final String USER = i("","class=icon-user") ; // -- "<i class='icon-user'></i>" ;
         public static final String HOME = i("","class=icon-home") ; // -- "<i class='icon-home'></i>" ;
         public static final String TRASH = i("","class=icon-trash") ; // -- "<i class='icon-trash'></i>" ;
+        public static final String PLUS = i("","class=icon-plus") ; // -- "<i class='icon-trash'></i>" ;
+
         //
 //        public static final String TEAM = i("","class=icon-tower") ; // -- "<i class='icon-trash'></i>" ;
 

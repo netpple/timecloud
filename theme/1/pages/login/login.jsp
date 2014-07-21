@@ -72,11 +72,12 @@ function getBrowserType() {
                 <form action="/jsp/login/loginAction.jsp" method="post">
                     <div class="input-group">
                         <input type="hidden" name="redirectUrl" value="<%=sRedirectUrl%>"/>
-                        <select name="pUserDomain" class="input-transparent">
-                            <option value="1">2Brain</option>
-                            <option value="2">Roac</option>
-                            <option value="3">AxisJ</option>
-                        </select>
+                        <input type="hidden" name="pUserDomain" value="4"/>
+                        <%--<select name="pUserDomain" class="input-transparent">--%>
+                            <%--<option value="1">2Brain</option>--%>
+                            <%--<option value="2">Roac</option>--%>
+                            <%--<option value="3">AxisJ</option>--%>
+                        <%--</select>--%>
                         <%--<input type="text" name="pUserId" required placeholder="이메일을 입력하세요" class="input-transparent" id="email" />--%>
                         <input type="text" name="pUserEmail" required placeholder="이메일을 입력하세요" class="input-transparent"
                                id="email"/>
@@ -89,6 +90,12 @@ function getBrowserType() {
             <div id="register" class="login-wrapper animated" style="display: none;">
                 <form action="/jsp/join/action.jsp" method="post">
                     <div class="input-group">
+                        <input type="hidden" name="domain_idx" value="4"/>
+                        <%--<select name="domain_idx" class="input-transparent">--%>
+                            <%--<option value="1">2Brain</option>--%>
+                            <%--<option value="2">Roac</option>--%>
+                            <%--<option value="3">AxisJ</option>--%>
+                        <%--</select>--%>
                         <input type="text" name="user_email" placeholder="이메일" class="input-transparent"/>
                         <input type="text" name="user_name" placeholder="이름" class="input-transparent"/>
                         <input type="password" name="user_passwd" placeholder="비밀번호" class="input-transparent"/>
@@ -99,6 +106,12 @@ function getBrowserType() {
             </div>
             <div id="forgot" class="login-wrapper animated" style="display: none;">
                 <form action="/jsp/findpassword/action.jsp" method="post">
+                    <input type="hidden" name="domain_idx" value="4"/>
+                    <%--<select name="domain_idx" class="input-transparent">--%>
+                        <%--<option value="1">2Brain</option>--%>
+                        <%--<option value="2">Roac</option>--%>
+                        <%--<option value="3">AxisJ</option>--%>
+                    <%--</select>--%>
                     <div class="input-group">
                         <input type="text" placeholder="이메일을 입력해주세요" name="user_email" class="input-transparent"/>
                     </div>

@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.io.*" %><%@ page import="java.util.HashMap"%><%@ page import="java.io.*" %>
 <%@ include file="./common/include/incInit.jspf" %>
 <%@ include file="./common/include/incSession.jspf" %><%
 	//_globalTabNo = 4 ;
@@ -47,8 +46,9 @@
 			sbFileList.append( oFile.get(oUserSession) ) ;
 		}
 	}
-	
-	String rankTable = getFileRankTable(oUserSession) ;
+
+    // TODO - TEAM RANKING  - DOMAIN RANKING, GLOBAL RANKING 구분 적용방법 필요
+    String rankTable = Html.trueString(TEAM_IDX>0,getFileTeamRankTable(oUserSession,Integer.toString(TEAM_IDX)));//getFileRankTable(oUserSession) ;
 %>
 <!DOCTYPE html>
 <html lang="en">

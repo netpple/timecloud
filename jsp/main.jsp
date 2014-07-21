@@ -33,19 +33,19 @@
 			 --%>
 				<div>
 					<h6>할 일<small> <a href="javascript:onViewTaskList();">더보기</a></small></h6>
-					<ul><%=myTask %></ul>			
+					<ul><%=myTask %></ul>
 				</div>
 			</div>
 			<div class='span5'>
 				<div>
 					<h6>시킨 일<small> <a href="javascript:onViewChildTask();">더보기</a></small></h6>
-					<ul><%=myCommand %></ul>			
+					<ul><%=myCommand %></ul>
 				</div>
 				<div>
 					<h6>CC<small> <a href="javascript:onViewObserverTask();">더보기</a></small></h6>
-					<ul><%=myObserved %></ul>			
-				</div>						
-			</div>		
+					<ul><%=myObserved %></ul>
+				</div>
+			</div>
 		</div>
 	</div>
 	<%=getNotification(oUserSession, "span2 noti") %>

@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sql-statement>
     <query>
-        <id>SELECT_DOMAIN_LIST</id>
+        <id>SELECT_DOMAIN_USER_BY_EMAIL</id>
+        <value>
+            SELECT
+            A.N_IDX,
+            B.N_DOMAIN_IDX
+            FROM
+            TIMECLOUD_USER A, TIMECLOUD_DOMAIN_USER B
+            WHERE
+            (A.N_IDX = B.N_USER_IDX)
+            AND A.V_EMAIL=?
+        </value>
+        <description>사용자이메일조회 - 비번찾기용,등록된 이메일여부 확인용</description>
+    </query>
+    <query>
+        <id>SELECT_IS_DOMAIN</id>
+        <value>
+            SELECT COUNT(*) FROM TIMECLOUD_DOMAIN WHERE C_DEL_YN = 'N' AND N_IDX = ?
+        </value>
+        <description></description>
+    </query>
+    <query>
+        <id>SELECT_DOMAIN_INFO</id>
         <value>
             SELECT
             A.N_IDX AS N_IDX
@@ -10,10 +31,33 @@
             , FN_TIMEGAP(A.V_REG_DATETIME) AS V_REG_DATETIME
             , FN_TIMEGAP(A.V_EDT_DATETIME) AS V_EDT_DATETIME
             , (SELECT COUNT(*) FROM TIMECLOUD_DOMAIN_USER WHERE N_DOMAIN_IDX = N_IDX) AS USER_CNT
+            , A.N_OWNER_IDX
+            , (SELECT V_NAME FROM TIMECLOUD_USER WHERE N_IDX = A.N_OWNER_IDX) AS OWNER_NAME
             FROM
             TIMECLOUD_DOMAIN A
             WHERE
             A.C_DEL_YN = 'N'
+            AND A.N_IDX = ?
+        </value>
+        <description></description>
+    </query>
+    <query>
+        <id>SELECT_DOMAIN_LIST</id>
+        <value>
+            SELECT
+            A.N_IDX AS N_IDX
+            , A.V_NAME
+            , A.C_OFF_YN
+            , FN_TIMEGAP(A.V_REG_DATETIME) AS V_REG_DATETIME
+            , FN_TIMEGAP(A.V_EDT_DATETIME) AS V_EDT_DATETIME
+            , (SELECT COUNT(*) FROM TIMECLOUD_DOMAIN_USER WHERE N_DOMAIN_IDX = A.N_IDX) AS USER_CNT
+            , A.N_OWNER_IDX
+            , B.V_NAME AS OWNER_NAME
+            FROM
+            TIMECLOUD_DOMAIN A, TIMECLOUD_USER B
+            WHERE
+            (A.N_OWNER_IDX = B.N_IDX)
+            AND A.C_DEL_YN = 'N'
             ORDER BY
             A.N_IDX ASC
         </value>
@@ -23,7 +67,7 @@
         <id>INSERT_DOMAIN</id>
         <value>
             INSERT INTO
-            TIMECLOUD_DOMAIN(N_IDX,V_NAME,V_REG_DATETIME,V_EDT_DATETIME,C_DEL_YN,C_OFF_YN)
+            TIMECLOUD_DOMAIN(N_IDX,V_NAME,V_REG_DATETIME,V_EDT_DATETIME,C_DEL_YN,C_OFF_YN,N_OWNER_IDX)
             VALUES (
             SEQ_DOMAIN_IDX.NEXTVAL
             ,?
@@ -31,6 +75,7 @@
             ,TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
             ,'N'
             ,'N'
+            ,?
             )
         </value>
     </query>

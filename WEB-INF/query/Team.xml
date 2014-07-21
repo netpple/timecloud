@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sql-statement>
     <query>
+        <id>SELECT_TEAM_IDX_BY_USER</id>
+        <value>
+            SELECT N_TEAM_IDX FROM TIMECLOUD_TEAM_USER
+            WHERE
+                N_USER_IDX=? AND N_DOMAIN_IDX=?
+        </value>
+        <description>임시 - 팀코드 확인.도메인별 유저당 1팀</description>
+    </query>
+    <query>
         <id>SELECT_IS_TEAM_OWNER</id>
         <value>
             SELECT COUNT(*) FROM TIMECLOUD_TEAM
@@ -8,7 +17,7 @@
             AND N_IDX=?
             AND N_DOMAIN_IDX=?
         </value>
-        <description>팀원여부확인</description>
+        <description>팀오너확인</description>
     </query>
     <query>
         <id>SELECT_IS_TEAM_MEMBER</id>
@@ -61,8 +70,8 @@
             , FN_TIMEGAP(A.V_REG_DATETIME) AS V_REG_DATETIME
             , FN_TIMEGAP(A.V_EDT_DATETIME) AS V_EDT_DATETIME
             , (SELECT COUNT(*) FROM TIMECLOUD_TEAM_USER WHERE N_TEAM_IDX = N_IDX) AS USER_CNT
-            , N_OWNER_IDX
-            , (SELECT V_NAME FROM TIMECLOUD_USER WHERE N_IDX = N_OWNER_IDX) AS OWNER_NAME
+            , A.N_OWNER_IDX
+            , (SELECT V_NAME FROM TIMECLOUD_USER WHERE N_IDX = A.N_OWNER_IDX) AS OWNER_NAME
             FROM
             TIMECLOUD_TEAM A, TIMECLOUD_TEAM_USER B
             WHERE

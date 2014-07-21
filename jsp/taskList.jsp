@@ -74,7 +74,8 @@
 		listOff = "종료 된 태스크가 없습니다." ;		
 	}
 	
-	String rankTable = getTaskRank(oUserSession) ;
+//	String rankTable = getTaskRank(oUserSession) ;
+    String rankTable = Html.trueString(TEAM_IDX>0,getTaskTeamRank(oUserSession,Integer.toString(TEAM_IDX))); //getFeedbackRankTable(oUserSession) ;
 %>
 <!DOCTYPE html>
 <html lang="en">

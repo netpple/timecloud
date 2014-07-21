@@ -1,4 +1,3 @@
-<%@ page import="java.io.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="./common/include/incInit.jspf" %>
 <%@ include file="./common/include/incSession.jspf" %><%
@@ -48,7 +47,7 @@
 	}
 	
 	// -- 피드백 랭킹 출력
-	String rankTable = getFeedbackRankTable(oUserSession) ;
+	String rankTable = Html.trueString(TEAM_IDX>0,getFeedbackTeamRankTable(oUserSession,Integer.toString(TEAM_IDX))); //getFeedbackRankTable(oUserSession) ;
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -87,12 +86,12 @@
 			<div class='span10 all'>
 				<div class='row-fluid'>	
 					<div class='span6'>
-						<span class="label label-success" >Files in</span>
+						<span class="label label-success" >Feedback in</span>
 						<ul class="nav nav-pills">
-							<li class="<%=selected[SELECT_ALL]%>"><a href="javascript:allTaskFile();"><%=ALL_TASK %></a></li>
-							<li class="<%=selected[SELECT_MY]%>"><a href="javascript:myTaskFile();"><%=MY_TASK %></a></li>
-							<li class="<%=selected[SELECT_MYCHILD]%>"><a href="javascript:childTaskFile();"><%=MYCHILD_TASK %></a></li>
-							<li class="<%=selected[SELECT_OBSERVER]%>"><a href="javascript:observerTaskFile();"><%=OBSERVER_TASK %></a></li>
+							<li class="<%=selected[SELECT_ALL]%>"><a href="javascript:allTaskFeedback();"><%=ALL_TASK %></a></li>
+							<li class="<%=selected[SELECT_MY]%>"><a href="javascript:myTaskFeedback();"><%=MY_TASK %></a></li>
+							<li class="<%=selected[SELECT_MYCHILD]%>"><a href="javascript:childTaskFeedback();"><%=MYCHILD_TASK %></a></li>
+							<li class="<%=selected[SELECT_OBSERVER]%>"><a href="javascript:observerTaskFeedback();"><%=OBSERVER_TASK %></a></li>
 						</ul>
 					</div>
 					<div class='span6' align=right><%=rankTable%></div>

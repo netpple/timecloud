@@ -8,7 +8,7 @@
         return;
     }
 
-    UserInfo userInfo = UserInfo.getUserByEmail(email);
+    UserInfo userInfo = UserInfo.getDomainUserByEmail(email,DOMAIN_IDX);
     if(userInfo == null){
         out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}",Cs.FAIL_READ,"등록되지 않은 사용자입니다.")); //결과없음(0) - GET에만 해당
         return;

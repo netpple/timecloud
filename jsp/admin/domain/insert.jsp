@@ -18,7 +18,7 @@
             alert = "alert('도메인명은 2글자 이상입니다.');";
         }
         else {
-            result = QueryHandler.executeUpdate("INSERT_DOMAIN", sName);
+            result = QueryHandler.executeUpdate("INSERT_DOMAIN", new String[]{sName,USER_IDX});
             if (result > 0) {
                 alert = "alert('저장되었습니다.');";
             } else {

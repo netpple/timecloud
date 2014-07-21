@@ -377,7 +377,38 @@
 	    </value>
 	    <description>검색 쿼리</description>
 	</query>
-	
+	<query>
+        <id>TEST_SELECT_SEARCH_TEAM</id>
+        <value>
+            SELECT * FROM (
+            SELECT
+            X.N_IDX
+            ,X.N_TASK_IDX
+            ,X.N_OWNER_IDX
+            ,X.V_DESC
+            ,X.V_TIMEGAP
+            ,X.V_RECENT
+            ,X.V_TYPE
+            ,Z.C_OFF_YN
+            ,Y.V_NAME
+            ,Z.V_DESC AS V_TASK
+            ,X.N_DOMAIN_IDX
+            FROM (
+            SELECT 'TASK' AS V_TYPE,N_IDX, N_IDX AS N_TASK_IDX, N_OWNER_IDX, V_DESC, FN_TIMEGAP(V_EDT_DATETIME) AS V_TIMEGAP,V_EDT_DATETIME AS V_RECENT, C_DEL_YN, N_DOMAIN_IDX FROM TIMECLOUD_TASK
+            UNION
+            SELECT 'ACTIVITY' AS V_TYPE,N_IDX, N_TASK_IDX, N_OWNER_IDX, V_DESC, FN_TIMEGAP(V_EDT_DATETIME) AS V_TIMEGAP,V_EDT_DATETIME AS V_RECENT, C_DEL_YN, N_DOMAIN_IDX FROM TIMECLOUD_ACTIVITY
+            UNION
+            SELECT 'FEEDBACK' AS V_TYPE,N_IDX, N_TASK_IDX, N_OWNER_IDX, V_DESC, FN_TIMEGAP(V_REG_DATETIME) AS V_TIMEGAP,V_REG_DATETIME AS V_RECENT, C_DEL_YN, N_DOMAIN_IDX FROM TIMECLOUD_FEEDBACK
+            UNION
+            SELECT 'FILE' AS V_TYPE,N_IDX, N_TASK_IDX, N_OWNER_IDX, V_ORIGIN_NAME AS V_DESC, FN_TIMEGAP(V_REG_DATETIME) AS V_TIMEGAP,V_REG_DATETIME AS V_RECENT, C_DEL_YN, N_DOMAIN_IDX FROM TIMECLOUD_FILE
+            ) X, TIMECLOUD_USER Y, TIMECLOUD_TASK Z WHERE (X.N_OWNER_IDX = Y.N_IDX) AND (X.N_TASK_IDX = Z.N_IDX) AND X.C_DEL_YN='N'
+            $0$
+            ) A, TIMECLOUD_TEAM_USER B WHERE (A.N_OWNER_IDX = B.N_USER_IDX) AND B.N_TEAM_IDX=? AND A.N_DOMAIN_IDX = ?
+            ORDER BY V_TYPE ASC, V_RECENT DESC
+        </value>
+        <description>팀 내 검색</description>
+	</query>
+
 	<query>
 		<id>TEST_SELECT_TASK_FILE_ALL</id>
 		<value>

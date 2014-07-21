@@ -177,7 +177,7 @@
         return result;
     }
 %><%!
-    // -- KPI - wrapper functions
+    // -- KPI - wrapper functions for GLOBAL RANK
     public String getTaskRank(UserSession oUserSession) {
         return getRankTable(oUserSession, "KPI_TASK_RANK");
     }
@@ -190,16 +190,41 @@
         return getRankTable(oUserSession, "KPI_FEEDBACK_RANK");
     }
 
-    public String getFileRankTable(UserSession oUserSession) {    // --íã£ãã¹ìë¡ë ë­í¹
+    public String getFileRankTable(UserSession oUserSession) {
         return getRankTable(oUserSession, "KPI_FILE_RANK");
     }
 
-    public String getActivityRankTable(UserSession oUserSession) {    // -- ì¡í°ë¹í° ë±ë¡ ë­í¹
+    public String getActivityRankTable(UserSession oUserSession) {
         return getRankTable(oUserSession, "KPI_ACTIVITY_RANK");
     }
 
-    public String getObserverRankTable(UserSession oUserSession) {    // -- ì°¸ì¡°ì í ë¹ë ë­í¹
+    public String getObserverRankTable(UserSession oUserSession) {
         return getRankTable(oUserSession, "KPI_OBSERVER_RANK");
+    }
+
+    // -- KPI - wrapper functions for TEAM RANK
+    public String getTaskTeamRank(UserSession oUserSession, String team_idx) {
+        return getRankTable(oUserSession, "KPI_TASK_RANK_TEAM", new String[]{team_idx});
+    }
+
+    public String getTaskAssginTeamRank(UserSession oUserSession, String team_idx) {
+        return getRankTable(oUserSession, "KPI_TASK_ASSIGN_RANK_TEAM", new String[]{team_idx});
+    }
+
+    public String getFeedbackTeamRankTable(UserSession oUserSession, String team_idx) {
+        return getRankTable(oUserSession, "KPI_FEEDBACK_RANK_TEAM", new String[]{team_idx});
+    }
+
+    public String getFileTeamRankTable(UserSession oUserSession, String team_idx) {
+        return getRankTable(oUserSession, "KPI_FILE_RANK_TEAM", new String[]{team_idx});
+    }
+
+    public String getActivityTeamRankTable(UserSession oUserSession, String team_idx) {
+        return getRankTable(oUserSession, "KPI_ACTIVITY_RANK_TEAM", new String[]{team_idx});
+    }
+
+    public String getObserverTeamRankTable(UserSession oUserSession, String team_idx) {
+        return getRankTable(oUserSession, "KPI_OBSERVER_RANK_TEAM", new String[]{team_idx});
     }
 
     // --
@@ -207,7 +232,6 @@
         return getRankTable(oUserSession, query, null);
     }
 
-    // -- ì¤ì  ì²ë¦¬ë¶
     public String getRankTable(UserSession oUserSession, String query, String[] params) {
         DataSet dsRank = null;
         if (params != null) dsRank = QueryHandler.executeQuery(query, params);
@@ -251,7 +275,9 @@
         int task_idx, creator_idx, n_tbl_idx;
         int i = 0;
         String msg = "";
-        if (ds != null && ds.size() > 0) {
+        int len = ds.size();
+        if (ds != null && len > 0) {
+            if (len <= notifiCount) notifiCount = len;
             while (i++ < notifiCount) {
                 ds.next();
                 task_idx = ds.getInt(1);
@@ -339,18 +365,19 @@
                             , "href='/jsp/team/view.jsp?team_idx=" + team.getIdx() + "'")
                     , "class=nav-header"));
         } else {
-            sbTeam.append(Html.h4("등록된 팀이 없습니다"));
+            sbTeam.append(Html.span(Html.b("등록된 팀이 없습니다 ")+Html.a(Html.Icon.PLUS,"href='/jsp/team/list.jsp'"), "class=nav-header"));
         }
 
-        return sbTeam+Html.ul(
-                        Html.li(Html.a(Html.Icon.HOME + "Home", "href='/'"), "class='" + homeActive + "'")
+        return sbTeam + Html.ul(
+                Html.li(Html.a(Html.Icon.HOME + "Home", "href='/'"), "class='" + homeActive + "'")
                         + Html.li(Html.a(Html.Icon.ACTIVITY + "Calendar", "href='/jsp/calendarAll.jsp'"), "class='" + calendarActive + "'")
                         + Html.li(Html.a(Html.Icon.FEEDBACK + "Feedback", "href='/jsp/feedbackAll.jsp'"), "class='" + feedbackActive + "'")
                         + Html.li(Html.a(Html.Icon.FILE + "File", "href='/jsp/fileAll.jsp'"), "class='" + fileActive + "'")
                         + Html.li(Html.a(Html.Icon.TASK + "Task", "href='/jsp/taskList.jsp'"), "class='" + taskActive + "'")
-                        + Html.li("", "class='divider'")
-                        + Html.li(Html.Icon.FAVORITE + "Favorite", "class='nav-header'")
-                        + myFavorite
+                        + Html.trueString((myFavorite != null),
+                        Html.li("", "class='divider'")
+                                + Html.li(Html.Icon.FAVORITE + "Favorite", "class='nav-header'")
+                                + myFavorite)
 //                        + Html.li("", "class='divider'")
 //                        + Html.li("Project", "class='nav-header'")
 //                        + myProject
@@ -363,7 +390,7 @@
 
     private String getLiFavorite(int myIdx, RequestHelper req) {
         DataSet ds = QueryHandler.executeQuery("TEST_SELECT_MYFAVORITE", myIdx);
-        if (ds == null) return "";
+        if (ds == null || ds.size() < 1) return null;
 
         final String type = req.getParam("type", "");
         final int idx = req.getIntParam("idx", -1);
@@ -485,6 +512,4 @@
 
         return buf.toString();
     }
-%><%!
-
 %>

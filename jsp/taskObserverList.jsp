@@ -34,7 +34,7 @@
 		listOff = "종료 된 참조 태스크가 없습니다." ;		
 	}
 	
-	String rankTable = getTaskRank(oUserSession) ;
+	String rankTable = Html.trueString(TEAM_IDX>0,getObserverTeamRankTable(oUserSession,Integer.toString(TEAM_IDX)));//getTaskRank(oUserSession) ;
 %>
 <!DOCTYPE html>
 <html lang="en">

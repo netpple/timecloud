@@ -1,11 +1,7 @@
+<%@ page import="java.util.Iterator" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="../../common/include/incInit.jspf" %>
 <%@ include file="../../common/include/incSession.jspf" %><%
-	// -- String[] param = new String[]{""+ownerIdx} ;
-	
-	DataSet ds = QueryHandler.executeQuery("SELECT_DOMAIN_LIST") ;
-
-    // List header
     String thead = "<thead><tr><th>#</th><th>도메인</th><th>유저수</th><th>lastModified</th><th>최초등록</th><th>상태</th><th>삭제</th></tr></thead>";
     String nodata = Html.tr(Html.td("데이터가 없습니다.","style='text-align:center' colspan=7"));
 
@@ -15,11 +11,14 @@
     String tabOn = "<small class='label label-warning'>ON</small>" ;
     int offcnt = 0, oncnt = 0;
     String trash ;
-	if(ds != null) {
+
+    List<DomainInfo> domains = DomainInfo.getDomains();
+	if(domains != null) {
 		DomainInfo domain = null ;
         String row ="", status="",idx="";
- 	 	while (ds.next()) {
- 	 		domain = new DomainInfo(ds) ;
+        Iterator<DomainInfo> it = domains.iterator();
+ 	 	while (it.hasNext()) {
+ 	 		domain = it.next();
             idx = domain.getIdx();
 
             row = Html.td(idx)
@@ -133,34 +132,4 @@
 	<%=getNotification(oUserSession, "span2 noti") %>		
 </div>
 </body>
-</html><%!
-
-class DomainInfo {
-	private String n_idx ;
-    private String v_name ;
-    private String v_reg_datetime ;
-    private String v_edt_datetime ;
-    private String c_off_yn ;
-    private String n_user_cnt;
-
-	DomainInfo (DataSet ds) {
-		this.n_idx = ds.getString(1) ;
-		this.v_name = ds.getString(2) ;
-		this.c_off_yn = ds.getString(3) ;
-		this.v_reg_datetime = ds.getString(4) ;
-		this.v_edt_datetime = ds.getString(5) ;
-        this.n_user_cnt = ds.getString(6);
-	}
-	public boolean isOFF(){
-		return "Y".equals(c_off_yn) ;
-	}
-    public String getName() {
-        return v_name;
-    }
-    public String getRegDatetime(){return v_reg_datetime;}
-    public String getEdtDatetime(){return v_edt_datetime;}
-    public String getOffYn(){return c_off_yn;}
-    public String getIdx(){return n_idx;}
-    public String getUserCnt(){return n_user_cnt;}
-}
-%>
+</html>

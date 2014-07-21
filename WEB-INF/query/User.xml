@@ -297,6 +297,27 @@
         </value>
         <description>USER BY EMAIL</description>
     </query>
+    <query>
+        <id>SELECT_USER_INFO3</id>
+        <value>
+            SELECT
+            A.N_IDX,
+            A.V_EMAIL,
+            A.V_NAME,
+            A.C_OFF_YN,
+            A.V_REG_DATETIME,
+            A.V_EDT_DATETIME,
+            FN_CRYPT('2',A.V_PASSWD,'TT'),
+            A.V_TEL,
+            A.V_NOTI_EMAIL
+            FROM TIMECLOUD_USER A,TIMECLOUD_DOMAIN_USER B
+            WHERE
+            (A.N_IDX = B.N_USER_IDX)
+            AND A.V_EMAIL = ? AND B.N_DOMAIN_IDX = ?
+            AND A.C_DEL_YN = 'N'
+        </value>
+        <description>USER BY EMAIL</description>
+    </query>
 
     <query>
         <id>SELECT_USER_LIST2</id>
