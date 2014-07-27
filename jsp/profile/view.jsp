@@ -91,14 +91,11 @@
 </head>
 <body>
 <div class="row-fluid">
-    <div class='span10'>
-        <%@ include file="../menuGlobal.jsp" %>
+    <div class='span8'>
+        <%--<%@ include file="../menuGlobal.jsp" %>--%>
         <div class="row-fluid">
-            <div class='span2 vertNav'><%=getVertNav(req, oUserSession) %>
-            </div>
-            <div class='span10 all'>
-                <%-- --%>
-                <h3>Profile</h3>
+            <%--<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>--%>
+            <div class='span12 all'>
                 <table class="table table-bordered">
                     <tr>
                         <th width="80px">이메일</th>
@@ -165,7 +162,7 @@
             </div>
         </div>
     </div>
-    <%=getNotification(oUserSession, "span2 noti") %>
+    <%=getNotification(oUserSession, "span4 noti") %>
 </div>
 <%--Modal Password--%>
 <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2"

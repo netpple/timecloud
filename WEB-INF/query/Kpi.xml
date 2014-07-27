@@ -228,5 +228,16 @@
         </value>
         <description>팀 - 태스크가 가장 많은 사람 월별랭킹</description>
     </query>
-
+    <query>
+        <id>KPI_TOOL_COUNT</id>
+        <value>
+            SELECT
+            (SELECT COUNT(*) FROM TIMECLOUD_FEEDBACK WHERE C_DEL_YN = 'N' $2$ ) AS FEED_CNT
+            ,(SELECT COUNT(*) FROM TIMECLOUD_TASK WHERE C_DEL_YN = 'N' $0$ )AS TASK_CNT
+            ,(SELECT COUNT(*) FROM TIMECLOUD_ACTIVITY WHERE C_DEL_YN = 'N' $1$ ) AS ACT_CNT
+            ,(SELECT COUNT(*) FROM TIMECLOUD_FILE WHERE C_DEL_YN = 'N' $3$ ) AS FILE_CNT
+            FROM DUAL
+        </value>
+        <description>메인 집계블럭</description>
+    </query>
 </sql-statement>

@@ -212,12 +212,11 @@
 </head>
 <body>
 <div class="row-fluid">
-    <div class='span10'>
-        <%@ include file="../menuGlobal.jsp" %>
+    <div class='span9'>
+        <%--<%@ include file="../menuGlobal.jsp" %>--%>
         <div class="row-fluid">
-            <div class='span2 vertNav'><%=getVertNav(req, oUserSession) %>
-            </div>
-            <div class='span10 all'>
+            <%--<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>--%>
+            <div class='span12 all'>
                 <%-- --%>
                 <div class="row-fluid">
                     <div class="span6"><h3>Team</h3></div>
@@ -268,7 +267,7 @@
             </div>
         </div>
     </div>
-    <%=getNotification(oUserSession, "span2 noti") %>
+    <%=getNotification(oUserSession, "span=3 noti") %>
 </div>
 <%--Modal Password--%>
 <div class="modal fade" id="memberModal" tabindex="-1" role="dialog" aria-labelledby="memberModalLabel"

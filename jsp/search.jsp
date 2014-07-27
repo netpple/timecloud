@@ -91,11 +91,10 @@
 <body>
 <div class="row-fluid">
     <div class='span10'>
-        <%@ include file="./menuGlobal.jsp" %>
+        <%--<%@ include file="./menuGlobal.jsp" %>--%>
         <div class='row-fluid'>
-            <div class='span2 vertNav'><%=getVertNav(req, oUserSession) %>
-            </div>
-            <div class='span10 all'><%=msg_result %>
+            <%--<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>--%>
+            <div class='span12 all'><%=msg_result %>
                 <div class="AXTabs">
                     <div class="AXTabsTray">
                         <a href="#ACTIVITY" class="AXTab">Activity(<%=map.get("ACTIVITY") %>)</a>

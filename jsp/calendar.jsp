@@ -339,17 +339,19 @@ Number.prototype.zf = function(len){return this.toString().zf(len);};
 </head>
 <body><%@ include file="./taskHierarchyInfo.jsp" %>
 <div class="row-fluid">
-	<div class='span10'><%@ include file="./menuGlobal.jsp" %>
+	<div class='span8'>
+        <%--<%@ include file="./menuGlobal.jsp" %>--%>
 		<div class="row-fluid">
-			<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>
-			<div class='span4' id="hierarchy" style="height:100%;"></div>
-			<div class='span6'><%@ include file="./menuTool.jsp" %>
+			<%--<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>--%>
+			<div class='span5' id="hierarchy" style="height:100%;"></div>
+			<div class='span7'><%@ include file="./menuTool.jsp" %>
 			  	<%--<div style='text-align:right'>CC: <%=_observerImages.toString() %></div>--%>
 				<div id="calendar" class='calendarArea'></div>
 			</div>
 		</div>
 	</div>
-	<%=getNotification(oUserSession, "span2 noti") %>
+    <div class='span1'></div>
+	<%=getNotification(oUserSession, "span3 noti") %>
 </div>
 <% if(!readonly){%>
 <div id="register" class="modal hide fade" tabindex="-1" role="dialog" 

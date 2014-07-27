@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="common/include/incInit.jspf" %><%@ include file="common/include/incSession.jspf" %><%@ include file="common/include/incTaskView.jspf" %><%!
+<%@ include file="./common/include/incInit.jspf" %><%@ include file="./common/include/incSession.jspf" %><%@ include file="./common/include/incTaskView.jspf" %><%!
 
 // -- 해당 태스크에 필요한 내용을 다들고 와서 시간 순으로 다 뿌려야 돼
 // -- Activity , Feedback, File, Observer
@@ -37,8 +37,8 @@
 <html lang="en">
 <head>
 <title>태스크 홈</title>
-<%@ include file="common/include/incHead.jspf" %>
-<%@ include file="common/include/incFileUpload.jspf" %>
+<%@ include file="./common/include/incHead.jspf" %>
+<%@ include file="./common/include/incFileUpload.jspf" %>
 <%@ include file="taskHierarchyInfo.jsp" %>
 <style type="text/css">
 	.tool {
@@ -126,11 +126,11 @@ function tool_delete(taskIdx, toolIdx, toolType) {
 </head>
 <body>
 <div class="row-fluid">
-	<div class='span8'><%--@ include file="./menuGlobal.jsp" --%>
+	<div class='span10'><%@ include file="./menuGlobal.jsp" %>
 		<div class="row-fluid">
-			<%--<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>--%>
-			<div class="span5" id="hierarchy" style="height:100%;"></div>
-			<div class="span7"><%@ include file="./menuTool.jsp"%>
+			<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>
+			<div class="span4" id="hierarchy" style="height:100%;"></div>
+			<div class="span6"><%@ include file="./menuTool.jsp" %>
 				<%-- Contents Editor Starter--%>
 				<% if(!isAll) { %>
 				<div class="tabbable editorArea"> <!-- Only required for left/right tabs -->
@@ -201,12 +201,11 @@ function tool_delete(taskIdx, toolIdx, toolType) {
 			</div>
 		</div>
 	</div>
-    <div class='span1'></div>
-	<%=getNotification(oUserSession, "span3 noti") %>
+	<%=getNotification(oUserSession, "span2 noti") %>
 </div>
 </body>
 </html>
-<%@ include file="common/include/incFooter.jspf" %>
+<%@ include file="./common/include/incFooter.jspf" %>
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">

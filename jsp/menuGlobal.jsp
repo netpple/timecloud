@@ -123,15 +123,15 @@
 			<li class="<%=gTab[6]%>"><a href="javascript:onViewAllObserver();">전체참조자</a></li>
 			<li class="<%=gTab[5]%>"><a href="javascript:onViewAllProject();">전체프로젝트</a></li>
 			<li class="<%=gTab[9]%>"><a href="javascript:onLiveChat();">채팅(개발중)</a></li>
-			--%>			
+			--%>
         </ul>
 		<form class="navbar-search pull-left" action="/jsp/search.jsp">
 			<input type='hidden' name='searchType' value='<%=pSearchType %>' />
 			<input type="text" name='searchValue' value="<%=pSearchValue %>" class="search-query" placeholder="Search">
 		</form>
         <ul class="nav pull-right">
-          <li><a href='#'>
-              <img src="<%=getProfileImageUrl(oUserSession.getUserIdx())%>" style="height:30px;width:30px; float:left;position:absolute; top:5px; left:-17px;"/> &nbsp;<%=oUserSession.getUserName() %>님</a>
+          <li><a href='/jsp/profile/view.jsp'>
+              <img src="<%=getProfileImageUrl(oUserSession.getUserIdx())%>" onerror="this.src='/html/images/avatar.png'" style="height:30px;width:30px; float:left;position:absolute; top:5px; left:-17px;"/> &nbsp;<%=oUserSession.getUserName() %>님</a>
           </li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="<%=IMG_PATH %>/setting_icon.png"/></a>

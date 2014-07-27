@@ -8,7 +8,11 @@
 	}
 	tTab[_toolTabNo] = "active" ;
 %>
-<script type="text/javascript">	
+<script type="text/javascript">
+    function onTaskHome(taskidx) {
+        var url = '<%=CONTEXT_PATH%>/jsp/task.jsp?tsk_idx='+taskidx<%=Html.trueString(TASK_LIST>0,"+'&tsk_list="+TASK_LIST+"'")%>;
+        location.href = url ;
+    }
 	function onViewCalendar(taskidx) {
 		var url = '<%=CONTEXT_PATH%>/jsp/calendar.jsp?tsk_idx='+taskidx<%=Html.trueString(TASK_LIST>0,"+'&tsk_list="+TASK_LIST+"'")%>;
 		location.href = url;

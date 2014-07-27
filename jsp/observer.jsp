@@ -130,18 +130,20 @@
 </head>
 <body>
 	<div class="row-fluid">
-		<div class=span10><%@ include file="./menuGlobal.jsp" %>
+		<div class=span8>
+            <%--<%@ include file="./menuGlobal.jsp" %>--%>
 			<div class="row-fluid">
-				<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>
-				<div id="wrap" class="span4">
+				<%--<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>--%>
+				<div id="wrap" class="span5">
 					<div id="hierarchy" style="height:100%;"></div>
 				</div>
-				<div id="tool" class="span6"><%@ include file="./menuTool.jsp" %>
+				<div id="tool" class="span7"><%@ include file="./menuTool.jsp" %>
 					<div class=contentArea><%=sb.toString()%></div>
 				</div>
 			</div>
-		</div>	
-		<%=getNotification(oUserSession, "span2 noti") %>
+		</div>
+        <div class=span1></div>
+		<%=getNotification(oUserSession, "span3 noti") %>
 	</div>
 </body>
 </html>

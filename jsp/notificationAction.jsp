@@ -3,28 +3,34 @@
 <%@ include file="./common/include/incSession.jspf" %><%
 
 
-	final int listCnt = req.getIntParam("listCount",-1);	
+	final int listCnt = req.getIntParam("listCount",-1); // 현재 리스트 출력 개수
 	int notiCnt = 10; // 이벤트 당 늘어나는 갯수 
 
+    int start = listCnt;
+    int end = listCnt + notiCnt;
 	// -- notification
-	DataSet ds = QueryHandler.executeQuery("TEST_SELECT_MYNOTIFICATION", oUserSession.getUserIdx()) ;
+	DataSet ds = QueryHandler.executeQuery("TEST_SELECT_MYNOTIFICATION", new String[]{USER_IDX,Integer.toString(start),Integer.toString(end)}) ;
+    if(ds == null || ds.size()<1){
+        out.print("-1");
+    }
 	
 	StringBuffer result = new StringBuffer() ;
 	String task_idx, desc, timegap ;
     int creator_idx = -1;
 
-	if(ds.numOfRow <= listCnt){
-		out.print(-1);
-		return ;
-	}else if(ds.numOfRow < (listCnt + notiCnt)){
-		notiCnt = notiCnt - ((listCnt + notiCnt) - ds.numOfRow);
-	}
-
-	ds.currentRowCount = listCnt;
+//	if(ds.numOfRow <= listCnt){
+//		out.print(-1);
+//		return ;
+//	}else if(ds.numOfRow < (listCnt + notiCnt)){
+//		notiCnt = notiCnt - ((listCnt + notiCnt) - ds.numOfRow);
+//	}
+//
+//	ds.currentRowCount = listCnt;
 	
 	int i = 0;
-	while(i++ < notiCnt) {
-		ds.next();
+//	while(i++ < notiCnt) {
+//		ds.next();
+    while(ds.next()){
 		task_idx = ds.getString(1) ;
 		desc = ds.getString(2) ;
 		creator_idx = ds.getInt(3) ;

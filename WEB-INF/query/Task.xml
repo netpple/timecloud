@@ -339,4 +339,45 @@
         </value>
         <description>Update Task Type</description>
     </query>
+    <query>
+        <id>SELECT_TASK_RECENTLY</id>
+        <value><![CDATA[
+            SELECT Z.*, rownum FROM(
+            SELECT * FROM(
+            (SELECT
+				X.N_IDX
+				,X.V_DESC
+				,X.C_OFF_YN
+				, FN_TIMEGAP(X.v_edt_datetime) AS timegap
+				,X.v_edt_datetime
+				,X.v_reg_datetime
+				,(SYSDATE - TO_DATE (X.v_edt_datetime, 'YYYYMMDDHH24MISS')) as gap
+            FROM TIMECLOUD_TASK X
+            WHERE X.N_OWNER_IDX = ?
+			)
+			UNION(
+            SELECT
+            X.N_IDX, X.V_DESC, X.C_OFF_YN, FN_TIMEGAP(v_edt_datetime) AS timegap
+			,X.v_edt_datetime,X.v_reg_datetime
+			,(SYSDATE - TO_DATE (X.v_edt_datetime, 'YYYYMMDDHH24MISS')) as gap
+            FROM TIMECLOUD_TASK X, (SELECT N_IDX, N_OWNER_IDX FROM TIMECLOUD_TASK WHERE N_OWNER_IDX = ?) Y
+            WHERE
+            X.N_PARENT_IDX = Y.N_IDX AND (X.N_OWNER_IDX != ?) AND X.N_LEVEL>0
+			)
+			UNION(
+			SELECT
+			X.N_IDX, X.V_DESC, X.C_OFF_YN, FN_TIMEGAP(v_edt_datetime) AS timegap
+			,X.v_edt_datetime,X.v_reg_datetime
+			,(SYSDATE - TO_DATE (X.v_edt_datetime, 'YYYYMMDDHH24MISS')) as gap
+			FROM TIMECLOUD_TASK X, TIMECLOUD_OBSERVER Y
+            WHERE
+            X.N_IDX = Y.N_TASK_IDX AND Y.N_OWNER_IDX = ?
+			)
+            )
+            WHERE gap < ? ORDER BY v_edt_datetime DESC
+            )Z
+            WHERE rownum BETWEEN ? AND ?
+        ]]></value>
+        <description>owner_idx(4개), gap, rownum_start,rownum_end</description>
+    </query>
 </sql-statement>

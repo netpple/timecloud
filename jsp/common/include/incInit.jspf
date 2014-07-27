@@ -268,7 +268,7 @@
     private String getNotification(UserSession oUserSession, String Class) {
         // -- notification
         int notifiCount = 20;
-        DataSet ds = QueryHandler.executeQuery("TEST_SELECT_MYNOTIFICATION", oUserSession.getUserIdx());
+        DataSet ds = QueryHandler.executeQuery("TEST_SELECT_MYNOTIFICATION", new String[]{Integer.toString(oUserSession.getUserIdx()),"1","10"});
 
         StringBuffer result = new StringBuffer();
         String desc, timegap, v_tbl_nm;
@@ -441,30 +441,6 @@
             if (!"".equals(timegap)) timegap = "<span style='color:gray;margin:0 0 0 10px'>" + timegap + "</span>";
 
             buf.append(String.format("<li class='%s'><a class='ellipsis' href='/jsp/task.jsp?tsk_idx=%d&type=%s&idx=%d'>%s</a>%s</li>", active, task_idx, type, n_idx, desc, timegap));
-        }
-        ds = null;
-
-        return buf.toString();
-    }
-
-    private String getTaskLi(DataSet ds) {
-        if (ds == null) return "";
-
-        StringBuffer buf = new StringBuffer();
-        int task_idx;
-        String desc, offYN, timegap;
-        String active = "";
-
-        while (ds.next()) {
-            task_idx = ds.getInt(1);
-            desc = ds.getString(2);
-            offYN = ds.getString(3);
-            timegap = ds.getString(4);
-
-            if (offYN.equals("Y")) desc = "<strike style='color:silver'>" + desc + "</strike>";
-            if (!"".equals(timegap)) timegap = "<span style='color:gray;margin:0 0 0 10px'>" + timegap + "</span>";
-
-            buf.append(String.format("<li><a class='ellipsis' href='/jsp/task.jsp?tsk_idx=%d'>%s</a>%s</li>", task_idx, desc, timegap));
         }
         ds = null;
 

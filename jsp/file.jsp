@@ -68,11 +68,12 @@ function loadFileList() {
 </head>
 <body>
 <div class='row-fluid'>
-	<div class='span10'><%@ include file="./menuGlobal.jsp" %>
+	<div class='span8'>
+        <%--<%@ include file="./menuGlobal.jsp" %>--%>
 		<div class="row-fluid">
-			<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>
-			<div class='span4' id="hierarchy" style="height:100%;"></div>
-			<div class='span6'><%@ include file="./menuTool.jsp" %>
+			<%--<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>--%>
+			<div class='span5' id="hierarchy" style="height:100%;"></div>
+			<div class='span7'><%@ include file="./menuTool.jsp" %>
 				<div class='contentArea'>
 			    <form id="fileupload" action="/jsp/common/fileupload/fileAction.jsp" method="POST" enctype="multipart/form-data">
 			    	<input type="hidden" name="tsk_idx" value="<%=TASK_IDX %>"/>
@@ -131,7 +132,8 @@ function loadFileList() {
 			</div>
 		</div>	
 	</div>
-	<%=getNotification(oUserSession, "span2 noti") %>
+    <div class="span1"></div>
+	<%=getNotification(oUserSession, "span3 noti") %>
 </div>
 </body>
 </html>
