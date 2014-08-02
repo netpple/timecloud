@@ -105,13 +105,13 @@
                         <a href="javascript:goMain();"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                     </li>
                     <li>
-                    <a href="javascript:goCalendar()"><i class="fa fa-calendar fa-fw"></i> Calendar</a>
+                        <a href="javascript:goCalendar()"><i class="fa fa-calendar fa-fw"></i> Calendar</a>
                     </li>
                     <li>
-                    <a href="javascript:goFeedback()"><i class="fa fa-comments fa-fw"></i> Feedback</a>
+                        <a href="javascript:goFeedback()"><i class="fa fa-comments fa-fw"></i> Feedback</a>
                     </li>
                     <li>
-                    <a href="javascript:goFile()"><i class="fa fa-file-image-o fa-fw"></i> File</a>
+                        <a href="javascript:goFile()"><i class="fa fa-file-image-o fa-fw"></i> File</a>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-star fa-fw"></i> Favorites<span class="fa arrow"></span></a>
@@ -161,36 +161,36 @@
 $(document).ready(function () {
     goMain();
 });
-function goTask(taskidx){
-    setFrame("Task","/jsp/task.jsp?tsk_idx=" + taskidx);
+function goTask(taskidx) {
+    setFrame("Task", "/jsp/task.jsp?tsk_idx=" + taskidx);
 }
 function goTaskAll() {
-    setFrame("Task","/jsp/taskList.jsp");
+    setFrame("Task", "/jsp/taskList.jsp");
 }
-function goCalendar(){
-    setFrame("Calendar","/jsp/calendarAll.jsp");
+function goCalendar() {
+    setFrame("Calendar", "/jsp/calendarAll.jsp");
     changeSidebarNav(2);
 }
-function goFeedback(){
-    setFrame("Feedbacks","/jsp/feedbackAll.jsp");
+function goFeedback() {
+    setFrame("Feedbacks", "/jsp/feedbackAll.jsp");
     changeSidebarNav(3);
 }
-function goFile(){
-    setFrame("Files","/jsp/fileAll.jsp");
+function goFile() {
+    setFrame("Files", "/jsp/fileAll.jsp");
     changeSidebarNav(4);
 }
-function goProfile(){
-    setFrame("Profile","/jsp/profile/view.jsp");
+function goProfile() {
+    setFrame("Profile", "/jsp/profile/view.jsp");
 }
 function goTeam() {
-    setFrame("Team","/jsp/team/view.jsp?team_idx=<%=TEAM_IDX%>");
+    setFrame("Team", "/jsp/team/view.jsp?team_idx=<%=TEAM_IDX%>");
 }
-function setFrame(title,url) {
+function setFrame(title, url) {
     var page = $("#page-wrapper");
     var li = $("#t_layout li.iframe");
 
-    $(".page-header",li).text(title);
-    $("iframe",li).attr({"src":url});
+    $(".page-header", li).text(title);
+    $("iframe", li).attr({"src": url});
 
     page.html(li.html());
 }
@@ -199,9 +199,9 @@ function resize(ifrm) {
     (ifrm).height = height + 20;
 }
 //
-function changeSidebarNav(idx){
+function changeSidebarNav(idx) {
     $(".sidebar-nav li a").removeClass("active"); // nav 초기화
-    $(".sidebar-nav li:eq("+idx+") a").addClass("active"); // set target nav active
+    $(".sidebar-nav li:eq(" + idx + ") a").addClass("active"); // set target nav active
 }
 function goMain() {
     var page = $("#page-wrapper");
@@ -314,7 +314,7 @@ function submitTaskPost(form) {
 function prependDropdownTask(data) {
     dropdown = $(".dropdown-tasks.mytasks");
     var template = $("#t_mytasks");
-    $("li:eq(0) > a", template).attr({"href": "javascript:goTask(" + data.idx +")"});
+    $("li:eq(0) > a", template).attr({"href": "javascript:goTask(" + data.idx + ")"});
     $("li:eq(0) strong", template).text("<%=oUserSession.getUserName()%>")
     $("li:eq(0) em", template).text(data.timegap)
     $("li:eq(0) div:eq(1)", template).text(data.desc);
@@ -351,14 +351,14 @@ function search() {
         input.focus();
         return false;
     }
-    setFrame("Search","/jsp/search.jsp?searchValue=" + q);
+    setFrame("Search", "/jsp/search.jsp?searchValue=" + q);
 }
 
 
 function setFavorite(list, favorite) {
     console.log(list.length);
     list.each(function () {
-        favorite.append($("<li></li>").append($("<a></a>", {"href": "javascript:goTask(" + this.taskidx +")"}).text(this.desc)));
+        favorite.append($("<li></li>").append($("<a></a>", {"href": "javascript:goTask(" + this.taskidx + ")"}).text(this.desc)));
     });
 }
 
