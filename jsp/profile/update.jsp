@@ -2,19 +2,17 @@
 <%@ include file="../common/include/incInit.jspf" %>
 <%@ include file="../common/include/incSession.jspf" %>
 <%
-    String alert = update(USER_IDX,request,response);
+    String alert = update(USER_IDX,req);
     String url = "location.replace('view.jsp')";
 
     out.print(JavaScript.write(alert + url));
 %>
 <%!
-    public String update(final String USER_IDX, HttpServletRequest request, HttpServletResponse response) {
-        RequestHelper mReq = new RequestHelper(request, response);
-
-        String sName = mReq.getParam("user_name", "");
-        String sTel = mReq.getParam("user_tel", "");
-        String sNotiEmail = mReq.getParam("user_noti_email");
-        String sPasswd = mReq.getParam("user_passwd");
+    public String update(final String USER_IDX, RequestHelper req) {
+        String sName = req.getParam("user_name", "");
+        String sTel = req.getParam("user_tel", "");
+        String sNotiEmail = req.getParam("user_noti_email");
+        String sPasswd = req.getParam("user_passwd");
 
         String alert = "";
 

@@ -3,8 +3,7 @@
 <%@ include file="../common/include/incInit.jspf" %>
 <%@ include file="../common/include/incSession.jspf" %>
 <%
-    RequestHelper mReq = new RequestHelper(request, response);
-    String sName = mReq.getParam("team_name", "");
+    String sName = req.getParam("team_name", "");
 
     String url = "", alert = "팀 생성실패";
     url = "location.replace('list.jsp')";

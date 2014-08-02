@@ -2,9 +2,8 @@
 <%@ include file="../common/include/incInit.jspf" %>
 <%@ include file="../common/include/incSession.jspf" %>
 <%
-    RequestHelper mReq = new RequestHelper(request, response);
-    String sPasswordNow = mReq.getParam("user_passwd_now", "");
-    String sPasswordNew = mReq.getParam("user_passwd_new", "");
+    String sPasswordNow = req.getParam("user_passwd_now", "");
+    String sPasswordNew = req.getParam("user_passwd_new", "");
 
     String alert = "";
     String url = "location.replace('view.jsp')";

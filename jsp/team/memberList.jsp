@@ -5,8 +5,7 @@
 <%@ include file="../common/include/incInit.jspf" %>
 <%@ include file="../common/include/incSession.jspf" %>
 <%
-    RequestHelper mReq = new RequestHelper(request, response);
-    final String team_idx = mReq.getParam("team_idx", "");
+    final String team_idx = req.getParam("team_idx", "");
     if(StringUtils.isEmpty(team_idx)){
         out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}", Cs.FAIL_PARAM, Cs.FAIL_MSG_2));
         return;

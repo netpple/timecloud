@@ -3,9 +3,8 @@
 <%@ include file="../common/include/incInit.jspf" %>
 <%@ include file="../common/include/incSession.jspf" %>
 <%
-    RequestHelper mReq = new RequestHelper(request, response);
-    final String team_idx = mReq.getParam("team_idx", "");
-    final String user_idx = mReq.getParam("user_idx", "");
+    final String team_idx = req.getParam("team_idx", "");
+    final String user_idx = req.getParam("user_idx", "");
 
     if (StringUtils.isEmpty(user_idx) || StringUtils.isEmpty(team_idx)) {    // 파라메터 체크
         out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}", Cs.FAIL_PARAM, Cs.FAIL_MSG_2)); // 파라메터 이상

@@ -2,9 +2,8 @@
 <%@ include file="../common/include/incInit.jspf" %>
 <%@ include file="../common/include/incSession.jspf" %>
 <%
-    RequestHelper mReq = new RequestHelper(request, response);
-    int idx = mReq.getIntParam("team_idx",-1) ;
-    String sToggle = mReq.getParam("toggle","");
+    int idx = req.getIntParam("team_idx",-1) ;
+    String sToggle = req.getParam("toggle","");
 
     String url = "", alert="";
     int result = 0;

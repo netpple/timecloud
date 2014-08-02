@@ -2,8 +2,7 @@
 <%@ include file="../../common/include/incInit.jspf" %>
 <%@ include file="../../common/include/incSession.jspf" %>
 <%
-    RequestHelper mReq = new RequestHelper(request, response);
-    String sName = mReq.getParam("domain_name", "");
+    String sName = req.getParam("domain_name", "");
 
     String url = "", alert = "";
     int result = 0;
@@ -16,9 +15,8 @@
         sName = sName.trim();
         if (sName.length() < 2) {
             alert = "alert('도메인명은 2글자 이상입니다.');";
-        }
-        else {
-            result = QueryHandler.executeUpdate("INSERT_DOMAIN", new String[]{sName,USER_IDX});
+        } else {
+            result = QueryHandler.executeUpdate("INSERT_DOMAIN", new String[]{sName, USER_IDX});
             if (result > 0) {
                 alert = "alert('저장되었습니다.');";
             } else {

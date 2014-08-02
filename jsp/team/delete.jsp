@@ -3,9 +3,7 @@
 <%@ include file="../common/include/incSession.jspf" %>
 <%
     // TODO - 권한 제어 : TEAM ADMIN 이상
-
-    RequestHelper mReq = new RequestHelper(request, response);
-    int idx = mReq.getIntParam("team_idx",-1) ;
+    int idx = req.getIntParam("team_idx",-1) ;
 
     String url = "", alert="";
     int result = 0;

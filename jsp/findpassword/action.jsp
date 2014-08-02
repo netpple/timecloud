@@ -3,7 +3,7 @@
 <%@ include file="../common/include/incInit.jspf" %>
 <%--<%@ include file="../common/include/incSession.jspf" %>--%>
 <%
-    String alert = action(request, response);
+    String alert = action(request, response);   // 미로그인 상태에서 쓰므로 incSession의 RequestHelper 사용불가
     String url = "location.replace('/theme/1/pages/login/login.jsp')";
     out.print(JavaScript.write(alert + url));
 %>

@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %><%@ include file="../common/include/incInit.jspf" %><%@ include file="../common/include/incSession.jspf" %><%
-    RequestHelper mReq = new RequestHelper(request, response);
-    final int team_idx = mReq.getIntParam("team_idx", -1);
+    final int team_idx = req.getIntParam("team_idx", -1);
     if (team_idx < 1) { // 파라메터 이상
         out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}", Cs.FAIL, Cs.FAIL_MSG_2));
         return;
