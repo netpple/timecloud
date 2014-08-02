@@ -212,18 +212,18 @@
 </head>
 <body>
 <div class="row-fluid">
-    <div class='span9'>
-        <%--<%@ include file="../menuGlobal.jsp" %>--%>
+    <div class='span8'>
+        <%@ include file="../menuGlobal.jsp" %>
         <div class="row-fluid">
             <%--<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>--%>
             <div class='span12 all'>
                 <%-- --%>
-                <div class="row-fluid">
-                    <div class="span6"><h3>Team</h3></div>
-                    <div class="span6">
-                        <button type="button" class="btn pull-right" onclick="javascript:if(confirm('탈퇴하시겠습니까?')){deleteMe();};">팀탈퇴</button>
-                    </div>
-                </div>
+                <%--<div class="row-fluid">--%>
+                    <%--<div class="span6"><h3>Team</h3></div>--%>
+                    <%--<div class="span6">--%>
+                        <%--<button type="button" class="btn pull-right" onclick="javascript:if(confirm('탈퇴하시겠습니까?')){deleteMe();};">팀탈퇴</button>--%>
+                    <%--</div>--%>
+                <%--</div>--%>
 
                 <table class="table table-bordered">
                     <tbody id="team_info">
@@ -267,7 +267,8 @@
             </div>
         </div>
     </div>
-    <%=getNotification(oUserSession, "span=3 noti") %>
+    <div class="span1"></div>
+    <%=getNotification(oUserSession, "span3 noti") %>
 </div>
 <%--Modal Password--%>
 <div class="modal fade" id="memberModal" tabindex="-1" role="dialog" aria-labelledby="memberModalLabel"

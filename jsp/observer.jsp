@@ -131,7 +131,7 @@
 <body>
 	<div class="row-fluid">
 		<div class=span8>
-            <%--<%@ include file="./menuGlobal.jsp" %>--%>
+            <%@ include file="./menuGlobal.jsp" %>
 			<div class="row-fluid">
 				<%--<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>--%>
 				<div id="wrap" class="span5">

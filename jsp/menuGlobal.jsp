@@ -1,10 +1,10 @@
-<%@page import="com.twobrain.common.util.RequestHelper"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><%
-/*
-	String[] gTab = new String[]{"","","","","","","","","",""} ;
-	if(_globalTabNo>=0 && _globalTabNo<10)gTab[_globalTabNo] = "active" ;
-*/
-%>
+<%--<%@page import="com.twobrain.common.util.RequestHelper"%>--%>
+<%--<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><%--%>
+<%--/*--%>
+	<%--String[] gTab = new String[]{"","","","","","","","","",""} ;--%>
+	<%--if(_globalTabNo>=0 && _globalTabNo<10)gTab[_globalTabNo] = "active" ;--%>
+<%--*/--%>
+<%--%>--%>
 <script type="text/javascript">
 	function onLogout() {
 		location.href = '<%=CONTEXT_PATH%>/jsp/login/logout.jsp';
@@ -73,7 +73,7 @@
 	
 	// -- MAIN DASHBOARD
 	function onMain() {
-		var url = '<%=CONTEXT_PATH%>/jsp/index.jsp' ;
+		var url = '<%=CONTEXT_PATH%>/theme/2/index.jsp' ;
 		location.href = url ;
 	}
 	
@@ -96,22 +96,23 @@
 	
 	function onTaskHomeActivityPop(taskidx, idx) {
 		var url = '<%=CONTEXT_PATH%>/jsp/task.jsp?tsk_idx='+taskidx +'#ACTIVITY_'+idx;
-		var pop = window.open(url) ; 
-		pop.focus() ;
+        location.href = url;
+//		var pop = window.open(url) ;
+//		pop.focus() ;
 	}
 </script>
-<div class="navbar">
-  <div class="navbar-inner">
-    <div class="container">
-      <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
+<%--<div class="navbar">--%>
+  <%--<div class="navbar-inner">--%>
+    <%--<div class="container">--%>
+      <%--<a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">--%>
+        <%--<span class="icon-bar"></span>--%>
+        <%--<span class="icon-bar"></span>--%>
+        <%--<span class="icon-bar"></span>--%>
+      <%--</a>--%>
       <%--<img src="<%=IMG_PATH%>/navi_logo.png"/> --%>
-      <a class="brand" href="javascript:onMain();"><img src="<%=IMG_PATH%>/navi_logo.png" width="167px" height="26px" style="float:left; position:absolute; top:5px; left:10px;"/></a>
-      <div class="nav-collapse collapse navbar-responsive-collapse" style="margin-left:170px;">
-        <ul class="nav">
+      <%--<a class="brand" href="javascript:onMain();"><img src="<%=IMG_PATH%>/navi_logo.png" width="167px" height="26px" style="float:left; position:absolute; top:5px; left:10px;"/></a>--%>
+      <%--<div class="nav-collapse collapse navbar-responsive-collapse" style="margin-left:170px;">--%>
+        <%--<ul class="nav">--%>
 			<%-- 
 			<li class="<%=gTab[2]%>"><a href="javascript:onViewAllActivities();"><%=Html.Icon.ACTIVITY %></a></li>
 			<li class="<%=gTab[4]%>"><a href="javascript:onViewAllFile();"><%=Html.Icon.FILE %></a></li>
@@ -124,25 +125,25 @@
 			<li class="<%=gTab[5]%>"><a href="javascript:onViewAllProject();">전체프로젝트</a></li>
 			<li class="<%=gTab[9]%>"><a href="javascript:onLiveChat();">채팅(개발중)</a></li>
 			--%>
-        </ul>
-		<form class="navbar-search pull-left" action="/jsp/search.jsp">
-			<input type='hidden' name='searchType' value='<%=pSearchType %>' />
-			<input type="text" name='searchValue' value="<%=pSearchValue %>" class="search-query" placeholder="Search">
-		</form>
-        <ul class="nav pull-right">
-          <li><a href='/jsp/profile/view.jsp'>
-              <img src="<%=getProfileImageUrl(oUserSession.getUserIdx())%>" onerror="this.src='/html/images/avatar.png'" style="height:30px;width:30px; float:left;position:absolute; top:5px; left:-17px;"/> &nbsp;<%=oUserSession.getUserName() %>님</a>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="<%=IMG_PATH %>/setting_icon.png"/></a>
-            <ul class="dropdown-menu">
-              <li><a href='/jsp/profile/view.jsp'>Profile</a></li>
-              <li class="divider"></li>
-              <li><a href="javascript:onLogout();">로그아웃</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div><!-- /.nav-collapse -->
-    </div>
-  </div><!-- /navbar-inner -->
-</div><!-- /navbar -->
+        <%--</ul>--%>
+		<%--<form class="navbar-search pull-left" action="/jsp/search.jsp">--%>
+			<%--<input type='hidden' name='searchType' value='<%=pSearchType %>' />--%>
+			<%--<input type="text" name='searchValue' value="<%=pSearchValue %>" class="search-query" placeholder="Search">--%>
+		<%--</form>--%>
+        <%--<ul class="nav pull-right">--%>
+          <%--<li><a href='/jsp/profile/view.jsp'>--%>
+              <%--<img src="<%=getProfileImageUrl(oUserSession.getUserIdx())%>" onerror="this.src='/html/images/avatar.png'" style="height:30px;width:30px; float:left;position:absolute; top:5px; left:-17px;"/> &nbsp;<%=oUserSession.getUserName() %>님</a>--%>
+          <%--</li>--%>
+          <%--<li class="dropdown">--%>
+            <%--<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="<%=IMG_PATH %>/setting_icon.png"/></a>--%>
+            <%--<ul class="dropdown-menu">--%>
+              <%--<li><a href='/jsp/profile/view.jsp'>Profile</a></li>--%>
+              <%--<li class="divider"></li>--%>
+              <%--<li><a href="javascript:onLogout();">로그아웃</a></li>--%>
+            <%--</ul>--%>
+          <%--</li>--%>
+        <%--</ul>--%>
+      <%--</div><!-- /.nav-collapse -->--%>
+    <%--</div>--%>
+  <%--</div><!-- /navbar-inner -->--%>
+<%--</div><!-- /navbar -->--%>

@@ -340,7 +340,7 @@ Number.prototype.zf = function(len){return this.toString().zf(len);};
 <body><%@ include file="./taskHierarchyInfo.jsp" %>
 <div class="row-fluid">
 	<div class='span8'>
-        <%--<%@ include file="./menuGlobal.jsp" %>--%>
+        <%@ include file="./menuGlobal.jsp" %>
 		<div class="row-fluid">
 			<%--<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>--%>
 			<div class='span5' id="hierarchy" style="height:100%;"></div>

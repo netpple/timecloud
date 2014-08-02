@@ -23,7 +23,8 @@
 				out.print(JavaScript.write("alert('태스크투게더 알람을 받기위해 이메일을 설정해주세요!');location.replace('"+CONTEXT_PATH+"/jsp/userInfo.jsp?user_idx="+userSession.getUserIdx()+"');"));
 			} else {
 				if("".equals(sRedirectPage)) {
-					response.sendRedirect(CONTEXT_PATH + "/jsp/index.jsp");
+//					response.sendRedirect(CONTEXT_PATH + "/jsp/index.jsp");
+					response.sendRedirect(CONTEXT_PATH + "/theme/2/index.jsp");
 				} else {
 					response.sendRedirect(sRedirectPage);
 				}	
