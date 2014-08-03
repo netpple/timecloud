@@ -34,6 +34,7 @@
                     + Html.td(team.getRegDatetime())
                     + Html.td(Html.button("가입", "onclick='javascript:joinTeam(" + idx + ");'"));
             sbListOn.append(Html.tr(row));
+            oncnt ++;
         }
     }
 
