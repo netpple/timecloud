@@ -357,7 +357,7 @@ function search() {
 
 
 function setFavorite(list, favorite) {
-    console.log(list.length);
+    favorite.html("");
     list.each(function () {
         favorite.append($("<li></li>").append($("<a></a>", {"href": "javascript:goTask(" + this.taskidx + ")"}).text(this.desc)));
     });
