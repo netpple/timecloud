@@ -11,6 +11,10 @@ public class Html {
     public static String p(String txt) { return p(txt,"") ; }
     public static String p(String txt,String attrs) { return markup("p",txt,attrs) ;}
 
+    // -- button
+    public static String button(String txt) { return button(txt,"") ; }
+    public static String button(String txt,String attrs) { return markup("button",txt,attrs) ;}
+
     // -- box - inline
     public static String span(String txt) { return span(txt,"") ; }
     public static String span(String txt,String attrs) { return markup("span",txt,attrs) ;}

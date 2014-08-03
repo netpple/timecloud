@@ -109,16 +109,17 @@
     }
 
     // -- TODO - ProfileImage Class 필요 - 태스크 온/오프 사용자 표시, 사용자 온/오프 표시 일괄처리 필요
+    public static final int PROFILE_IMAGE_DEFAULT_SIZE = 65;
     public static String getProfileImage(String n_owner_idx) {
         return getProfileImage(Integer.parseInt(n_owner_idx));
     }
 
     public static String getProfileImage(int n_owner_idx) {
-        return getProfileImage(n_owner_idx, 50, "", false);
+        return getProfileImage(n_owner_idx, PROFILE_IMAGE_DEFAULT_SIZE, "", false);
     }
 
     public static String getProfileImage(int n_owner_idx, boolean isGrayScale) {
-        return getProfileImage(n_owner_idx, 50, "", isGrayScale);
+        return getProfileImage(n_owner_idx, PROFILE_IMAGE_DEFAULT_SIZE, "", isGrayScale);
     }
 
     public static String getProfileImage(int n_owner_idx, int width, boolean isGrayScale) {
@@ -135,7 +136,7 @@
 
     public static String getProfileImage(int n_owner_idx, int width, String imageShape, boolean isGrayScale) {
         if (n_owner_idx <= 0) return null;
-        if (width <= 0) width = 50;
+        if (width <= 0) width = PROFILE_IMAGE_DEFAULT_SIZE;
 
         if (imageShape == null || "".equals(imageShape))
             imageShape = ImageShape.NORMAL;    // -- rounded, polaroid, circle

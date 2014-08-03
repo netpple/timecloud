@@ -37,6 +37,9 @@
     String sTransactionResult = QueryHandler.executeTransaction(vInsertTransaction);
 
     if (sTransactionResult.equals(Cs.COMMIT)) {
+
+
+
         alert = "alert('팀이 생성되었습니다.');";
     }
 

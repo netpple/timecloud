@@ -3,7 +3,6 @@
 <%@ include file="../common/include/incInit.jspf" %>
 <%@ include file="../common/include/incSession.jspf" %>
 <%
-    RequestHelper req = new RequestHelper(request, response);
     final String team_idx = req.getParam("team_idx", "");
     final String user_idx = req.getParam("user_idx", "");
 
@@ -12,11 +11,11 @@
         return;
     }
 
-    // 권한체크 - 관리자, 팀장만 수행할 수 있다.
-    if (QueryHandler.executeQueryInt("SELECT_IS_TEAM_OWNER", new String[]{USER_IDX, team_idx, DOMAIN_IDX}) < 1) {
-        out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}", Cs.FAIL_AUTH, Cs.FAIL_MSG_2)); // 권한 없음
-        return;
-    }
+    // 권한체크 - 관리자, 팀장만 수행할 수 있다. --> 각자 가입할 수 있는 형태로 바꾼다.
+//    if (QueryHandler.executeQueryInt("SELECT_IS_TEAM_OWNER", new String[]{USER_IDX, team_idx, DOMAIN_IDX}) < 1) {
+//        out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}", Cs.FAIL_AUTH, Cs.FAIL_MSG_2)); // 권한 없음
+//        return;
+//    }
 
 
     int cnt = QueryHandler.executeUpdate("INSERT_TEAM_USER", new String[]{team_idx, user_idx, DOMAIN_IDX});

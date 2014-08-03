@@ -48,7 +48,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.jsp">APP STORE - BITUP!</a>
+            <a class="navbar-brand" href="index.jsp">AppCenter - BITUP!</a>
         </div>
         <!-- /.navbar-header -->
         <ul class="nav navbar-top-links navbar-right">
@@ -196,6 +196,7 @@ function setFrame(title, url) {
 }
 function resize(ifrm) {
     var height = (ifrm).contentWindow.document.body.scrollHeight;
+    if (height < 768) height = 748;
     (ifrm).height = height + 20;
 }
 //
@@ -401,7 +402,7 @@ function setTimeline(list, timeline) {
         $(".text-muted", li).text("");// init
         $(".text-muted", li).append($("<i></i>", {"class": "fa fa-clock-o"}));
         $(".text-muted", li).append(" " + this.timegap);    // time
-        $(".timeline-body > p", li).html(this.desc);    // desc
+        $(".timeline-body > p", li).html($("<a></a>",{"href":"javascript:goTask("+this.taskidx+")"}).html(this.desc));    // desc
         timeline.append(li.clone());
     });
 }
@@ -418,7 +419,7 @@ function setFeedback(list, chat) {
         $(".text-muted", li).text("");// init
         $(".text-muted", li).append($("<i></i>", {"class": "fa fa-clock-o fa-fw"}));
         $(".text-muted", li).append(" " + this.timegap);
-        $(".chat-body p", li).text(this.desc);
+        $(".chat-body p", li).append($("<a></a>", {"href": "javascript:goTask(" + this.taskidx + ")"}).text(this.desc));
         chat.append(li.clone());
     });
 
@@ -437,9 +438,9 @@ function setFeedback(list, chat) {
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
                         class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">{title}</h4>
+                <h4 class="modal-title" id="myModalLabel"><%--{title}--%></h4>
             </div>
-            <div class="modal-body">{content}</div>
+            <div class="modal-body"><%--{content}--%></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary">Save changes</button>
@@ -571,7 +572,7 @@ function setFeedback(list, chat) {
             <div class="col-lg-8">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <i class="fa fa-clock-o fa-fw"></i> Timeline
+                        <i class="fa fa-clock-o fa-fw"></i> My Timeline
                     </div>
                     <div class="panel-body">
                         <ul class="timeline">
@@ -618,12 +619,12 @@ function setFeedback(list, chat) {
 
         <div class="chat-body clearfix">
             <div class="header">
-                <strong class="primary-font">{name}</strong>
+                <strong class="primary-font"><%--{name}--%></strong>
                 <small class="pull-right text-muted">
-                    <i class="fa fa-clock-o fa-fw"></i> {timegap}
+                    <i class="fa fa-clock-o fa-fw"></i> <%--{timegap}--%>
                 </small>
             </div>
-            <p>{desc}</p>
+            <p><%--{desc}--%></p>
         </div>
     </li>
     <li class="right clearfix">
@@ -664,17 +665,17 @@ function setFeedback(list, chat) {
     <li>
         <a href="#">
             <div>
-                <strong>{NAME}</strong>
+                <strong><%--{NAME}--%></strong>
                     <span class="pull-right text-muted">
-                        <em>{TIMEGAP}</em>
+                        <em><%--{TIMEGAP}--%></em>
                     </span>
             </div>
-            <div>{DESC}</div>
+            <div><%--{DESC}--%></div>
         </a>
     </li>
     <li class="divider"></li>
     <li>
-        <a class="text-center" href="#">
+        <a class="text-center" href="javascript:goTaskAll()">
             <strong>See All Tasks</strong>
             <i class="fa fa-angle-right"></i>
         </a>

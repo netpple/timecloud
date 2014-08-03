@@ -14,22 +14,22 @@
 	switch(loginResult) {
 		case 1:
 			UserSession userSession = (UserSession)request.getSession().getAttribute("UserSession");
-			
-			String notiEmail = userSession.getSubEmail();
-			
-			if(notiEmail == null || "".equals(notiEmail)) {
-				StringBuffer sb = new StringBuffer();
-				
-				out.print(JavaScript.write("alert('태스크투게더 알람을 받기위해 이메일을 설정해주세요!');location.replace('"+CONTEXT_PATH+"/jsp/userInfo.jsp?user_idx="+userSession.getUserIdx()+"');"));
-			} else {
-				if("".equals(sRedirectPage)) {
+
+            // noti용 보조이메일 처리 .. 이거는 좀 불필요해 보임..
+//			String notiEmail = userSession.getSubEmail();
+//			if(notiEmail == null || "".equals(notiEmail)) {
+//				StringBuffer sb = new StringBuffer();
+//				out.print(JavaScript.write("alert('태스크투게더 알람을 받기위해 이메일을 설정해주세요!');location.replace('"+CONTEXT_PATH+"/jsp/userInfo.jsp?user_idx="+userSession.getUserIdx()+"');"));
+//                return;
+//			}
+
+            if ("".equals(sRedirectPage)) {
 //					response.sendRedirect(CONTEXT_PATH + "/jsp/index.jsp");
-					response.sendRedirect(CONTEXT_PATH + "/theme/2/index.jsp");
-				} else {
+                response.sendRedirect(CONTEXT_PATH + "/theme/2/index.jsp");
+            } else {
 					response.sendRedirect(sRedirectPage);
 				}	
-			}
-			
+
 			break;
 			
 		case 2:

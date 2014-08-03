@@ -1,7 +1,12 @@
+<%@ page import="java.io.File" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="../common/include/incInit.jspf" %>
 <%@ include file="../common/include/incSession.jspf" %>
 <%
+    response.setHeader("Cache-Control","no-cache");
+    response.setHeader("Pragma","no-cache");
+    response.setDateHeader("Expires",0);
+
     final String pUserIdx = req.getParam("user_idx", "" + oUserSession.getUserIdx());
     DataSet ds = QueryHandler.executeQuery("SELECT_USER_INFO", new String[]{pUserIdx});
     UserInfo user = null;
@@ -33,7 +38,13 @@
     <%@ include file="../common/include/incHead.jspf" %>
     <%@ include file="../common/include/incFileUpload.jspf" %>
 
+    <%--<meta http-equiv="cache-control" content="No-Cache">--%>
+    <%--<META HTTP-EQUIV="expires" content="0">--%>
+    <%--<meta http-equiv="pragma" content="no-cache">--%>
+
     <script type="text/javascript">
+        $(document).ready(function(){});
+
         function check() {
             var f = document.getElementById('f1');
             var uname = f.user_name;
@@ -110,24 +121,23 @@
                     <tr>
                         <th>사진</th>
                         <td>
-                            <div><%=photo%>
-                                <%
-//                                    final String FILE_UPLOAD_BASE_REPOSITORY = Config.getProperty("init", "FILE_UPLOAD_BASE_REPOSITORY");    //업로드 위치
-//                                    String uploadPath = FILE_UPLOAD_BASE_REPOSITORY + "/profile/";   // 프로필 원본 저장할 필요있나 ? 일단 하자.
-//                                    System.out.println(String.format("%s%s", uploadPath, USER_IDX));
-//                                    File myPhoto = new File(String.format("%s%s", uploadPath, USER_IDX));
-//                                    boolean hasMyPhoto = myPhoto.exists();
-                                %>
-                                <form id="fileupload" action="/jsp/profile/photoAction.jsp" method="POST"
-                                      enctype="multipart/form-data">
-                                    <div class="col-lg-7">
-                                        <input type="file" name="file">
-                                        <button type="submit" class="btn btn-primary start">
-                                            <i class="glyphicon glyphicon-upload"></i>
-                                            <span class="file">update</span>
-                                        </button>
-                                    </div>
-                                </form>
+                            <div>
+<%
+    String uploadPath = Config.getProperty("init", "FILE_UPLOAD_BASE_REPOSITORY") + "/profile/";
+    File file = new File(uploadPath + String.format("%s", USER_IDX));
+    if(file.exists()){
+%>
+                                <iframe scrolling="no" frameborder="0" style="width:100px;height:100px" src="<%=getProfileImageUrl(Integer.parseInt(USER_IDX))%>"></iframe><br/>
+                                <button class="btn" onclick="javascript:location.href='thumbnail.jsp';">사진변경</button>
+<%
+    }
+    else {
+%>
+                                <img src="/html/images/avatar.png"/><br/>
+                                <button class="btn" onclick="javascript:location.href='thumbnail.jsp';">사진등록</button>
+<%
+    }
+%>
                             </div>
                         </td>
                     </tr>
