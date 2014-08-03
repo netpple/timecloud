@@ -48,7 +48,7 @@ function getBrowserType() {
     <meta charset="utf-8">
     <!-- Always force latest IE rendering engine or request Chrome Frame -->
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-    <title>Login to Together@<%=sHostName %>
+    <title>Login to TaskTogether@AppCenter
     </title>
     <link href="../../stylesheets/application.css" media="screen" rel="stylesheet" type="text/css"/>
     <!--[if lt IE 9]>

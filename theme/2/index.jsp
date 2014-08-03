@@ -48,7 +48,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.jsp">AppCenter - Bit UP!</a>
+            <a class="navbar-brand" href="index.jsp"><img src="/repos/4/ci/ci_1.png" style="height:25px" /></a>
         </div>
         <!-- /.navbar-header -->
         <ul class="nav navbar-top-links navbar-right">
@@ -118,6 +118,9 @@
                         <ul class="nav nav-second-level left-favorite">
                         </ul>
                         <!-- /.nav-second-level -->
+                    </li>
+                    <li>
+                        <img src="/repos/4/ci/ci_2.jpg" style="width:250px;" />
                     </li>
                 </ul>
             </div>
@@ -682,5 +685,6 @@ function setFeedback(list, chat) {
     </li>
 </ul>
 </div>
+<footer class="footer"><div class="pull-right" style="margin-right:15px;color:silver;"><i class="fa fa-cog fa-spin"></i> Powered by TaskTogether </div></footer>
 </body>
 </html>

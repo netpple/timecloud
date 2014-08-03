@@ -10582,7 +10582,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     if ($("body").hasClass("login")) {
       Notifications.push({
         imagePath: "../../images/cloud.png",
-        text: "<p>Welcome to the Together !</p><div>Click login to get a WOW wrong username/password effect, or write any username to enter</div> <div>Be sure to check all sections for features!</div>",
+        text: "<p>태스크투게더에 오신 걸 환경합니다. !</p><div>앱센터에서 주관하는 Bit UP! 참가팀 모든 분들께 행운이 함께하길 기원합니다.</div>",
         autoDismiss: 10
       });
     } else {
