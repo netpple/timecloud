@@ -196,10 +196,10 @@
 	</form>	
  --%>	
 <div class='row-fluid'>
-	<div class='span9'><%@ include file="./menuGlobal.jsp" %>
+	<div class='span12'><%@ include file="./menuGlobal.jsp" %>
 		<div class='row-fluid'>
 			<%--<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>--%>
-			<div class='span11 all'>
+			<div class='span12 all'>
 				<h7>내가 수행할 태스크 (전체)</h7>
 				<div class='row-fluid'>
 					<div class='span6'><form class='form-inline'><%=ctrlTaskType.toString() %></form></div>
@@ -218,7 +218,7 @@
 			</div>
 		</div>
 	</div>
-	<%=getNotification(oUserSession, "span3 noti") %>
+	<%--<%=getNotification(oUserSession, "span3 noti") %>--%>
 </div>
 <form id='f2' method='post'>
 	<input type='hidden' name='tsk_idx' value=''/>

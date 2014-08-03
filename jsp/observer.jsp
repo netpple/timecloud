@@ -130,7 +130,7 @@
 </head>
 <body>
 	<div class="row-fluid">
-		<div class=span8>
+		<div class=span12>
             <%@ include file="./menuGlobal.jsp" %>
 			<div class="row-fluid">
 				<%--<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>--%>
@@ -142,8 +142,8 @@
 				</div>
 			</div>
 		</div>
-        <div class=span1></div>
-		<%=getNotification(oUserSession, "span3 noti") %>
+        <%--<div class=span1></div>--%>
+		<%--<%=getNotification(oUserSession, "span3 noti") %>--%>
 	</div>
 </body>
 </html>

@@ -102,7 +102,7 @@
 </head>
 <body>
 <div class="row-fluid">
-    <div class='span8'>
+    <div class='span12'>
         <%--<%@ include file="../menuGlobal.jsp" %>--%>
         <div class="row-fluid">
             <%--<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>--%>
@@ -172,7 +172,7 @@
             </div>
         </div>
     </div>
-    <%=getNotification(oUserSession, "span4 noti") %>
+    <%--<%=getNotification(oUserSession, "span4 noti") %>--%>
 </div>
 <%--Modal Password--%>
 <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2"

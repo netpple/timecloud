@@ -90,7 +90,7 @@
 </head>
 <body>
 <div class="row-fluid">
-    <div class='span10'>
+    <div class='span12'>
         <%@ include file="./menuGlobal.jsp" %>
         <div class='row-fluid'>
             <%--<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>--%>
@@ -109,7 +109,7 @@
             </div>
         </div>
     </div>
-    <%=getNotification(oUserSession, "span2 noti") %>
+    <%--<%=getNotification(oUserSession, "span2 noti") %>--%>
 </div>
 </body>
 </html>
