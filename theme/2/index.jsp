@@ -414,7 +414,7 @@ function setFeedback(list, chat) {
     list.each(function (idx) { // my tasks
         if (idx % 2 == 1) li = li_right;
         else li = li_left;
-        $(".chat-img > img", li).attr({"src": this.photourl, "width": "50px"});
+        $(".chat-img > img", li).attr({"src": this.photourl, "width": "50px", "onerror":"javascript:this.src='/html/images/avatar.png'"});
         $(".chat-body .primary-font", li).text(this.v_feedback_owner);
         $(".text-muted", li).text("");// init
         $(".text-muted", li).append($("<i></i>", {"class": "fa fa-clock-o fa-fw"}));
