@@ -1,3 +1,4 @@
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="../../common/include/incInit.jspf" %>
 <%@ include file="../../common/include/incSession.jspf" %>
@@ -9,7 +10,7 @@
 
     url = "location.replace('list.jsp')";
 
-    if (!sName.isEmpty()) {
+    if (StringUtils.isEmpty(sName)) {
         alert = "alert('도메인명을 입력해주세요.');";
     } else {
         sName = sName.trim();

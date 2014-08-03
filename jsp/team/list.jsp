@@ -79,7 +79,7 @@
                 <%-- --%>
                 <table width="100%">
                     <tr>
-                        <td><h3>Current Team List</h3></td>
+                        <td><h6><i class="fa fa-info"></i> 아래 목록에서 <strong>해당 팀에 가입</strong>하시거나 팀을 생성해 주세요.</h6></td>
                         <td align="right">
                             <!-- Button trigger modal -->
                             <button class="btn btn-primary btn-lg text-right" data-toggle="modal"
@@ -99,7 +99,7 @@
                                         aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                                 <h4 class="modal-title" id="myModalLabel">팀 등록</h4>
                             </div>
-                            <div class="modal-body">
+                            <div class="modal-body"><p><i class="fa fa-info"></i> 팀을 등록하시는 분이 팀장이 됩니다.</p>
                                 <form id='f1' method='post' action='insert.jsp'>
                                     <table>
                                         <tr>

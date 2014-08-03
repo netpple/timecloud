@@ -1,6 +1,23 @@
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="../../../../jsp/common/include/incInit.jspf" %>
 <%
+        /**
+         * 도메인별 로그인 적용을 위함 - 회원가입이 도메인 단위로 발생함.
+         * 4 - AppCenter Test
+         * 6 - AppCenter Real
+         */
+    String debug = request.getParameter("debug");
+    int domain_idx = -1;
+    if(StringUtils.isEmpty(debug)){
+        domain_idx = 6;
+    }
+    else {  // debug 모드임
+        domain_idx = Integer.parseInt(debug);   // debug에 테스트하고자 하는 domain_idx를 설정함.
+    }
+    //
+    final int SERVICED_DOMAIN_IDX = domain_idx;
+
     String sRedirectUrl = request.getParameter("redirectUrl");
 
     if (sRedirectUrl == null)
@@ -72,7 +89,7 @@ function getBrowserType() {
                 <form action="/jsp/login/loginAction.jsp" method="post">
                     <div class="input-group">
                         <input type="hidden" name="redirectUrl" value="<%=sRedirectUrl%>"/>
-                        <input type="hidden" name="pUserDomain" value="4"/>
+                        <input type="hidden" name="pUserDomain" value="<%=SERVICED_DOMAIN_IDX%>"/>
                         <%--<select name="pUserDomain" class="input-transparent">--%>
                             <%--<option value="1">2Brain</option>--%>
                             <%--<option value="2">Roac</option>--%>
@@ -90,7 +107,7 @@ function getBrowserType() {
             <div id="register" class="login-wrapper animated" style="display: none;">
                 <form action="/jsp/join/action.jsp" method="post">
                     <div class="input-group">
-                        <input type="hidden" name="domain_idx" value="4"/>
+                        <input type="hidden" name="domain_idx" value="<%=SERVICED_DOMAIN_IDX%>"/>
                         <%--<select name="domain_idx" class="input-transparent">--%>
                             <%--<option value="1">2Brain</option>--%>
                             <%--<option value="2">Roac</option>--%>
@@ -106,7 +123,7 @@ function getBrowserType() {
             </div>
             <div id="forgot" class="login-wrapper animated" style="display: none;">
                 <form action="/jsp/findpassword/action.jsp" method="post">
-                    <input type="hidden" name="domain_idx" value="4"/>
+                    <input type="hidden" name="domain_idx" value="<%=SERVICED_DOMAIN_IDX%>"/>
                     <%--<select name="domain_idx" class="input-transparent">--%>
                         <%--<option value="1">2Brain</option>--%>
                         <%--<option value="2">Roac</option>--%>

@@ -134,7 +134,7 @@
     else {
 %>
                                 <img src="/html/images/avatar.png"/><br/>
-                                <button class="btn" onclick="javascript:location.href='thumbnail.jsp';">사진등록</button>
+                                <button class="btn" onclick="javascript:location.href='thumbnail.jsp';">사진등록</button>&nbsp;<i class="fa fa-info"></i> 팀원들이 잘 알아볼 수 있게 사진을 등록해주세요.
 <%
     }
 %>

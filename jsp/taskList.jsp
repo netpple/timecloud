@@ -21,8 +21,8 @@
 
 	DataSet ds = QueryHandler.executeQuery("SELECT_TASK_LIST3", new String[]{ ""+ownerIdx, taskTypeCode }, subQuery.toString()) ;
 	
-	String listOff = "" ,tabOff = "<small class='label label-important'>OFF</small>" ; 
-	String listOn = "", tabOn = "<small class='label label-warning'>ON</small>" ;
+	String listOff = "" ,tabOff = "완료";//"<small class='label label-important'>완료</small>" ;
+	String listOn = "", tabOn = "진행";//"<small class='label label-warning'>진행</small>" ;
 
 	StringBuffer ctrlTaskType = new StringBuffer() ;
  	ctrlTaskType
@@ -63,11 +63,12 @@
  	 		}
 		}
  	 	 	 	
- 	 	String th = "<thead><tr><th>#</th><th>"+Html.Icon.USER+"</th><th>태스크</th><th>구분</th><th>상태</th><th>종료</th></tr></thead>" ;
+// 	 	String th = "<thead><tr><th>#</th><th>"+Html.Icon.USER+"</th><th>태스크</th><th>구분</th><th>상태</th><th>종료</th></tr></thead>" ;
+ 	 	String th = "<thead><tr><th>#</th><th>"+Html.Icon.USER+"</th><th>태스크</th><th>종료</th></tr></thead>" ;
  	 	listOn  = "<table class='table table-bordered table-hover'>" + th + "<tbody>" + listOn  + "</tbody></table>" ;
  	 	listOff = "<table class='table table-bordered table-hover'>" + th + "<tbody>" + listOff + "</tbody></table>" ;
- 	 	tabOn +=  Html.small("전체 "+onCnt+"건, 자체  "+onMyCnt+"건 , 할당  "+onOtherCnt+"건" ) ;
- 	 	tabOff += Html.small("전체 "+offCnt+"건, 자체  "+offMyCnt+"건 , 할당  "+offOtherCnt+"건") ;
+// 	 	tabOn +=  Html.small("전체 "+onCnt+"건, 자체  "+onMyCnt+"건 , 할당  "+onOtherCnt+"건" ) ;
+// 	 	tabOff += Html.small("전체 "+offCnt+"건, 자체  "+offMyCnt+"건 , 할당  "+offOtherCnt+"건") ;
 	}
 	else {
 		listOn = "진행 중인 태스크가 없습니다." ;
@@ -200,11 +201,11 @@
 		<div class='row-fluid'>
 			<%--<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>--%>
 			<div class='span12 all'>
-				<h7>내가 수행할 태스크 (전체)</h7>
-				<div class='row-fluid'>
-					<div class='span6'><form class='form-inline'><%=ctrlTaskType.toString() %></form></div>
-					<div class='span6'><div align=right><%=rankTable %></div></div>
-				</div>
+				<%--<h7>내가 수행할 태스크 (전체)</h7>--%>
+				<%--<div class='row-fluid'>--%>
+					<%--<div class='span6'><form class='form-inline'><%=ctrlTaskType.toString() %></form></div>--%>
+					<%--<div class='span6'><div align=right><%=rankTable %></div></div>--%>
+				<%--</div>--%>
 				<div>
 					<ul class="nav nav-tabs">
 						<li class=active><a href="#tab1" data-toggle="tab"><%=tabOn %></a></li>
@@ -498,26 +499,26 @@
 			String photo = null;
 			String[] asUser = v_parent_user.split("-");
 			if (!isTop() && asUser != null && asUser.length == 2) {
-				photo = getProfileImage(Integer.parseInt(asUser[0]),20);
+				photo = getProfileImage(Integer.parseInt(asUser[0]));
 				
 				if(sess.getUserIdx() != Integer.parseInt(asUser[0])) {
 					desc += " <small class='badge badge-info'>from</small> "
 							+ asUser[1] ;
 				}
 			} else {
-				photo = getProfileImage(sess.getUserIdx(),20);
+				photo = getProfileImage(sess.getUserIdx());
 			}
 
 			out = "<td>" + n_idx + "</td>" + "<td>" + photo + "</td>" 
 					+ "<td>"+ desc + " "+ Html.small(v_edt_datetime)+"</td>" 
-					+ "<td><div class='btn-toolbar'>"+ getTypePrivateToggle() + getTypeTermToggle()+ getTypeRepeatToggle() + "</div></td>"
+//					+ "<td><div class='btn-toolbar'>"+ getTypePrivateToggle() + getTypeTermToggle()+ getTypeRepeatToggle() + "</div></td>"
 /*					
 					+ "<td><a href='javascript:onTaskHome("+ n_idx + ");'>"+Html.Icon.TASK+"</a></td>"
 					+ "<td>" + calLink+ "</td>" 
 					+ "<td><a href='javascript:goToFeedback(" + n_idx+ ");'>"+Html.Icon.FEEDBACK+"</a></td>"
 					+ "<td><a href='javascript:goToFileUpload(" + n_idx+ ");'>"+Html.Icon.FILE+"</a></td>"
 */					
-					+ "<td>"+ taskStatus + "</td>"
+//					+ "<td>"+ taskStatus + "</td>"
 					+ "<td>" + status + "</td>";
 					
 			return out;

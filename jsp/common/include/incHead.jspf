@@ -19,6 +19,8 @@
 <link href="<%=AXISJ_PATH %>/ui/default/AXJ.css" rel="stylesheet">
 <link href="<%=AXISJ_PATH %>/ui/default/AXTree.css" rel="stylesheet">
 <link href="<%=AXISJ_PATH %>/ui/default/AXTabs.css" rel="stylesheet">
+<%--awesome font--%>
+<link href="/theme/2/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 <%-- Task Togegher CSS/JS--%>
 <link href="<%=CSS_PATH%>/tt/common.css" rel="stylesheet">
 <script src="<%=JS_PATH%>/tt/common.js"></script>

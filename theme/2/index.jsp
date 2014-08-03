@@ -48,7 +48,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.jsp"><img src="/repos/4/ci/ci_1.png" style="height:25px" /></a>
+            <a class="navbar-brand" href="index.jsp"><img src="/repos/<%=DOMAIN_IDX%>/ci/ci_1.png" style="height:25px" /></a>
         </div>
         <!-- /.navbar-header -->
         <ul class="nav navbar-top-links navbar-right">
@@ -120,7 +120,7 @@
                         <!-- /.nav-second-level -->
                     </li>
                     <li>
-                        <img src="/repos/4/ci/ci_2.jpg" style="width:250px;" />
+                        <img src="/repos/<%=DOMAIN_IDX%>/ci/ci_2.jpg" style="width:250px;" />
                     </li>
                 </ul>
             </div>
@@ -606,7 +606,7 @@ function setFeedback(list, chat) {
     <li class="basic">
         <form role="form">
             <div class="form-group">
-                <label>Input your task</label>
+                <label><i class="fa fa-info"></i> 태스크를 만들어보세요. 모든 일은 태스크에서 시작됩니다.</label>
                 <input type="text" name="desc" value="" class="form-control"
                        placeholder="계획 혹은 수행할 태스크 내용을 100자 이내로 작성해 주세요">
                 <span class="pull-right charactor-counter"><span>0</span>/100자</span>
