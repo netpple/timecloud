@@ -218,7 +218,7 @@ Number.prototype.zf = function(len){return this.toString().zf(len);};
 					$("#register").modal('hide') ;
 					*/
 				} else {
-					alert('액티비티 등록 실패');
+					alert('등록 실패');
 				}
 			}, 
 			error: function(data, status, err) {
@@ -260,7 +260,7 @@ Number.prototype.zf = function(len){return this.toString().zf(len);};
 				success: function(data) {
 					if(data > 0) {
 					} else {
-						alert('액티비티 등록 실패');
+						alert('등록 실패');
 						revertFunc() ;
 					}
 				}, 
@@ -358,7 +358,7 @@ Number.prototype.zf = function(len){return this.toString().zf(len);};
 	aria-labelledby="registerLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="registerLabel">액티비티 등록</h3>
+		<h3 id="registerLabel">일정 등록</h3>
 	</div>
 		<div class="modal-body">
 		<form id="frmActivityAdd" class="form-horizontal"><input type="hidden" name="tsk_idx" value="<%=TASK_IDX%>"/>

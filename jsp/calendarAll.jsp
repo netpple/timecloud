@@ -103,7 +103,7 @@
 				success: function(data) {
 					if(data > 0) {
 					} else {
-						alert('액티비티 등록 실패');
+						alert('등록 실패');
 						revertFunc() ;
 					}
 				}, 

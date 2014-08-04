@@ -156,7 +156,7 @@
         private String getActionMessage() {
             String msg = "";
             if ("ACTIVITY".equals(v_type)) {
-                msg = "수행한 액티비티입니다." + Html.Icon.ACTIVITY;
+                msg = "등록한 일정입니다." + Html.Icon.ACTIVITY;
             } else if ("FEEDBACK".equals(v_type)) {
                 msg = "남긴 피드백입니다." + Html.Icon.FEEDBACK;
             } else if ("FILE".equals(v_type)) {

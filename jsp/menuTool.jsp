@@ -44,7 +44,7 @@
 		<li class='<%=tTab[0]%>'><a href="javascript:onTaskHome('<%=TASK_IDX %>');" class='tabhome ellipsis'><%=Html.trueString(isAll,"전체 보기",oTaskHierarchy.getCurrentTask().getDesc()) %></a></li>
 		<li class='<%=tTab[1]%>'><a href="javascript:onViewCalendar('<%=TASK_IDX %>');">일정</a></li>
 		<li class='<%=tTab[2]%>'><a href="javascript:goToFileUpload();">자료</a></li>
-		<li class='<%=tTab[3]%>'><a href="javascript:tabToObserver();">CC</a></li>
+		<li class='<%=tTab[3]%>'><a href="javascript:tabToObserver();">참조</a></li>
 		<%--		
 		<li class='<%=tTab[2]%>'><a href="javascript:goToFeedback();">태스크피드백</a></li>
 		 <li class='<%=tTab[2]%>'><a href="javascript:onViewAllCalendar('<%=TASK_IDX %>');">태스크 전체일정</a></li>		
