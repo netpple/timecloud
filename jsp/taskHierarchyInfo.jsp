@@ -75,7 +75,7 @@ var fnObj = {
 				theme:"AXContextMenu", // 선택항목
 				width:"140", // 선택항목
 				menu:[
-				    {isOpen:true, label:"일정/할당", className:"plus", onclick:function(){location.href="/jsp/calendar.jsp?tsk_idx="+ this.sendObj.no +"&modal=Y"}},
+				    {isOpen:true, label:"일정 등록", className:"plus", onclick:function(){location.href="/jsp/calendar.jsp?tsk_idx="+ this.sendObj.no +"&modal=Y"}},
 				    <%--
 					--%>
 				    {isOpen:true, label:"태스크 수정", className:"minus", onclick:function(){

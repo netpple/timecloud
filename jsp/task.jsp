@@ -137,7 +137,7 @@ function tool_delete(taskIdx, toolIdx, toolType) {
 				<div class="tabbable editorArea"> <!-- Only required for left/right tabs -->
 					<ul class="nav nav-tabs">
 						<%if(taskOwner == oUserSession.getUserIdx() && "N".equals(isTaskOff)) { %>
-							<li><img class="arrow" src="/html/images/arrow_blank.png"/><a href="#activityTab" task_idx="<%=TASK_IDX%>" data-toggle="tab"><%=Html.Icon.TASK+Html.small("일정/할당") %></a></li>
+							<li><img class="arrow" src="/html/images/arrow_blank.png"/><a href="#activityTab" task_idx="<%=TASK_IDX%>" data-toggle="tab"><%=Html.Icon.TASK+Html.small("일정 등록") %></a></li>
 							<li class="active" ><img class="arrow" src="/html/images/arrow_top_type2.png"><a href="#tab1" data-toggle="tab"><%=Html.Icon.FEEDBACK+Html.small("피드백 남기기") %> </a></li>
 							<li><img class="arrow" src="/html/images/arrow_blank.png"><a href="#tab2" data-toggle="tab"><%=Html.Icon.FILE+Html.small("자료 올리기") %> </a></li>
 						<%} else { %>
