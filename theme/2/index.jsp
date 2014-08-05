@@ -84,6 +84,9 @@
                 <!-- /.dropdown-user -->
             </li>
             <!-- /.dropdown -->
+            <li>
+              <%=oUserSession.getUserName()%>님 <%=getProfileImage(oUserSession.getUserIdx(),35,ImageShape.CIRCLE)%>
+            </li>
         </ul>
         <!-- /.navbar-top-links -->
 
