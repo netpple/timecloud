@@ -39,48 +39,20 @@
     <%--</div>--%>
     <%--<div id="message"></div>--%>
 </div>
-<div>
-    <img src="#" id="cropbox" height="300" border="1" onerror="this.src='/html/images/file_icon.png'"/>
+<div id="cropbox">
+    <%--<img src="#" height="300" border="1" onerror="this.src='/html/images/file_icon.png'"/>--%>
 </div>
 <div id="output" height="100"></div>
 <script>
-    $(document).ready(function(){
-//        var options = {
-//                beforeSend: function () {
-//                    $("#progress").show();
-//                    //clear everything
-//                    $("#bar").width('0%');
-//                    $("#message").html("");
-//                    $("#percent").html("0%");
-//                },
-//                uploadProgress: function (event, position, total, percentComplete) {
-//                    $("#bar").width(percentComplete + '%');
-//                    $("#percent").html(percentComplete + '%');
-//
-//                },
-//                success: function () {
-//                    $("#bar").width('100%');
-//                    $("#percent").html('100%');
-//
-//                },
-//                complete: function (response) {
-//                    $("#message").html("<span color='green'>" + response.responseText + "</span>");
-//                },
-//                error: function () {
-//                    $("#message").html("<span color='red'> ERROR: unable to upload files</span>");
-//
-//                }
-//        };
-//        $("#fileupload").ajaxForm(options);
-    });
+    $(document).ready(function(){});
     function showCoords(c) {
         // get image natural height/width for server site crop image.
-        var imageheight = document.getElementById('cropbox').naturalHeight;
-        var imagewidth = document.getElementById('cropbox').naturalWidth;
-        var xper = (c.x * 100 / jQuery('#cropbox').width());
-        var yper = (c.y * 100 / jQuery('#cropbox').height());
-        var wPer = (c.w * 100 / jQuery('#cropbox').width());
-        var hper = (c.h * 100 / jQuery('#cropbox').height());
+        var imageheight = document.getElementById('cropimg').naturalHeight;
+        var imagewidth = document.getElementById('cropimg').naturalWidth;
+        var xper = (c.x * 100 / $('#cropimg').width());
+        var yper = (c.y * 100 / $('#cropimg').height());
+        var wPer = (c.w * 100 / $('#cropimg').width());
+        var hper = (c.h * 100 / $('#cropimg').height());
 
         var actX = (xper * imagewidth / 100);
         var actY = (yper * imageheight / 100);
@@ -95,39 +67,28 @@
     function loadImage() {
         var w = 100;
         var h = 100;
-        var W = jQuery('#cropbox').width();
-        var H = jQuery('#cropbox').height();
+        var W = $('#cropimg').width();
+        var H = $('#cropimg').height();
         var x = W / 2 - w / 2;
         var y = H / 2 - h / 2;
         var x1 = x + w;
         var y1 = y + h;
 
-        jQuery('#cropbox').Jcrop({
+        jQuery('#cropimg').Jcrop({
             onChange: showCoords,
             onSelect: showCoords,
 
             setSelect: [ x, y, x1, y1 ], minSize: [ 100, 100 ] // use for crop min size
             , aspectRatio: 1 / 1    // crop ration
         });
-
-//        jQuery('#CropButton').click(function () {
-//
-//            $('#fileupload').submit(function() {
-//                console.log("hello");
-//                // submit the form
-//                $(this).ajaxSubmit();
-//                // return false to prevent normal browser submit and page navigation
-//                return false;
-//            });
-//        });
-
     }
 
     function readUrl(obj) {
+        $('#cropbox').html("");
         if (obj.files && obj.files[0]) {
             var reader = new FileReader();
             reader.onload = function (e) {
-                $('#cropbox').attr("src", e.target.result);
+                $('#cropbox').append($("<img/>",{'id':"cropimg",'src': e.target.result,'height':'300px','onerror':"this.src='/html/images/file_icon.png'"}));
                 loadImage();
             }
             reader.readAsDataURL(obj.files[0]);
