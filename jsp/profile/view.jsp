@@ -3,9 +3,9 @@
 <%@ include file="../common/include/incInit.jspf" %>
 <%@ include file="../common/include/incSession.jspf" %>
 <%
-    response.setHeader("Cache-Control","no-cache");
-    response.setHeader("Pragma","no-cache");
-    response.setDateHeader("Expires",0);
+    response.setHeader("Cache-Control", "no-cache");
+    response.setHeader("Pragma", "no-cache");
+    response.setDateHeader("Expires", 0);
 
     final String pUserIdx = req.getParam("user_idx", "" + oUserSession.getUserIdx());
     DataSet ds = QueryHandler.executeQuery("SELECT_USER_INFO", new String[]{pUserIdx});
@@ -43,7 +43,8 @@
     <%--<meta http-equiv="pragma" content="no-cache">--%>
 
     <script type="text/javascript">
-        $(document).ready(function(){});
+        $(document).ready(function () {
+        });
 
         function check() {
             var f = document.getElementById('f1');
@@ -122,22 +123,24 @@
                         <th>사진</th>
                         <td>
                             <div>
-<%
-    String uploadPath = Config.getProperty("init", "FILE_UPLOAD_BASE_REPOSITORY") + "/profile/";
-    File file = new File(uploadPath + String.format("%s", USER_IDX));
-    if(file.exists()){
-%>
-                                <iframe scrolling="no" frameborder="0" style="width:100px;height:100px" src="<%=getProfileImageUrl(Integer.parseInt(USER_IDX))%>"></iframe><br/>
+                                <%
+                                    String uploadPath = Config.getProperty("init", "FILE_UPLOAD_BASE_REPOSITORY") + "/profile/";
+                                    File file = new File(uploadPath + String.format("%s", USER_IDX));
+                                    if (file.exists()) {
+                                %>
+                                <iframe scrolling="no" frameborder="0" style="width:100px;height:100px"
+                                        src="<%=getProfileImageUrl(Integer.parseInt(USER_IDX))%>"></iframe>
+                                <br/>
                                 <button class="btn" onclick="javascript:location.href='thumbnail.jsp';">사진변경</button>
-<%
-    }
-    else {
-%>
+                                <%
+                                } else {
+                                %>
                                 <img src="/html/images/avatar.png"/><br/>
-                                <button class="btn" onclick="javascript:location.href='thumbnail.jsp';">사진등록</button>&nbsp;<i class="fa fa-info"></i> 팀원들이 잘 알아볼 수 있게 사진을 등록해주세요.
-<%
-    }
-%>
+                                <button class="btn" onclick="javascript:location.href='thumbnail.jsp';">사진등록</button>
+                                &nbsp;<i class="fa fa-info"></i> 팀원들이 잘 알아볼 수 있게 사진을 등록해주세요.
+                                <%
+                                    }
+                                %>
                             </div>
                         </td>
                     </tr>
@@ -163,10 +166,8 @@
                     </tr>
                 </table>
                 <div class="form-actions">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#profileModal">프로필
-                        수정
-                    </button>
-                    <button type="button" class="btn" data-toggle="modal" data-target="#passwordModal">비밀번호 변경</button>
+                    <button type="button" class="btn btn-primary" onclick="javascript:profile();">프로필 수정</button>
+                    <button type="button" class="btn" onclick="javascript:password();">비밀번호 변경</button>
                 </div>
                 <%-- --%>
             </div>
@@ -174,99 +175,105 @@
     </div>
     <%--<%=getNotification(oUserSession, "span4 noti") %>--%>
 </div>
-<%--Modal Password--%>
-<div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2"
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span
                         aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel2">비밀번호 변경</h4>
+                <h4 class="modal-title" id="myModalLabel"></h4>
             </div>
-            <div class="modal-body">
-                <form id='f2' method='post' action='password.jsp'>
-                    <table>
-                        <tr>
-                            <th>현재 비밀번호</th>
-                            <td><input type="password" name="user_passwd_now" value=""/></td>
-                        </tr>
-                        <tr>
-                            <th>새로운 비밀번호</th>
-                            <td><input type="password" name="user_passwd_new" value=""/></td>
-                        </tr>
-                        <tr>
-                            <th>새로운 비밀번호(확인)</th>
-                            <td><input type="password" name="user_passwd_new2" value=""/></td>
-                        </tr>
-                    </table>
-                </form>
-            </div>
+            <div class="modal-body"></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="javascript:check2();">Save
+                <button id="btnSubmit" type="button" class="btn btn-primary">Save
                     changes
                 </button>
             </div>
         </div>
     </div>
 </div>
-<%--Modal--%>
 
-<%--Modal Profile--%>
-<div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span
-                        aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">Profile 수정</h4>
-            </div>
-            <div class="modal-body">
-                <form id='f1' method='post' action='update.jsp'>
-                    <table>
-                        <tr>
-                            <th>이메일</th>
-                            <td><%=email%>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>이름</th>
-                            <td><input type="text" name="user_name" value="<%=name%>"/></td>
-                        </tr>
-                        <tr>
-                            <th>사진</th>
-                            <td><%=photo %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>연락처</th>
-                            <td><input type="text" name="user_tel" value="<%=tel%>"/></td>
-                        </tr>
-                        <tr>
-                            <th>보조 이메일</th>
-                            <td><input type="text" name="user_noti_email" value="<%=noti_email%>"/></td>
-                        </tr>
-                        <tr>
-                            <th>비밀번호</th>
-                            <td><input type="password" name="user_passwd" value=""/>
-                                <br/>* 변경을 원하시면 비밀번호를 입력해 주세요
-                            </td>
-                        </tr>
-                    </table>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="javascript:check();">Save
-                    changes
-                </button>
-            </div>
-        </div>
-    </div>
+<script>
+    function password() {
+        $('#myModal h4.modal-title').text("비밀번호 변경하기");
+        $('#myModal div.modal-body').html($("#template li:eq(1)").html());
+        $("#btnSubmit").unbind("click");
+        $("#btnSubmit").bind("click",function(){
+            check2();
+        });
+        $('#myModal').modal('show');
+    }
+    function profile() {
+        $('#myModal h4.modal-title').text("Profile 수정하기");
+        $('#myModal div.modal-body').html($("#template li:eq(0)").html());
+        $("#btnSubmit").unbind("click");
+        $("#btnSubmit").bind("click",function(){
+            check();
+        });
+        $('#myModal').modal('show');
+    }
+</script>
+<div id='template' style="display:none">
+    <ul>
+        <li>
+            <%--Profile Form--%>
+            <form id='f1' method='post' action='update.jsp'>
+                <table>
+                    <tr>
+                        <th>이메일</th>
+                        <td><%=email%>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>이름</th>
+                        <td><input type="text" name="user_name" value="<%=name%>"/></td>
+                    </tr>
+                    <tr>
+                        <th>사진</th>
+                        <td><%=photo %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>연락처</th>
+                        <td><input type="text" name="user_tel" value="<%=tel%>"/></td>
+                    </tr>
+                    <tr>
+                        <th>보조 이메일</th>
+                        <td><input type="text" name="user_noti_email" value="<%=noti_email%>"/></td>
+                    </tr>
+                    <tr>
+                        <th>비밀번호</th>
+                        <td><input type="password" name="user_passwd" value=""/>
+                            <br/>* 변경을 원하시면 비밀번호를 입력해 주세요
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </li>
+        <li>
+            <%--Password Form--%>
+            <form id='f2' method='post' action='password.jsp'>
+                <table>
+                    <tr>
+                        <th>현재 비밀번호</th>
+                        <td><input type="password" name="user_passwd_now" value=""/></td>
+                    </tr>
+                    <tr>
+                        <th>새로운 비밀번호</th>
+                        <td><input type="password" name="user_passwd_new" value=""/></td>
+                    </tr>
+                    <tr>
+                        <th>새로운 비밀번호(확인)</th>
+                        <td><input type="password" name="user_passwd_new2" value=""/></td>
+                    </tr>
+                </table>
+            </form>
+        </li>
+    </ul>
 </div>
-<%--Modal--%>
+
 </body>
 </html>
 <%!
