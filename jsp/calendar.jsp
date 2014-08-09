@@ -91,8 +91,32 @@ Number.prototype.zf = function(len){return this.toString().zf(len);};
 				center: 'title',
 				right: 'month,agendaWeek,agendaDay'
 			},
-			eventClick: function(calEvent, jsEvent, view) {
-				// -- window.open('./activityInfo.jsp?pActivityIdx='+calEvent.idx,'pop') ;
+			eventClick: function(calEvent, jsEvent, view) { // activity clicked
+                console.log(calEvent);
+                $("#register h3#registerLabel").text("일정 수정");
+                $("#register #activityIdx").val(calEvent.idx);
+                var start_date = convertDate(calEvent.start);
+                var start_time = convertTime(calEvent.start);
+                $("#register #startDate").val(start_date);
+                $("#register #startTime").val(start_time);
+
+                var end_date = '';
+                var end_time = '';
+                if(calEvent.end != null) {
+                    end_date = convertDate(calEvent.end);
+                    end_time = convertTime(calEvent.end);
+                }
+                else {
+                    end_date = start_date;
+                    end_time = start_time;
+                }
+
+                $("#register #endDate").val(end_date);
+                $("#register #endTime").val(end_time);
+
+                $("#register #desc").val(calEvent.title);
+
+                $("#register").modal('show')
 				$(this).css('border-color', 'red') ;
 			},
 			eventMouseover: function(calEvent, jsEvent, view) {
@@ -114,19 +138,11 @@ Number.prototype.zf = function(len){return this.toString().zf(len);};
 			selectable: true,
 			selectHelper: true,
 			select: function(start, end, allDay) {
-				startDate.value = "";
-				endDate.value = "";
-				document.getElementById("startDate").value = convertDate(start);
-				document.getElementById("endDate").value = convertDate(end);
-				desc.value = "";
-				observerComment.value = "";
-				taskAssign.selectedIndex = 0;
-				$("input[name=pObserver]:checkbox").attr("checked", false);
-				$("#observerCheckList").css("display","none");
-				$("#observerDesc").css("display","none");
-				
-				$("#register").modal('show')
-				calendar.fullCalendar('unselect');
+                modalInit();
+				$("#startDate").val(convertDate(start));
+				$("#endDate").val(convertDate(end));
+                $("#register h3#registerLabel").text("일정 등록");
+                $("#register").modal('show')
 			},
 			
 			editable: true,
@@ -153,19 +169,25 @@ Number.prototype.zf = function(len){return this.toString().zf(len);};
 		});
 		
 		<%if(isModal.equals("Y")) {%>
-			document.getElementById("startDate").value = new Date().format("yyyy-MM-dd");
-			document.getElementById("endDate").value = new Date().format("yyyy-MM-dd");
-			desc.value = "";
-			observerComment.value = "";
-			taskAssign.selectedIndex = 0;
-			$("input[name=pObserver]:checkbox").attr("checked", false);
-			$("#observerCheckList").css("display","none");
-			$("#observerDesc").css("display","none");
-			
-			$("#register").modal('show')
-			calendar.fullCalendar('unselect');	
+            modalInit();
+            $("#register").modal('show')
 		<%}%>
 	});
+
+    function modalInit(){
+        $("#register #activityIdx").val("");
+        $("#register #startDate").val(new Date().format("yyyy-MM-dd"));
+        $("#register #startTime").val("");
+        $("#register #endDate").val(new Date().format("yyyy-MM-dd"));
+        $("#register #endTime").val("");
+        $("#register #desc").val("");
+        $("#register #observerComment").val("");
+        $("#register #taskAssign").val("0");
+        $("#register input[name=pObserver]:checkbox").attr("checked", false);
+        $("#register #observerCheckList").css("display","none");
+        $("#register #observerDesc").css("display","none");
+        calendar.fullCalendar('unselect');
+    }
 	
 	function onActivity() {
 		if( lock() ) {
@@ -361,17 +383,23 @@ Number.prototype.zf = function(len){return this.toString().zf(len);};
 		<h3 id="registerLabel">일정 등록</h3>
 	</div>
 		<div class="modal-body">
-		<form id="frmActivityAdd" class="form-horizontal"><input type="hidden" name="tsk_idx" value="<%=TASK_IDX%>"/>
+		<form id="frmActivityAdd" class="form-horizontal">
+            <input type="hidden" name="tsk_idx" value="<%=TASK_IDX%>"/>
+            <input type="hidden" id="activityIdx" name="pActivityIdx" value=""/>
 			<div class="control-group">
 				<label class="control-label" for="startDate">시작 </label>
 				<div class="controls">
-					<input type="text" id="startDate" name="pStartDate"/> <!-- input type="time" id="startTime" name="pStartTime" value=""/-->
+					<input type="text" id="startDate" name="pStartDate"/>
+                    <input type="time" id="startTime" name="pStartTime" placeholder="00:00"/>
+                    <%--<input type="time" id="startTime" name="pStartTime" value="">--%>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="endDate">종료</label>
 				<div class="controls">
-					<input type="text" id="endDate" name="pEndDate"/> <!-- input type="time" id="endTime" name="pEndTime" value=""/-->
+					<input type="text" id="endDate" name="pEndDate"/>
+                    <input type="time" id="endTime" name="pEndTime" placeholder="00:00"/>
+                    <%--<input type="time" id="endTime" name="pEndTime" value=""/>--%>
 				</div>
 			</div>
 			<div class="control-group">
@@ -391,9 +419,9 @@ Number.prototype.zf = function(len){return this.toString().zf(len);};
 				<div class="controls">
 					<textarea name="pComment" id="observerComment" rows=3 placeholder="참고할 내용을 적어주세요."></textarea>
 				</div>
-			</div>
-			<%=userCheckbox %>
-		</form>		
+                <%=userCheckbox %>
+            </div>
+		</form>
 		</div>
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>

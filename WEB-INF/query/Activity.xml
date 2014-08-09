@@ -160,8 +160,20 @@
 	    </value>
 	    <description>달력에서 액티비티 날짜 수정</description>
 	</query>
-	
-	<query>
+    <query>
+        <id>UPDATE_ACTIVITY</id>
+        <value>
+            UPDATE TIMECLOUD_ACTIVITY SET
+            v_desc=?,
+            v_start_datetime=?,
+            v_end_datetime=?,
+            v_edt_datetime=to_char(sysdate,'YYYYMMDDHH24MISS')
+            WHERE N_IDX=? AND N_OWNER_IDX=?
+        </value>
+        <description>달력에서 액티비티 날짜 수정</description>
+    </query>
+
+    <query>
 		<id>SELECT_ACTIVITY_ALL</id>
 		<value>
 			SELECT 
