@@ -122,20 +122,18 @@
                     <tr>
                         <th>사진</th>
                         <td>
-                            <div>
+                            <div><%=photo%><br/>
                                 <%
                                     String uploadPath = Config.getProperty("init", "FILE_UPLOAD_BASE_REPOSITORY") + "/profile/";
                                     File file = new File(uploadPath + String.format("%s", USER_IDX));
                                     if (file.exists()) {
                                 %>
-                                <iframe scrolling="no" frameborder="0" style="width:100px;height:100px"
-                                        src="<%=getProfileImageUrl(Integer.parseInt(USER_IDX))%>"></iframe>
-                                <br/>
+                                <%--<iframe scrolling="no" frameborder="0" style="width:100px;height:100px"--%>
+                                        <%--src="<%=getProfileImageUrl(Integer.parseInt(USER_IDX))%>?1"></iframe>--%>
                                 <button class="btn" onclick="javascript:location.href='thumbnail.jsp';">사진변경</button>
                                 <%
                                 } else {
                                 %>
-                                <img src="/html/images/avatar.png"/><br/>
                                 <button class="btn" onclick="javascript:location.href='thumbnail.jsp';">사진등록</button>
                                 &nbsp;<i class="fa fa-info"></i> 팀원들이 잘 알아볼 수 있게 사진을 등록해주세요.
                                 <%

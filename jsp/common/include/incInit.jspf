@@ -10,6 +10,7 @@
 <%@ page import="com.twobrain.common.util.*" %>
 <%@ page import="com.twobrain.dao.*" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.io.File" %>
 <%
     final String CONTEXT_PATH = request.getContextPath();
     final String CONTEXT_REAL_PATH = request.getRealPath(CONTEXT_PATH);
@@ -150,7 +151,13 @@
     }
 
     public static String getProfileImageUrl(int n_owner_idx) {
-        return String.format(Config.getProperty("init", Cs.USER_PROFILE_IMAGE_URN), n_owner_idx);
+        String uploadPath = Config.getProperty("init", "FILE_UPLOAD_BASE_REPOSITORY") + "/profile/";
+        File file = new File(uploadPath + String.format("%s", n_owner_idx));
+        String url = "";
+        if(file.exists()){
+            url = String.format(Config.getProperty("init", Cs.USER_PROFILE_IMAGE_URN), n_owner_idx)+"?"+file.lastModified();
+        }
+        return url;
     }
 
     public static class ImageShape {
