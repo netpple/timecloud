@@ -371,7 +371,7 @@ function setFavorite(list, favorite) {
 
 function setTaskDropdown(list, dropdown) {
     var template = $("#t_mytasks");
-
+    dropdown.html("");
     $(list.get().reverse()).each(function () { // my tasks
         prependDropdownTask(this);
     });
