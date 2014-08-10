@@ -349,7 +349,8 @@ class Tool {
 			String component = "" ;
 			String message = null ;
 			if(isMe()) {	// -- my feedback
-				component = " <input type='button' class='btn btn-mini btn-danger' value='Delete' onClick=\"javascript:tool_delete("+n_task_idx+","+n_idx+",'"+v_type+"');\" />";
+//				component = " <input type='button' class='btn btn-mini btn-danger' value='Delete' onClick=\"javascript:tool_delete("+n_task_idx+","+n_idx+",'"+v_type+"');\" />";
+                component = "<a href=\"javascript:tool_delete(\"+n_task_idx+\",\"+n_idx+\",'\"+v_type+\"');\"><i class=icon-trash></i> 삭제</a>";
 				message = "내가 " + getActionMessage() ;
 			}
 			else {

@@ -85,7 +85,7 @@
             </li>
             <!-- /.dropdown -->
             <li>
-                <a href="javascript:goProfile()"><%=oUserSession.getUserName()%>님 <%=getProfileImage(oUserSession.getUserIdx(),35,ImageShape.CIRCLE)%></a>
+                <a href="javascript:goProfile()" style="border:0;margin:0;padding:0;min-height:30px;"><%=oUserSession.getUserName()%>님 <%=getProfileImage(oUserSession.getUserIdx(),35,ImageShape.CIRCLE)%></a>
             </li>
         </ul>
         <!-- /.navbar-top-links -->
