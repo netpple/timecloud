@@ -27,4 +27,30 @@
         </value>
         <description></description>
     </query>
+
+    <query>
+        <id>SELECT_TIMELINE</id>
+        <value>
+            SELECT * FROM (
+            SELECT Z.*, ROWNUM as ro FROM(
+            SELECT n_idx, n_task_idx, v_desc, timegap, tooltype FROM (
+            SELECT N_IDX, N_TASK_IDX, V_DESC, FN_TIMEGAP(V_EDT_DATETIME) as timegap, V_EDT_DATETIME AS recent,
+            'ACTIVITY' AS tooltype, N_OWNER_IDX, C_DEL_YN FROM TIMECLOUD_ACTIVITY
+            UNION
+            SELECT N_IDX, N_TASK_IDX, V_DESC, FN_TIMEGAP(V_REG_DATETIME) as timegap, V_REG_DATETIME AS recent,
+            'FEEDBACK' AS tooltype, N_OWNER_IDX, C_DEL_YN FROM TIMECLOUD_FEEDBACK
+            UNION
+            SELECT N_IDX, N_TASK_IDX, V_ORIGIN_NAME AS V_DESC, FN_TIMEGAP(V_REG_DATETIME) as timegap, V_REG_DATETIME AS
+            recent, 'FILE' AS tooltype, N_OWNER_IDX, C_DEL_YN FROM TIMECLOUD_FILE
+            )
+            WHERE N_OWNER_IDX = ? AND C_DEL_YN = 'N'
+            $0$
+            ORDER BY recent DESC
+            )Z
+            )
+            $1$
+        </value>
+        <description></description>
+    </query>
+
 </sql-statement>

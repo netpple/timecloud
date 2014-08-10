@@ -151,6 +151,7 @@
 <!-- Custom Theme JavaScript -->
 <script src="js/sb-admin-2.js"></script>
 
+<script src="js/plugins/pklauzinski-jscroll-bc31cbb/jquery.jscroll.js"></script>
 <style>
     .sidebar {
         margin-top: 53px;
@@ -161,6 +162,10 @@
         color: #c0c0c0;
     }
 
+    .custom-timeline-panel .panel-body {
+        height: 371px;
+        overflow-y: scroll;
+    }
     /*태스크등록폼 글자카운터 스타일*/
 </style>
 <script>
@@ -254,7 +259,7 @@ function openTaskForm() {
 
     // 모달 set
     title.text("태스크 만들기");
-    console.log(template.html());
+//    console.log(template.html());
     body.html(template.html());
 
     // 폼 조작
@@ -371,15 +376,16 @@ function setFavorite(list, favorite) {
 
 function setTaskDropdown(list, dropdown) {
     var template = $("#t_mytasks");
-    dropdown.html("");
+
     $(list.get().reverse()).each(function () { // my tasks
         prependDropdownTask(this);
     });
     dropdown.append($("li:eq(2)", template).clone());
 }
 function setTimeline(list, timeline) {
-    var li = $("#t_timeline > li");
+    var li_templ = $("#t_timeline > li");
     list.each(function (idx) {
+        var li = li_templ.clone();
         if (idx % 2 == 1)li.addClass("timeline-inverted");
         else li.removeClass("timeline-inverted");
 
@@ -409,7 +415,49 @@ function setTimeline(list, timeline) {
         $(".text-muted", li).append($("<i></i>", {"class": "fa fa-clock-o"}));
         $(".text-muted", li).append(" " + this.timegap);    // time
         $(".timeline-body > p", li).html($("<a></a>",{"href":"javascript:goTask("+this.taskidx+")"}).html(this.desc));    // desc
-        timeline.append(li.clone());
+        timeline.append(li);
+    });
+    timeline.append($("<li></li>").append($("<a></a>",{'href':'/jsp/timeline/list.jsp?p=2','class':'jscroll-next'})));
+
+    $('.scroll_timeline').jscroll({
+        nextSelector: 'a.jscroll-next:last',
+        jsonParser: function (json) {
+            console.log(json);
+            var list = $(json.recently);
+            list.each(function (idx) {
+                var li = li_templ.clone();
+                if (idx % 2 == 1)li.addClass("timeline-inverted");
+                else li.removeClass("timeline-inverted");
+
+                var div = $(".timeline-badge", li);
+                div.text("");
+                div.removeClass(); // 초기화 - 템플릿의 아이콘 및 클래스 초기화 한다.
+                div.addClass("timeline-badge");
+                // tool 에 따른 아이콘 표시
+                if (this.type == "ACTIVITY") {
+                    div.addClass("info");
+                    div.append($("<i></i>", {"class": "fa fa-check"}));
+                }
+                else if (this.type == "FILE") {
+                    div.addClass("danger");
+                    div.append($("<i></i>", {"class": "fa fa-file-image-o"}));
+                }
+                else if (this.type == "FEEDBACK") {
+                    div.addClass("success");
+                    div.append($("<i></i>", {"class": "fa fa-comment"}));
+                }
+                <%--$(".timeline-badge", li).append($("<img/>",{"src":"<%=getProfileImageUrl(3)%>","class":"img-circle"}));--%>
+                // 체크박스
+                // 사람이미지도 가능
+
+                $(".timeline-title", li).text(this.type);   // title
+                $(".text-muted", li).text("");// init
+                $(".text-muted", li).append($("<i></i>", {"class": "fa fa-clock-o"}));
+                $(".text-muted", li).append(" " + this.timegap);    // time
+                $(".timeline-body > p", li).html($("<a></a>",{"href":"javascript:goTask("+this.taskidx+")"}).html(this.desc));    // desc
+                timeline.append(li);
+            });
+        }
     });
 }
 
@@ -418,20 +466,35 @@ function setFeedback(list, chat) {
     var li_right = $("#t_feedback > li.right");
     var li;
     list.each(function (idx) { // my tasks
-        if (idx % 2 == 1) li = li_right;
-        else li = li_left;
+        if (idx % 2 == 1) li = li_right.clone();
+        else li = li_left.clone();
+
         $(".chat-img > img", li).attr({"src": this.photourl, "width": "50px", "onerror":"javascript:this.src='/html/images/avatar.png'"});
         $(".chat-body .primary-font", li).text(this.v_feedback_owner);
-        $(".text-muted", li).text("");// init
+        $(".text-muted", li).html("");// init
         $(".text-muted", li).append($("<i></i>", {"class": "fa fa-clock-o fa-fw"}));
         $(".text-muted", li).append(" " + this.timegap);
         $(".chat-body p", li).append($("<a></a>", {"href": "javascript:goTask(" + this.taskidx + ")"}).text(this.desc));
-        chat.append(li.clone());
+        chat.append(li);
     });
+    chat.append($("<li></li>").append($("<a></a>",{'href':'/jsp/feedback/list.jsp?p=2','class':'jscroll-next'})));
 
-    chat.scroll(function (event) {
-        // TODO - FEEDBACK SCROLL
-        event.preventDefault();
+    $('.scroll').jscroll({
+        nextSelector: 'a.jscroll-next:last',
+        jsonParser: function (json) {
+            var list = $(json.feedbacks);
+            list.each(function (idx) { // my tasks
+                if (idx % 2 == 1) li = li_right.clone();
+                else li = li_left.clone();
+                $(".chat-img > img", li).attr({"src": this.photourl, "width": "50px", "onerror": "javascript:this.src='/html/images/avatar.png'"});
+                $(".chat-body .primary-font", li).text(this.v_feedback_owner);
+                $(".text-muted", li).text("");// init
+                $(".text-muted", li).append($("<i></i>", {"class": "fa fa-clock-o fa-fw"}));
+                $(".text-muted", li).append(" " + this.timegap);
+                $(".chat-body p", li).append($("<a></a>", {"href": "javascript:goTask(" + this.taskidx + ")"}).text(this.desc));
+                chat.append(li);
+            });
+        }
     });
 }
 
@@ -576,11 +639,11 @@ function setFeedback(list, chat) {
         </div>
         <div class="row">
             <div class="col-lg-8">
-                <div class="panel panel-default">
+                <div class="custom-timeline-panel panel panel-default">
                     <div class="panel-heading">
                         <i class="fa fa-clock-o fa-fw"></i> My Timeline
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body scroll_timeline">
                         <ul class="timeline">
                         </ul>
                     </div>
@@ -593,7 +656,7 @@ function setFeedback(list, chat) {
                         <i class="fa fa-comments fa-fw"></i>
                         Feedback
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body scroll">
                         <ul class="chat"></ul>
                     </div>
                     <div class="panel-footer">

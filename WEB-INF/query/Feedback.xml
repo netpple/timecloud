@@ -54,7 +54,8 @@
     <query>
         <id>SELECT_FEEDBACK_ALL2</id>
         <value>
-            SELECT Z.*, ROWNUM
+            SELECT * FROM (
+            SELECT Z.*, ROWNUM as ro
             FROM (SELECT *
             FROM ( SELECT X.N_IDX,
             X.N_OWNER_IDX,
@@ -97,8 +98,9 @@
             )
             $0$ -- AND (GAP BETWEEN 0 AND 3)
             ORDER BY N_IDX DESC
-            ) Z
-            $1$ -- WHERE ROWNUM BETWEEN ? AND ?
+            )Z
+            )
+            $1$ -- WHERE ro BETWEEN ? AND ?
         </value>
         <description>나와 관련된 모든 피드백을 기간/페이징 조건을 가져온다.</description>
     </query>

@@ -8,13 +8,14 @@
 
     List<Task> taskList = getTaskList(QueryHandler.executeQuery("SELECT_TASK_RECENTLY"
             , new String[]{USER_IDX, USER_IDX, USER_IDX, USER_IDX, "30", "1", "10"})); //USER_IDX(4),GAP(day),START(rownum),END(rownum)
-    List<Tool> recently = getToolList(QueryHandler.executeQuery("TEST_SELECT_RECENTLY", USER_IDX));
+    List<Tool> recently = getToolList(QueryHandler.executeQuery("SELECT_TIMELINE", new String[]{USER_IDX}, "AND 1=1^WHERE ro BETWEEN 1 AND 10"));
 //    List<Notification> notificationList = getNotificationList(QueryHandler.executeQuery("TEST_SELECT_MYNOTIFICATION", USER_IDX, "1", "10"));
     List<Feedback> feedbackList = getFeedbackList(
             QueryHandler.executeQuery(
                     "SELECT_FEEDBACK_ALL2"
                     , new String[]{USER_IDX, USER_IDX}
-                    , "WHERE (GAP BETWEEN 0 AND 30)^WHERE ROWNUM BETWEEN 1 AND 10"));
+                    , "WHERE 1=1^WHERE ro BETWEEN 1 AND 10"));
+//                    , "WHERE (GAP BETWEEN 0 AND 30)^WHERE ROWNUM BETWEEN 1 AND 10")); // 기간 조건 최근 30일 이내
     List<Favorite> favoriteList = getFavoriteList(QueryHandler.executeQuery("TEST_SELECT_MYFAVORITE", USER_IDX));
     // 집계 블럭
     DataSet ds = QueryHandler.executeQuery ("KPI_TOOL_COUNT"
@@ -30,9 +31,6 @@
 //    result.notifications = notificationList;
     result.feedbacks = feedbackList;
     result.favorites = favoriteList;
-
-    result.count = taskList.size() + recently.size() ; //+ notificationList.size();
-
     result.result = Cs.SUCCESS;
     result.msg = Cs.SUCCESS_MSG_1;
 
@@ -42,7 +40,6 @@
     public class JsonResult {
         public String result = Cs.FAIL;
         public String msg = Cs.FAIL_MSG_1;
-        public int count = 0;
         public List<Task> list;
         public List<Tool> recently;
         public List<Notification> notifications;
