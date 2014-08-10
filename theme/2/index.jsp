@@ -420,6 +420,7 @@ function setTimeline(list, timeline) {
     timeline.append($("<li></li>").append($("<a></a>",{'href':'/jsp/timeline/list.jsp?p=2','class':'jscroll-next'})));
 
     $('.scroll_timeline').jscroll({
+        loadingHtml: '<small><i class="fa fa-circle-o-notch fa-spin"></i> Loading...</small>',
         nextSelector: 'a.jscroll-next:last',
         jsonParser: function (json) {
             console.log(json);
@@ -480,6 +481,7 @@ function setFeedback(list, chat) {
     chat.append($("<li></li>").append($("<a></a>",{'href':'/jsp/feedback/list.jsp?p=2','class':'jscroll-next'})));
 
     $('.scroll').jscroll({
+        loadingHtml: '<small><i class="fa fa-circle-o-notch fa-spin"></i> Loading...</small>',
         nextSelector: 'a.jscroll-next:last',
         jsonParser: function (json) {
             var list = $(json.feedbacks);
