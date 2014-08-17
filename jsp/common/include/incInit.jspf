@@ -167,19 +167,29 @@
         public static final String CIRCLE = "img-circle";
     }
 
-
+        /**
+         * 자동링크 기능
+         * @param src
+         * @return
+         */
     public static String addLink(String src) {
         String regex = "([\\p{Alnum}]+)://([a-z0-9.\\-&/%=?:@#$(),.+;~\\_]+)";
 
         Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(src);
 
-        String result = "";
+        String result = src;
 
-        if (src.contains("https")) {
+        if (src.contains("https://")) {
             result = m.replaceAll("<a href='https://$2' target=_blank>https://$2</a>");
-        } else {
+        }
+        else if(src.contains("http://")) {
             result = m.replaceAll("<a href='http://$2' target=_blank>http://$2</a>");
+        }
+        else if(src.contains("file://")){
+            result = m.replaceAll("<a href='/jsp/common/fileupload/fileAction.jsp?pAction=DownloadFile&pFileIdx=$2'><i class='icon-download'></i>download</a>");
+            // todo - 추후 메타영역 처리 별도 분리 필요
+
         }
 
         return result;

@@ -264,9 +264,8 @@ width: 80.90598290598291%;
 
 /* textarea to input text (feedback ..) */
 .textInput {
-	width : 97% ; 
 	font-size:13px ;
-	border : none ;
+	/*border : none ;*/
 	resize : none ;
 }
 
@@ -305,3 +304,6 @@ width: 80.90598290598291%;
 	-moz-opacity: 1.0;opacity:1;filter: alpha(opacity=100);
 }
 
+.form-actions {
+    padding: 10px 20px 10px;
+}

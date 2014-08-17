@@ -5,6 +5,7 @@ import lombok.Setter;
 
 public class JsonFile {
 
+	@Setter @Getter public String idx = "";
 	@Setter @Getter public String taskIdx = "";
 	@Setter @Getter public int ownerIdx = 0;
 	@Setter @Getter public String ownerName = "";

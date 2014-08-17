@@ -27,8 +27,6 @@
 <%@ page import="java.net.URLEncoder"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.Hashtable"%>
-<%@ page import="java.util.List"%>
-<%@ page import="com.twobrain.common.log.LogHandler" %>
 <%
 
 	//GetOutputStream 에러를 방지하기 위함 (jspWriter error) -> 서블렛으로 이동시 필요 없음
@@ -429,7 +427,7 @@
 							item.write(file);
 							
 							JsonFile jsonFile = new JsonFile();
-							
+							jsonFile.setIdx(sIdx);
 							jsonFile.setTaskIdx(sTaskIdx);
 							jsonFile.setOwnerIdx(oUserSession.getUserIdx());
 							jsonFile.setOwnerName(oUserSession.getUserName());

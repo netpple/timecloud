@@ -52,6 +52,11 @@
 <link href="<%=CSS_PATH%>/fullcalendar.css" rel="stylesheet">
 <link href="<%=CSS_PATH%>/fullcalendar.print.css" rel="stylesheet" media="print">
 <script src="<%=JS_PATH%>/fullcalendar.js"></script>
+<%-- 버전문제있음 - fullcalendar-2.0.2--%>
+<%--<link href="/test/fullcalendar-2.0.2/fullcalendar.css" rel="stylesheet">--%>
+<%--<link href="/test/fullcalendar-2.0.2/fullcalendar.print.css" rel="stylesheet" media="print">--%>
+<%--<script src="/test/fullcalendar-2.0.2/lib/moment.min.js"></script>--%>
+<%--<script src="/test/fullcalendar-2.0.2/fullcalendar.min.js"></script>--%>
 <%--jquery validator--%>
 <script src="/html/assets/jquery.validate.min.js"></script>
 <script src="/html/assets/additional-methods.min.js"></script>
@@ -150,13 +155,13 @@ $(document).ready(function () {
             $("#register #desc").val(calEvent.title);
 
             modalOpen();
-            $(this).css('border-color', 'red');
+//            $(this).css('border-color', 'red');
         },
         eventMouseover: function (calEvent, jsEvent, view) {
-            $(this).css('border-color', 'orange');
+            $(this).css('border-color', '#999');
         },
         eventMouseout: function (calEvent, jsEvent, view) {
-            $(this).css('border-color', 'blue');
+            $(this).css('border-color', '#bfbfbf');
         },
         eventDragStart: function (calEvent, jsEvent, ui, view) {
         },
@@ -544,7 +549,7 @@ $(document).ready(function () {
 
                 <div class="controls">
                     <input type="text" id="startDate" name="pStartDate" class="myDateFormat" required/>
-                    <input type="text" id="startTime" name="pStartTime" value="00:00" data-default="00:00"/>
+                    <input type="text" id="startTime" name="pStartTime" value="00:00" data-default="00:00" placeholder="00:00"/>
                 </div>
             </div>
             <div class="control-group">
@@ -552,7 +557,7 @@ $(document).ready(function () {
 
                 <div class="controls">
                     <input type="text" id="endDate" name="pEndDate" class="myDateFormat" required/>
-                    <input type="text" id="endTime" name="pEndTime" value="00:00" data-default="00:00">
+                    <input type="text" id="endTime" name="pEndTime" value="00:00" data-default="00:00" placeholder="00:00"/>
                 </div>
             </div>
             <div class="control-group">
