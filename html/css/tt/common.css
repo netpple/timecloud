@@ -264,6 +264,7 @@ width: 80.90598290598291%;
 
 /* textarea to input text (feedback ..) */
 .textInput {
+    width:97%;
 	font-size:13px ;
 	/*border : none ;*/
 	resize : none ;
