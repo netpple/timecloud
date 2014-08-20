@@ -148,7 +148,7 @@
     function deleteMe() {    // 팀탈퇴
         deleteItem(<%=USER_IDX%>);
         alert("탈퇴하셨습니다.");
-        location.replace("/");
+        parent.goMain();
     }
 
     function deleteItem(user_idx) {
