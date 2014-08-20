@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="../../common/include/incInit.jspf" %>
 <%@ include file="../../common/include/incSession.jspf" %>
+<%@ include file="auth.jspf"%><%--관리자 권한체크 --%>
 <%
-    RequestHelper req = new RequestHelper(request, response);
     int idx = req.getIntParam("team_idx", -1);
     String sToggle = req.getParam("toggle", "");
 

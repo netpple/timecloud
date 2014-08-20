@@ -48,7 +48,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.jsp"><img src="/repos/<%=DOMAIN_IDX%>/ci/ci_1.png" style="height:25px" /></a>
+            <a class="navbar-brand" href="index.jsp"><img src="/repos/<%=DOMAIN_IDX%>/ci/ci_1.png" style="height:25px"/></a>
         </div>
         <!-- /.navbar-header -->
         <ul class="nav navbar-top-links navbar-right">
@@ -85,7 +85,10 @@
             </li>
             <!-- /.dropdown -->
             <li>
-                <a href="javascript:goProfile()" style="border:0;margin:0;padding:0;min-height:30px;"><%=oUserSession.getUserName()%>님 <%=getProfileImage(oUserSession.getUserIdx(),35,ImageShape.CIRCLE)%></a>
+                <a href="javascript:goProfile()"
+                   style="border:0;margin:0;padding:0;min-height:30px;"><%=oUserSession.getUserName()%>
+                    님 <%=getProfileImage(oUserSession.getUserIdx(), 35, ImageShape.CIRCLE)%>
+                </a>
             </li>
         </ul>
         <!-- /.navbar-top-links -->
@@ -122,8 +125,23 @@
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
+                    <%
+                        if (IS_DOMAIN_ADMIN) {
+                    %>
                     <li>
-                        <img src="/repos/<%=DOMAIN_IDX%>/ci/ci_2.jpg" style="width:250px;" />
+                        <a href="#"><i class="fa fa-dashboard fa-fw"></i> Administration<span class="fa arrow"></a>
+                        <ul class="nav nav-second-level left-domain-admin">
+                            <li>
+                                <a href="javascript:setFrame('Teams', '/jsp/admin/team/list.jsp');">Teams</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <%
+                        }
+                    %>
+
+                    <li>
+                        <img src="/repos/<%=DOMAIN_IDX%>/ci/ci_2.jpg" style="width:250px;"/>
                     </li>
                 </ul>
             </div>
@@ -166,6 +184,7 @@
         height: 371px;
         overflow-y: scroll;
     }
+
     /*태스크등록폼 글자카운터 스타일*/
 </style>
 <script>
@@ -375,6 +394,7 @@ function setFavorite(list, favorite) {
 }
 
 function setTaskDropdown(list, dropdown) {
+    dropdown.html("");
     var template = $("#t_mytasks");
 
     $(list.get().reverse()).each(function () { // my tasks
@@ -414,10 +434,10 @@ function setTimeline(list, timeline) {
         $(".text-muted", li).text("");// init
         $(".text-muted", li).append($("<i></i>", {"class": "fa fa-clock-o"}));
         $(".text-muted", li).append(" " + this.timegap);    // time
-        $(".timeline-body > p", li).html($("<a></a>",{"href":"javascript:goTask("+this.taskidx+")"}).html(this.desc));    // desc
+        $(".timeline-body > p", li).html($("<a></a>", {"href": "javascript:goTask(" + this.taskidx + ")"}).html(this.desc));    // desc
         timeline.append(li);
     });
-    timeline.append($("<li></li>").append($("<a></a>",{'href':'/jsp/timeline/list.jsp?p=2','class':'jscroll-next'})));
+    timeline.append($("<li></li>").append($("<a></a>", {'href': '/jsp/timeline/list.jsp?p=2', 'class': 'jscroll-next'})));
 
     $('.scroll_timeline').jscroll({
         loadingHtml: '<small><i class="fa fa-circle-o-notch fa-spin"></i> Loading...</small>',
@@ -455,7 +475,7 @@ function setTimeline(list, timeline) {
                 $(".text-muted", li).text("");// init
                 $(".text-muted", li).append($("<i></i>", {"class": "fa fa-clock-o"}));
                 $(".text-muted", li).append(" " + this.timegap);    // time
-                $(".timeline-body > p", li).html($("<a></a>",{"href":"javascript:goTask("+this.taskidx+")"}).html(this.desc));    // desc
+                $(".timeline-body > p", li).html($("<a></a>", {"href": "javascript:goTask(" + this.taskidx + ")"}).html(this.desc));    // desc
                 timeline.append(li);
             });
         }
@@ -470,7 +490,7 @@ function setFeedback(list, chat) {
         if (idx % 2 == 1) li = li_right.clone();
         else li = li_left.clone();
 
-        $(".chat-img > img", li).attr({"src": this.photourl, "width": "50px", "onerror":"javascript:this.src='/html/images/avatar.png'"});
+        $(".chat-img > img", li).attr({"src": this.photourl, "width": "50px", "onerror": "javascript:this.src='/html/images/avatar.png'"});
         $(".chat-body .primary-font", li).text(this.v_feedback_owner);
         $(".text-muted", li).html("");// init
         $(".text-muted", li).append($("<i></i>", {"class": "fa fa-clock-o fa-fw"}));
@@ -478,7 +498,7 @@ function setFeedback(list, chat) {
         $(".chat-body p", li).append($("<a></a>", {"href": "javascript:goTask(" + this.taskidx + ")"}).text(this.desc));
         chat.append(li);
     });
-    chat.append($("<li></li>").append($("<a></a>",{'href':'/jsp/feedback/list.jsp?p=2','class':'jscroll-next'})));
+    chat.append($("<li></li>").append($("<a></a>", {'href': '/jsp/feedback/list.jsp?p=2', 'class': 'jscroll-next'})));
 
     $('.scroll').jscroll({
         loadingHtml: '<small><i class="fa fa-circle-o-notch fa-spin"></i> Loading...</small>',
@@ -753,6 +773,10 @@ function setFeedback(list, chat) {
     </li>
 </ul>
 </div>
-<footer class="footer"><div class="pull-right" style="margin-right:15px;color:silver;"><i class="fa fa-cog fa-spin"></i> Powered by TaskTogether </div></footer>
+<footer class="footer">
+    <div class="pull-right" style="margin-right:15px;color:silver;"><i class="fa fa-cog fa-spin"></i> Powered by
+        TaskTogether
+    </div>
+</footer>
 </body>
 </html>

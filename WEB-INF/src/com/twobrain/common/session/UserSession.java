@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
 import com.twobrain.common.core.DataSet;
+import org.apache.commons.lang3.StringUtils;
 
 public class UserSession implements HttpSessionBindingListener, Comparable<UserSession> {
 
@@ -16,6 +17,7 @@ public class UserSession implements HttpSessionBindingListener, Comparable<UserS
     private String domainIdx = "";
 	private String host = "";
 	private String subEmail = "";
+    private boolean isDomainAdmin = false;
 	
 	public UserSession() {}
 
@@ -27,7 +29,8 @@ public class UserSession implements HttpSessionBindingListener, Comparable<UserS
         subEmail = dsInfo.getString(8);    // 서브 이베일로 정리
         domain = dsInfo.getString(9); //email.substring(email.indexOf('@') + 1, email.length());
         domainIdx = dsInfo.getString(10);
-	}
+        isDomainAdmin = StringUtils.equals("Y",dsInfo.getString(11));
+    }
 
 	public int hashCode() {
 		return 13*email.hashCode();
@@ -93,4 +96,5 @@ public class UserSession implements HttpSessionBindingListener, Comparable<UserS
     public String getHost() {
     	return host;
     }
+    public boolean isDomainAdmin() {return isDomainAdmin;}
 }

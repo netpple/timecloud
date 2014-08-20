@@ -75,11 +75,10 @@
             FROM
             TIMECLOUD_TEAM A, TIMECLOUD_TEAM_USER B
             WHERE
-            A.N_IDX = B.N_TEAM_IDX
+            A.N_IDX = B.N_TEAM_IDX (+)
             AND A.C_DEL_YN = 'N'
-            AND B.N_USER_IDX = ?
-            AND A.N_DOMAIN_IDX = ?
-            AND A.N_IDX = ?
+            $0$
+            -- AND B.N_USER_IDX = ? AND A.N_DOMAIN_IDX = ? AND A.N_IDX = ?
         </value>
         <description></description>
     </query>

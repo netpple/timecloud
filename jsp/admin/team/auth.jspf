@@ -1,0 +1,7 @@
+<%
+    // 도메인 관리자 이상만 접근됨
+    if(!IS_DOMAIN_ADMIN){
+        out.print(String.format("{\"result\":\"%s\",\"msg\":\"%s\"}", Cs.FAIL_AUTH, Cs.FAIL_MSG_2));
+        return;
+    }
+%>

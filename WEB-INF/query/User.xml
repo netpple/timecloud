@@ -405,6 +405,7 @@
             , A.V_NOTI_EMAIL
             , B.V_NAME AS DOMAIN_NAME
             , B.N_IDX AS DOMAIN_IDX
+            , X.C_ADMIN_YN
             FROM
             TIMECLOUD_USER A, TIMECLOUD_DOMAIN_USER X, TIMECLOUD_DOMAIN B
             WHERE

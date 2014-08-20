@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="../../common/include/incInit.jspf" %>
 <%@ include file="../../common/include/incSession.jspf" %>
+<%@ include file="auth.jspf"%><%--관리자 권한체크 --%>
 <%
     String sName = req.getParam("team_name", "");
 

@@ -33,6 +33,7 @@
     final String USER_IDX = Integer.toString(oUserSession.getUserIdx());
 	final String sessionId = USER_IDX + "@" + request.getSession().getId();
     final String DOMAIN_IDX = oUserSession.getDomainIdx();
+    final boolean IS_DOMAIN_ADMIN = oUserSession.isDomainAdmin();
     // TODO - 임시 - 앱센터용 팀코드
     final int TEAM_IDX = QueryHandler.executeQueryInt("SELECT_TEAM_IDX_BY_USER",new String[]{USER_IDX,DOMAIN_IDX});
 

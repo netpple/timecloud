@@ -54,8 +54,15 @@ public class TeamInfo {
         return (cnt > 0);
     }
 
+    public static TeamInfo getInstance(final String team_idx, final String domain_idx) { // 도메인 관리자용
+        DataSet ds = QueryHandler.executeQuery("SELECT_TEAM_INFO", new String[]{domain_idx, team_idx}, "AND A.N_DOMAIN_IDX = ? AND A.N_IDX = ?");
+        if (ds == null || !ds.next()) return null;
+        TeamInfo team = new TeamInfo(ds);
+        return team;
+    }
+
     public static TeamInfo getInstance(final String user_idx, final String team_idx, final String domain_idx) {
-        DataSet ds = QueryHandler.executeQuery("SELECT_TEAM_INFO", new String[]{user_idx, domain_idx, team_idx});
+        DataSet ds = QueryHandler.executeQuery("SELECT_TEAM_INFO", new String[]{user_idx, domain_idx, team_idx}, "AND B.N_USER_IDX = ? AND A.N_DOMAIN_IDX = ? AND A.N_IDX = ?");
         if (ds == null || !ds.next()) return null;
         TeamInfo team = new TeamInfo(ds);
         return team;
