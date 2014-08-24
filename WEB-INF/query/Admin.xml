@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-statement>
+    <query>
+        <id>SELECT_DOMAIN_TASK</id>
+        <value>
+            SELECT
+            X.N_IDX
+            , X.V_DESC
+            , X.C_OFF_YN
+            , FN_TIMEGAP(X.V_REG_DATETIME) as v_reg_datetime
+            , FN_TIMEGAP(X.V_EDT_DATETIME) as v_edt_datetime
+            , X.N_LIST
+            , X.N_PARENT_IDX
+            ,(SELECT (B.N_IDX ||'-'|| B.V_NAME) FROM TIMECLOUD_TASK A, TIMECLOUD_USER B WHERE (A.N_OWNER_IDX = B.N_IDX)
+            AND A.N_IDX=X.N_PARENT_IDX) AS V_PARENT_USER
+            ,X.C_STATUS
+            ,X.C_TASK_TYPE
+            ,X.V_HIDE
+            ,Y.N_TEAM_IDX
+            ,Z.V_NAME
+            FROM TIMECLOUD_TASK X, TIMECLOUD_TEAM_USER Y, TIMECLOUD_TEAM Z
+            WHERE (X.N_OWNER_IDX = Y.N_USER_IDX AND Y.N_TEAM_IDX = Z.N_IDX)
+            AND (X.N_DOMAIN_IDX=? AND Z.N_DOMAIN_IDX=?)
+            AND X.C_DEL_YN ='N'
+            $0$
+            AND X.C_TASK_TYPE LIKE(?)
+            ORDER BY X.N_IDX DESC
+        </value>
+        <description>DOMAIN ADMIN ONLY</description>
+    </query>
+</sql-statement>
