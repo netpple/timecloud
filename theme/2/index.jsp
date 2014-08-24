@@ -129,10 +129,13 @@
                         if (IS_DOMAIN_ADMIN) {
                     %>
                     <li>
-                        <a href="#"><i class="fa fa-dashboard fa-fw"></i> Administration<span class="fa arrow"></a>
+                        <a href="#"><i class="fa fa-dashboard fa-fw"></i> Administration<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level left-domain-admin">
                             <li>
                                 <a href="javascript:setFrame('Teams', '/jsp/admin/team/list.jsp');">Teams</a>
+                            </li>
+                            <li>
+                                <a href="javascript:setFrame('Tasks', '/jsp/admin/task/list.jsp');">Tasks</a>
                             </li>
                         </ul>
                     </li>
