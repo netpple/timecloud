@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="../../common/include/incInit.jspf" %>
 <%@ include file="../../common/include/incSession.jspf" %>
-<%@ include file="auth.jspf"%><%--관리자 권한체크 --%>
+<%@ include file="../auth.jspf"%><%--관리자 권한체크 --%>
 <%
     int iTeamIdx = req.getIntParam("team_idx");
     if (iTeamIdx <= 0) {

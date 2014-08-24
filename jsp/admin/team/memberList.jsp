@@ -4,7 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="../../common/include/incInit.jspf" %>
 <%@ include file="../../common/include/incSession.jspf" %>
-<%@ include file="auth.jspf"%><%--관리자 권한체크 --%>
+<%@ include file="../auth.jspf"%><%--관리자 권한체크 --%>
 <%
     final String team_idx = req.getParam("team_idx", "");
     if(StringUtils.isEmpty(team_idx)){
