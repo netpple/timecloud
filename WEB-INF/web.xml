@@ -21,13 +21,11 @@
 		<servlet-name>Initialize</servlet-name>
 		<display-name>Application Initialize Class</display-name>
 		<description>Read XML File</description>
-		<servlet-class>
-			com.twobrain.common.init.Initialize
-		</servlet-class>
-
+		<servlet-class>com.twobrain.common.init.Initialize</servlet-class>
 		<init-param>
 			<param-name>QueryXMLFile</param-name>
 			<param-value>
+                Admin.xml,
 				Activity.xml,
 				Common.xml,
                 Domain.xml,
@@ -45,22 +43,6 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-
-	<error-page>
-		<error-code>401</error-code>
-		<location>/jsp/error/401.jsp</location>
-	</error-page>
-
-	<error-page>
-		<error-code>404</error-code>
-		<location>/jsp/error/404.jsp</location>
-	</error-page>
-
-	<error-page>
-		<error-code>500</error-code>
-		<location>/jsp/error/500.jsp</location>
-	</error-page>
-
 	<session-config>
 		<session-timeout>60</session-timeout>
 	</session-config>
