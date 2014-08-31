@@ -348,8 +348,17 @@ function submitTaskPost(form) {
 function prependDropdownTask(data) {
     dropdown = $(".dropdown-tasks.mytasks");
     var template = $("#t_mytasks");
+    var author = "";
+    console.log(data.domainyn);
+    if(data.domainyn == 'Y'){
+        author = "<i class='fa fa-bullhorn'></i> <font color=orange>Bit</font>UP Notification";
+    }
+    else {
+        author = ""; //<%--=oUserSession.getUserName()--%>";
+    }
+
     $("li:eq(0) > a", template).attr({"href": "javascript:goTask(" + data.idx + ")"});
-    $("li:eq(0) strong", template).text("<%=oUserSession.getUserName()%>")
+    $("li:eq(0) strong", template).html(author)
     $("li:eq(0) em", template).text(data.timegap)
     $("li:eq(0) div:eq(1)", template).text(data.desc);
     dropdown.prepend($("li:eq(1)", template).clone());
@@ -493,8 +502,16 @@ function setFeedback(list, chat) {
         if (idx % 2 == 1) li = li_right.clone();
         else li = li_left.clone();
 
+        var domain_feed = "";
+        console.log(this.domainyn);
+        if(this.domainyn == 'Y'){
+            domain_feed = "<i class='fa fa-bullhorn'></i> ";
+        }
+
         $(".chat-img > img", li).attr({"src": this.photourl, "width": "50px", "onerror": "javascript:this.src='/html/images/avatar.png'"});
-        $(".chat-body .primary-font", li).text(this.v_feedback_owner);
+
+        $(".chat-body .primary-font", li).html(domain_feed+this.v_feedback_owner);
+
         $(".text-muted", li).html("");// init
         $(".text-muted", li).append($("<i></i>", {"class": "fa fa-clock-o fa-fw"}));
         $(".text-muted", li).append(" " + this.timegap);
@@ -700,6 +717,7 @@ function setFeedback(list, chat) {
                 <label><i class="fa fa-info"></i> 태스크를 만들어보세요. 모든 일은 태스크에서 시작됩니다.</label>
                 <input type="text" name="desc" value="" class="form-control"
                        placeholder="계획 혹은 수행할 태스크 내용을 100자 이내로 작성해 주세요">
+                <% if(IS_DOMAIN_ADMIN){%><span><input type="checkbox" name="domain_yn" value="Y" /> 도메인전체공유</span><%}%>
                 <span class="pull-right charactor-counter"><span>0</span>/100자</span>
             </div>
         </form>

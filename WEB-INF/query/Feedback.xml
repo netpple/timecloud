@@ -30,7 +30,7 @@
             (
             SELECT A.V_DESC, A.N_IDX, A.N_OWNER_IDX, A.C_STATUS
             FROM TIMECLOUD_TASK A
-            , ( SELECT N_LIST FROM TIMECLOUD_TASK WHERE N_OWNER_IDX = ? GROUP BY N_LIST) B
+            , ( SELECT N_LIST FROM TIMECLOUD_TASK WHERE (N_OWNER_IDX = ? OR C_DOMAIN_YN='Y') AND C_DEL_YN='N' GROUP BY N_LIST) B
             WHERE A.N_LIST = B.N_LIST
             UNION
             SELECT A.V_DESC, A.N_IDX, A.N_OWNER_IDX, A.C_STATUS
@@ -55,50 +55,31 @@
         <id>SELECT_FEEDBACK_ALL2</id>
         <value>
             SELECT * FROM (
-            SELECT Z.*, ROWNUM as ro
-            FROM (SELECT *
-            FROM ( SELECT X.N_IDX,
-            X.N_OWNER_IDX,
-            X.N_TASK_IDX,
-            X.V_DESC,
-            X.V_REG_DATETIME,
-            Y.V_DESC AS V_TASK_DESC,
-            Y.N_OWNER_IDX AS N_TASK_OWNER,
-            (SELECT V_NAME
-            FROM TIMECLOUD_USER
-            WHERE N_IDX = X.N_OWNER_IDX)
-            AS V_FEEDBACK_OWNER,
-            Y.C_STATUS,
-            ( SYSDATE - TO_DATE (X.V_REG_DATETIME, 'YYYYMMDDHH24MISS'))AS GAP,
-            FN_TIMEGAP(X.V_REG_DATETIME) AS TIMEGAP
-            FROM TIMECLOUD_FEEDBACK X,
-            (SELECT A.V_DESC,A.N_IDX,A.N_OWNER_IDX,A.C_STATUS FROM TIMECLOUD_TASK A,
-            ( SELECT N_LIST
-            FROM TIMECLOUD_TASK
-            WHERE N_OWNER_IDX = ?
-            GROUP BY N_LIST) B
-            WHERE A.N_LIST = B.N_LIST
-            UNION
-            SELECT A.V_DESC,
-            A.N_IDX,
-            A.N_OWNER_IDX,
-            A.C_STATUS
-            FROM TIMECLOUD_TASK A,
-            (SELECT E.N_IDX AS N_TASK_IDX
-            FROM TIMECLOUD_TASK E,
-            ( SELECT D.N_LIST
-            FROM TIMECLOUD_OBSERVER C,
-            TIMECLOUD_TASK D
-            WHERE (C.N_TASK_IDX = D.N_IDX)
-            AND C.N_OWNER_IDX = ?
-            GROUP BY D.N_LIST) F
-            WHERE E.N_LIST = F.N_LIST) B
-            WHERE A.N_IDX = B.N_TASK_IDX) Y
-            WHERE X.N_TASK_IDX = Y.N_IDX AND X.C_DEL_YN = 'N'
-            )
-            $0$ -- AND (GAP BETWEEN 0 AND 3)
-            ORDER BY N_IDX DESC
-            )Z
+                SELECT Z.*, ROWNUM as ro FROM (
+                    SELECT * FROM (
+                        SELECT X.N_IDX,
+                            X.N_OWNER_IDX,
+                            X.N_TASK_IDX,
+                            X.V_DESC,
+                            X.V_REG_DATETIME,
+                            Y.V_DESC AS V_TASK_DESC,
+                            Y.N_OWNER_IDX AS N_TASK_OWNER,
+                            (SELECT V_NAME FROM TIMECLOUD_USER WHERE N_IDX = X.N_OWNER_IDX) AS V_FEEDBACK_OWNER,
+                            Y.C_STATUS,
+                            ( SYSDATE - TO_DATE (X.V_REG_DATETIME, 'YYYYMMDDHH24MISS'))AS GAP,
+                            FN_TIMEGAP(X.V_REG_DATETIME) AS TIMEGAP,
+                            Y.C_DOMAIN_YN
+                        FROM TIMECLOUD_FEEDBACK X,
+                        (
+                            SELECT A.V_DESC, A.N_IDX, A.N_OWNER_IDX, A.C_STATUS, A.C_DOMAIN_YN FROM TIMECLOUD_TASK A, (SELECT N_LIST FROM TIMECLOUD_TASK WHERE (N_OWNER_IDX = ? OR C_DOMAIN_YN='Y') GROUP BY N_LIST) B WHERE A.N_LIST = B.N_LIST
+                            UNION
+                            SELECT A.V_DESC, A.N_IDX, A.N_OWNER_IDX, A.C_STATUS, A.C_DOMAIN_YN FROM TIMECLOUD_TASK A, (SELECT E.N_IDX AS N_TASK_IDX FROM TIMECLOUD_TASK E,(SELECT D.N_LIST FROM TIMECLOUD_OBSERVER C, TIMECLOUD_TASK D WHERE (C.N_TASK_IDX = D.N_IDX) AND C.N_OWNER_IDX = ? GROUP BY D.N_LIST) F WHERE E.N_LIST = F.N_LIST) B WHERE A.N_IDX = B.N_TASK_IDX
+                        ) Y
+                        WHERE X.N_TASK_IDX = Y.N_IDX AND X.C_DEL_YN = 'N'
+                    )
+                    $0$
+                    ORDER BY N_IDX DESC
+                )Z
             )
             $1$ -- WHERE ro BETWEEN ? AND ?
         </value>

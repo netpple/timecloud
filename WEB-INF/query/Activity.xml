@@ -36,14 +36,16 @@
 		<id>SELECT_ALL_ACTIVITY_LIST</id>
 		<value>
 			SELECT 
-				N_IDX, V_DESC, V_START_DATETIME, V_END_DATETIME
-				, ceil(to_date(SUBSTR(v_start_datetime,0,8),'yyyymmdd') - to_date(to_char(sysdate,'yyyymmdd'),'yyyymmdd')) as n_start_gap
-				, ceil(to_date(SUBSTR(v_end_datetime,0,8),'yyyymmdd') - to_date(to_char(sysdate,'yyyymmdd'),'yyyymmdd') ) as n_end_gap
-				, N_TASK_IDX
-			FROM TIMECLOUD_ACTIVITY 
-			WHERE N_OWNER_IDX = ?
-			AND C_DEL_YN = 'N'
-			ORDER BY N_IDX DESC
+				A.N_IDX, A.V_DESC, A.V_START_DATETIME, A.V_END_DATETIME
+				, ceil(to_date(SUBSTR(A.v_start_datetime,0,8),'yyyymmdd') - to_date(to_char(sysdate,'yyyymmdd'),'yyyymmdd')) as n_start_gap
+				, ceil(to_date(SUBSTR(A.v_end_datetime,0,8),'yyyymmdd') - to_date(to_char(sysdate,'yyyymmdd'),'yyyymmdd') ) as n_end_gap
+				, A.N_TASK_IDX
+                , B.C_DOMAIN_YN
+			FROM TIMECLOUD_ACTIVITY A, TIMECLOUD_TASK B
+			WHERE (A.N_TASK_IDX = B.N_IDX)
+            AND (A.N_OWNER_IDX = ? OR B.C_DOMAIN_YN='Y')
+			AND (A.C_DEL_YN = 'N' AND B.C_DEL_YN = 'N')
+			ORDER BY A.N_IDX DESC
 		</value>
 		<description>액티비티 목록</description>
 	</query>

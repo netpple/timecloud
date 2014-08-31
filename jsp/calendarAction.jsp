@@ -69,6 +69,7 @@
         int iTaskList = ds.getInt(1); // -- TOP TASK IDX
         int iTaskLevel = ds.getInt(2); // -- PARENT TASK LEVEL
         int iTaskRidx = ds.getInt(3); // -- PARENT TASK RIDX
+        String domain_yn = ds.getString(4); // 도메인전체공유여부
 
         // -- UPDATE TIMECLOUD_TASK SET N_RIDX=N_RIDX+1 WHERE N_LIST=? AND N_RIDX >= ?
 
@@ -89,6 +90,7 @@
                 "" + (iTaskLevel + 1),    // -- 부모 레벨 + 1
                 "" + (iTaskRidx + 1),    // -- 부모 정렬 + 1, 부모 밑에 달림
                 sDescription,
+                domain_yn,
                 "" + iTaskAssignUserId,
                 DOMAIN_IDX});
 

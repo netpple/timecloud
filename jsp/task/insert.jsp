@@ -3,6 +3,10 @@
 <%@ include file="../common/include/incInit.jspf" %>
 <%@ include file="../common/include/incSession.jspf" %><%
     String desc = req.getParam("desc", null) ;
+    String domain_yn = "N";
+    if(IS_DOMAIN_ADMIN){
+        domain_yn = req.getParam("domain_yn", "N") ;    // 도메인공유태스크 여부
+    }
 
     JsonResult result = new JsonResult();
     result.count = 0;
@@ -22,6 +26,7 @@
             "0",
             "0",
             desc,
+            domain_yn,
             ""+ownerIdx,
             DOMAIN_IDX} ;
 

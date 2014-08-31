@@ -132,7 +132,7 @@
         <id>SELECT_TASK_LIST2</id>
         <value>
             SELECT
-            N_LIST, N_LEVEL, N_RIDX
+            N_LIST, N_LEVEL, N_RIDX, C_DOMAIN_IDX
             FROM TIMECLOUD_TASK
             WHERE N_IDX = ? AND N_OWNER_IDX = ? AND C_DEL_YN = 'N'
         </value>
@@ -245,11 +245,13 @@
             N_LEVEL,
             N_RIDX,
             V_DESC,
+            C_DOMAIN_YN,
             V_REG_DATETIME,
             V_EDT_DATETIME,
             N_OWNER_IDX,
             N_DOMAIN_IDX
             ) VALUES(
+            ?,
             ?,
             ?,
             ?,
@@ -352,14 +354,15 @@
 				,X.v_edt_datetime
 				,X.v_reg_datetime
 				,(SYSDATE - TO_DATE (X.v_edt_datetime, 'YYYYMMDDHH24MISS')) as gap
+				,X.C_DOMAIN_YN
             FROM TIMECLOUD_TASK X
-            WHERE X.N_OWNER_IDX = ?
+            WHERE (X.N_OWNER_IDX = ? OR X.C_DOMAIN_YN = 'Y')
 			)
 			UNION(
             SELECT
             X.N_IDX, X.V_DESC, X.C_OFF_YN, FN_TIMEGAP(v_edt_datetime) AS timegap
 			,X.v_edt_datetime,X.v_reg_datetime
-			,(SYSDATE - TO_DATE (X.v_edt_datetime, 'YYYYMMDDHH24MISS')) as gap
+			,(SYSDATE - TO_DATE (X.v_edt_datetime, 'YYYYMMDDHH24MISS')) as gap, X.C_DOMAIN_YN
             FROM TIMECLOUD_TASK X, (SELECT N_IDX, N_OWNER_IDX FROM TIMECLOUD_TASK WHERE N_OWNER_IDX = ?) Y
             WHERE
             X.N_PARENT_IDX = Y.N_IDX AND (X.N_OWNER_IDX != ?) AND X.N_LEVEL>0
@@ -368,7 +371,7 @@
 			SELECT
 			X.N_IDX, X.V_DESC, X.C_OFF_YN, FN_TIMEGAP(v_edt_datetime) AS timegap
 			,X.v_edt_datetime,X.v_reg_datetime
-			,(SYSDATE - TO_DATE (X.v_edt_datetime, 'YYYYMMDDHH24MISS')) as gap
+			,(SYSDATE - TO_DATE (X.v_edt_datetime, 'YYYYMMDDHH24MISS')) as gap, X.C_DOMAIN_YN
 			FROM TIMECLOUD_TASK X, TIMECLOUD_OBSERVER Y
             WHERE
             X.N_IDX = Y.N_TASK_IDX AND Y.N_OWNER_IDX = ?

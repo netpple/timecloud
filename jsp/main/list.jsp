@@ -145,6 +145,7 @@
         public int n_task_owner = -1;
         public String v_feedback_owner;
         public String c_task_status;
+        public String domainyn;
         public String photourl = "";
 
         public Feedback(DataSet ds) {
@@ -159,6 +160,7 @@
             this.c_task_status = ds.getString(9);
             // ds.getFloat(10) - gap(days)
             this.timegap = ds.getString(11);
+            this.domainyn = ds.getString(12);
             this.photourl = getProfileImageUrl(n_owner_idx);
         }
     }
@@ -180,12 +182,14 @@
         public String desc;
         public String offyn;
         public String timegap;
+        public String domainyn;
         public Task(){}
         public Task(DataSet ds) {
             idx = ds.getInt(1);
             desc = ds.getString(2);
             offyn = ds.getString(3);
             timegap = ds.getString(4);
+            domainyn = ds.getString(8);
         }
     }
 %>
