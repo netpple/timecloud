@@ -26,6 +26,7 @@
 			<param-name>QueryXMLFile</param-name>
 			<param-value>
                 Admin.xml,
+                Auth.xml,
 				Activity.xml,
 				Common.xml,
                 Domain.xml,

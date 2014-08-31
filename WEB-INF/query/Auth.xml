@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-statement>
+    <query>
+        <id>SELECT_TASK_AUTH</id>
+        <value>
+            SELECT count(*) FROM TIMECLOUD_TASK a, TIMECLOUD_OBSERVER b
+            WHERE (a.N_IDX=b.N_TASK_IDX(+))
+            AND a.N_LIST=(SELECT N_LIST FROM TIMECLOUD_TASK WHERE N_IDX=?)
+            AND (a.N_OWNER_IDX=? OR b.N_OWNER_IDX=?)
+        </value>
+        <description>태스크 할당 혹은 참조된 사용자만 접근</description>
+    </query>
+</sql-statement>

@@ -1,0 +1,17 @@
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
+<%
+    // 일반페이지에서 도메인 관리자가 아닐 경우 접근확인을 위함
+    if(!IS_DOMAIN_ADMIN){
+        if(!hasAuth(TASK_IDX,USER_IDX)){
+            return;
+        }
+    }
+%>
+<%!
+    private boolean hasAuth(int TASK_IDX, String USER_IDX){
+        if(TASK_IDX<1 || StringUtils.isEmpty(USER_IDX))return false;
+        String taskIdx=Integer.toString(TASK_IDX);
+        int cnt = QueryHandler.executeQueryInt("SELECT_TASK_AUTH",new String[]{taskIdx,USER_IDX,USER_IDX});
+        return (cnt>0);
+    }
+%>

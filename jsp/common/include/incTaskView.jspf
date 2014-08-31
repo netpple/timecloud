@@ -12,7 +12,7 @@
 <%@page import="com.google.gson.Gson"%>
 <%@ page import="lombok.Getter" %>
 <%@ page import="lombok.Setter" %>
-<%@ page import="java.util.*" %>
+<%@ page import="java.util.*" %><%@ include file="../../authUser.jspf" %><%--유저 접근권한체크 --%>
 <% 
 if(TASK_IDX <= 0 ) { 
 	out.println("Parameter is invalid") ;
