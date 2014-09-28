@@ -132,7 +132,7 @@
         <id>SELECT_TASK_LIST2</id>
         <value>
             SELECT
-            N_LIST, N_LEVEL, N_RIDX, C_DOMAIN_IDX
+            N_LIST, N_LEVEL, N_RIDX, N_DOMAIN_IDX
             FROM TIMECLOUD_TASK
             WHERE N_IDX = ? AND N_OWNER_IDX = ? AND C_DEL_YN = 'N'
         </value>

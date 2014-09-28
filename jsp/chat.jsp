@@ -139,7 +139,7 @@ background-image: -webkit-gradient(
    $(function() {
 		var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
 		
-		var chatSocket = new WS("ws://cs.2brain.com:8000/connect?userid=<%=oUserSession.getUserName()%>&groupid=<%=host%>");
+		var chatSocket = new WS("ws://localhost:8088/connect?userid=<%=oUserSession.getUserName()%>&groupid=<%=host%>");
 		var sendMessage = function() {
 			chatSocket.send(JSON.stringify(
 				{text: $("#talk").val()}

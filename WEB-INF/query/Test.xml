@@ -184,6 +184,7 @@
             , ?
             ,TO_CHAR(sysdate,'YYYYMMDDHH24MISS')
             , ?
+            , ?, ?
             )
         </value>
         <description>알림 입력 - By Machine</description>

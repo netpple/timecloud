@@ -9,7 +9,7 @@
     List<Task> taskList = getTaskList(QueryHandler.executeQuery("SELECT_TASK_RECENTLY"
             , new String[]{USER_IDX, USER_IDX, USER_IDX, USER_IDX, "30", "1", "10"})); //USER_IDX(4),GAP(day),START(rownum),END(rownum)
     List<Tool> recently = getToolList(QueryHandler.executeQuery("SELECT_TIMELINE", new String[]{USER_IDX}, "AND 1=1^WHERE ro BETWEEN 1 AND 10"));
-//    List<Notification> notificationList = getNotificationList(QueryHandler.executeQuery("TEST_SELECT_MYNOTIFICATION", USER_IDX, "1", "10"));
+    List<Notification> notis = getNotificationList(QueryHandler.executeQuery("TEST_SELECT_MYNOTIFICATION", new String[]{USER_IDX, "1", "10"}));
     List<Feedback> feedbackList = getFeedbackList(
             QueryHandler.executeQuery(
                     "SELECT_FEEDBACK_ALL2"
@@ -28,7 +28,7 @@
 
     result.list = taskList; // mytask
     result.recently = recently; // recently tools
-//    result.notifications = notificationList;
+    result.notis = notis;
     result.feedbacks = feedbackList;
     result.favorites = favoriteList;
     result.result = Cs.SUCCESS;
@@ -42,7 +42,7 @@
         public String msg = Cs.FAIL_MSG_1;
         public List<Task> list;
         public List<Tool> recently;
-        public List<Notification> notifications;
+        public List<Notification> notis;
         public List<Feedback> feedbacks;
         public List<Favorite> favorites;
         //
@@ -113,8 +113,9 @@
     }
 
     public class Notification {
-        public int task_idx;
-        public String desc;
+        public int taskIdx;
+        public String ntfcMessage;
+        public String ntfcType;
         public int creator_idx;
         public String timegap;
         public String v_tbl_nm;
@@ -124,8 +125,9 @@
         public String task;
 
         public Notification(DataSet ds) {
-            task_idx = ds.getInt(1);
-            desc = ds.getString(2);
+            taskIdx = ds.getInt(1);
+            ntfcMessage = ds.getString(2);
+            ntfcType = "Feedback";
             creator_idx = ds.getInt(3);
             timegap = ds.getString(4);
             v_tbl_nm = ds.getString(5);

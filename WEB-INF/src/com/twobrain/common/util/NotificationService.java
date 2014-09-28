@@ -308,7 +308,8 @@ class Notification {
 
                 setMailTitle(String.format("%s님이 태스크를 할당하였습니다.", getNtfcSenderName()));
                 setMailBody(String.format("%s님이 태스크를 할당하였습니다.<br/><br/>태스크 : %s<br/><br/>내용보기 : %s", getNtfcSenderName(), getTaskName(), sbLinkUrl.toString()));
-                setNtfcMessage(String.format("%s님이 태스크를 할당하였습니다.<br/>태스크 : %s", getNtfcSenderName(), getTaskName()));
+//                setNtfcMessage(String.format("%s님이 태스크를 할당하였습니다.<br/>태스크 : %s", getNtfcSenderName(), getTaskName()));
+                setNtfcMessage(getTaskName()); // 할당은 그냥 태스크명
                 break;
 
             case File:
@@ -317,7 +318,8 @@ class Notification {
 
                 setMailTitle(String.format("%s님이 파일 업로드하였습니다.", getNtfcSenderName()));
                 setMailBody(String.format("%s님이 파일 업로드하였습니다. <br/><br/>태스크 : %s<br/><br/> 파일 : %s<br/><br/>파일보기 : %s", getNtfcSenderName(), taskName, getNtfcMetaInfo().get(META_FILE_NAME), sbLinkUrl.toString()));
-                setNtfcMessage(String.format("%s님이 파일 업로드하였습니다.<br/>태스크 : %s<br/><br/> 파일 : %s", getNtfcSenderName(), taskName, getNtfcMetaInfo().get(META_FILE_NAME)));
+//                setNtfcMessage(String.format("%s님이 파일 업로드하였습니다.<br/>태스크 : %s<br/><br/> 파일 : %s", getNtfcSenderName(), taskName, getNtfcMetaInfo().get(META_FILE_NAME)));
+                setNtfcMessage(String.format("%s", getNtfcMetaInfo().get(META_FILE_NAME))); // 파일명으로
 
                 DataSet dsFileUploader = QueryHandler.executeQuery("SELECT_FILE_UPLOADER", getTaskIdx());
                 if (dsFileUploader != null && dsFileUploader.size() > 0) {
@@ -333,7 +335,8 @@ class Notification {
 
                 setMailTitle(String.format("%s님이 태스크에 피드백을 남기기셨습니다.", getNtfcSenderName()));
                 setMailBody(String.format("%s : %s<br/><br/>태스크 : %s<br/><br/>내용보기 : %s", getNtfcSenderName(), getNtfcMetaInfo().get(META_FEEDBKAC_MESSAGE), getTaskName(), sbLinkUrl.toString()));
-                setNtfcMessage(String.format("%s : %s<br/>태스크 : %s", getNtfcSenderName(), getNtfcMetaInfo().get(META_FEEDBKAC_MESSAGE), getTaskName()));
+//                setNtfcMessage(String.format("%s : %s<br/>태스크 : %s", getNtfcSenderName(), getNtfcMetaInfo().get(META_FEEDBKAC_MESSAGE), getTaskName()));
+                setNtfcMessage(String.format("%s", getNtfcMetaInfo().get(META_FEEDBKAC_MESSAGE))); // 피드백메시지로
 
                 DataSet dsFeedbackTalker = QueryHandler.executeQuery("SELECT_FEEDBACK_TALKER", taskIdx);
 
@@ -349,7 +352,8 @@ class Notification {
                 sbLinkUrl.append("/jsp/task.jsp?tsk_idx=" + getTaskIdx());
                 setMailTitle(String.format("%s님이 태스크를 참조하였습니다.", getNtfcSenderName()));
                 setMailBody(String.format("%s님이 태스크를 참조하였습니다.<br/><br/>태스크 : %s<br/><br/>내용보기 : %s", getNtfcSenderName(), getTaskName(), sbLinkUrl.toString()));
-                setNtfcMessage(String.format("%s님이 태스크를 참조하였습니다.<br/>태스크 : %s", getNtfcSenderName(), getTaskName()));
+//                setNtfcMessage(String.format("%s님이 태스크를 참조하였습니다.<br/>태스크 : %s", getNtfcSenderName(), getTaskName()));
+                setNtfcMessage(getTaskName()); // 참조도 그냥 태스크명으로
                 break;
 
             default:
@@ -493,7 +497,7 @@ class Notification {
         new Thread() {
             public void run() {
                 for (String userIdx : getNtfcTargetUser()) {
-                    Object[] params = new Object[]{getNtfcMessage(), getNtfcSenderIdx(), userIdx, getNtfcTableName(), getNtfcTableIdx(), getTaskIdx(), userSession.getDomainIdx()};
+                    Object[] params = new Object[]{getNtfcMessage(), getNtfcSenderIdx(), userIdx, getNtfcTableName(), getNtfcTableIdx(), getTaskIdx(), userSession.getDomainIdx(), getTaskName(), getNtfcSenderName()};
                     QueryHandler.executeUpdate("TEST_INSERT_NOTIFICATION", params);
                 }
             }

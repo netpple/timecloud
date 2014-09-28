@@ -40,7 +40,7 @@
 <div id="wrapper">
 
     <!-- Navigation -->
-    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0;height:50px;">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -67,6 +67,14 @@
                 <!-- /.dropdown-tasks -->
             </li>
             <!-- /.dropdown -->
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-alerts mynotis">
+                </ul>
+                <!-- /.dropdown-alerts -->
+            </li>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                     <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
@@ -247,8 +255,11 @@ function goMain() {
         if (data.result != <%=Cs.SUCCESS%>) {
             return false;
         }
-        // 상단 dropdown 서브메뉴
+        // 상단 dropdown - Task
         setTaskDropdown($(data.list), $(".dropdown-tasks.mytasks"));
+
+        // 상단 dropdown - Alerts(Noti)
+        setNotiDropdown($(data.notis), $(".dropdown-alerts.mynotis"));
 
         // 좌측메뉴 즐겨찾기
         setFavorite($(data.favorites), $(".left-favorite"));
@@ -346,7 +357,7 @@ function submitTaskPost(form) {
 }
 
 function prependDropdownTask(data) {
-    dropdown = $(".dropdown-tasks.mytasks");
+    var dropdown = $(".dropdown-tasks.mytasks");
     var template = $("#t_mytasks");
     var author = "";
     console.log(data.domainyn);
@@ -363,6 +374,33 @@ function prependDropdownTask(data) {
     $("li:eq(0) div:eq(1)", template).text(data.desc);
     dropdown.prepend($("li:eq(1)", template).clone());
     dropdown.prepend($("li:eq(0)", template).clone());
+}
+
+function prependDropdownNoti(data) {
+    var dropdown = $(".dropdown-alerts.mynotis");
+    var template = $("#t_mynotis");
+
+//    $("li:eq(0) > a", template).attr({"href": "javascript:goTask(" + data.idx + ")"});
+//    $("li:eq(0) strong", template).html(author)
+//    $("li:eq(0) em", template).text(data.timegap)
+//    $("li:eq(0) div:eq(1)", template).text(data.desc);
+    dropdown.prepend($("li:eq(0)", template).clone());
+
+    var li;
+    if(data.ntfcType == "Feedback") li = $("li:eq(1)", template).clone();
+    else if(data.ntfcType == "Task") li = $("li:eq(2)", template).clone();
+    else if(data.ntfcType == "File") li = $("li:eq(3)", template).clone();
+    else if(data.ntfcType == "Observer")  li = $("li:eq(4)", template).clone();
+    else return false;
+
+//    console.log(data);
+    $("a",li).attr({"href": "javascript:goTask(" + data.taskIdx + ")"});
+    $("div > i",li).after(data.ntfcMessage);
+    if(data.timegap == null || data.timegap=="" || data.timegap=="undefined")data.timegap="방금";
+    $("div span.pull-right",li).text(data.timegap);
+
+
+    dropdown.prepend(li);
 }
 
 function modalInit() {
@@ -414,6 +452,19 @@ function setTaskDropdown(list, dropdown) {
     });
     dropdown.append($("li:eq(2)", template).clone());
 }
+
+// TODO - NOTI
+function setNotiDropdown(list, dropdown) {
+    dropdown.html("");
+//    var template = $("#t_mynotis");
+
+    $(list.get().reverse()).each(function(){
+        prependDropdownNoti(this);
+    });
+//    dropdown.append($("li:eq(3)", template).clone());
+}
+//
+
 function setTimeline(list, timeline) {
     var li_templ = $("#t_timeline > li");
     list.each(function (idx) {
@@ -793,11 +844,84 @@ function setFeedback(list, chat) {
         </a>
     </li>
 </ul>
+<ul id="t_mynotis">
+    <li class="divider"></li>
+    <li>
+        <a href="#">
+            <div>
+                <i class="fa fa-comment fa-fw"></i> <%--msg--%>
+                <span class="pull-right text-muted small"><%--gap--%></span>
+            </div>
+        </a>
+    </li>
+    <li>
+        <a href="#">
+            <div>
+                <i class="fa fa-tasks fa-fw"></i> <%--msg--%>
+                <span class="pull-right text-muted small"></span>
+            </div>
+        </a>
+    </li>
+    <li>
+        <a href="#">
+            <div>
+                <i class="fa fa-file fa-fw"></i> <%--msg--%>
+                <span class="pull-right text-muted small"></span>
+            </div>
+        </a>
+    </li>
+    <li>
+        <a href="#">
+            <div>
+                <i class="fa fa-eye fa-fw"></i> <%--msg--%>
+                <span class="pull-right text-muted small"></span>
+            </div>
+        </a>
+    </li>
+</ul>
 </div>
 <footer class="footer">
     <div class="pull-right" style="margin-right:15px;color:silver;"><i class="fa fa-cog fa-spin"></i> Powered by
         TaskTogether
     </div>
 </footer>
+<%-- Notification Client --%>
+<script>
+    $(function() {
+        var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
+        var webSocket = new WS("ws://<%=NOTIFICATION_SERVER_URL%>/noti.connect?sessionId=<%=sessionId%>");
+
+
+        var receiveEvent = function(event) {
+            var data = JSON.parse(event.data);
+            if(data.error) {
+                console.log(data.error);
+                return;
+            } else {
+                toast.push(data.ntfcMessage);
+                console.log(data);
+                prependDropdownNoti(data);
+//                var html = "<li class='media'>";
+//                html += "<a class='pull-left'>";
+//                html += "<img class='media-object' src='/repos/profile/"+data.ntfcSenderIdx+"'>";
+//                html += "</a>";
+//                html += "<div class='media-body messageBody'><div><a href='"+data.linkUrl+"'>"+data.ntfcMessage+"</a></div></div>";
+//                html += "</li>";
+//
+//                $(".media-list").prepend(html);
+            }
+        }
+
+        webSocket.onmessage = receiveEvent;
+
+        console.log(webSocket);
+    });
+</script>
+<script src="<%=AXISJ_PATH %>/lib/AXJ.js"></script>
+<script src="<%=AXISJ_PATH %>/lib/AXTree.js"></script>
+<script src="<%=AXISJ_PATH %>/lib/AXTab.js"></script>
+<link href="<%=AXISJ_PATH %>/ui/default/AXJ.css" rel="stylesheet">
+<link href="<%=AXISJ_PATH %>/ui/default/AXTree.css" rel="stylesheet">
+<link href="<%=AXISJ_PATH %>/ui/default/AXTabs.css" rel="stylesheet">
 </body>
 </html>
