@@ -37,44 +37,44 @@
   ga('create', 'UA-44893237-1', '2brain.com');
   ga('send', 'pageview');
 </script>
-<script type="text/javascript">
-$( document ).ready(function() {
-	var height = window.document.height;
-	$(".noti").css("height",height);
-	
-	$( window ).resize(function() {
-		var height = window.document.height;
-		$(".noti").css("height",height);
-	});
-});
-</script>
-<script type="text/javascript">
-$(function() {
-	var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
-	
-	var chatSocket = new WS("ws://<%=NOTIFICATION_SERVER_URL%>/noti.connect?sessionId=<%=sessionId%>");
-	
-	var receiveEvent = function(event) {
-		var data = JSON.parse(event.data);
-		if(data.error) {
-			return;
-		} else {
-			toast.push(data.ntfcMessage);
-			
-			var html = "<li class='media'>";
-			html += "<a class='pull-left'>";
-			html += "<img class='media-object' src='/repos/2brain.com/profile/"+data.ntfcSenderIdx+"@2brain.com.jpg'>";
-			html += "</a>";
-			html += "<div class='media-body messageBody'><div><a href='"+data.linkUrl+"'>"+data.ntfcMessage+"</a></div></div>";
-			html += "</li>";
-			
-			$(".media-list").prepend(html);
-		}
-	}
+<%--<script type="text/javascript">--%>
+<%--$( document ).ready(function() {--%>
+	<%--var height = window.document.height;--%>
+	<%--$(".noti").css("height",height);--%>
+	<%----%>
+	<%--$( window ).resize(function() {--%>
+		<%--var height = window.document.height;--%>
+		<%--$(".noti").css("height",height);--%>
+	<%--});--%>
+<%--});--%>
+<%--</script>--%>
+<%--<script type="text/javascript">--%>
+<%--$(function() {--%>
+	<%--var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;--%>
+	<%----%>
+	<%--var chatSocket = new WS("ws://<%=NOTIFICATION_SERVER_URL%>/noti.connect?sessionId=<%=sessionId%>");--%>
+	<%----%>
+	<%--var receiveEvent = function(event) {--%>
+		<%--var data = JSON.parse(event.data);--%>
+		<%--if(data.error) {--%>
+			<%--return;--%>
+		<%--} else {--%>
+			<%--toast.push(data.ntfcMessage);--%>
+			<%----%>
+			<%--var html = "<li class='media'>";--%>
+			<%--html += "<a class='pull-left'>";--%>
+			<%--html += "<img class='media-object' src='/repos/2brain.com/profile/"+data.ntfcSenderIdx+"@2brain.com.jpg'>";--%>
+			<%--html += "</a>";--%>
+			<%--html += "<div class='media-body messageBody'><div><a href='"+data.linkUrl+"'>"+data.ntfcMessage+"</a></div></div>";--%>
+			<%--html += "</li>";--%>
+			<%----%>
+			<%--$(".media-list").prepend(html);--%>
+		<%--}--%>
+	<%--}--%>
 
-	chatSocket.onmessage = receiveEvent;
-});
-</script>
+	<%--chatSocket.onmessage = receiveEvent;--%>
+<%--});--%>
+<%--</script>--%>
 <script type="text/javascript">
     /**
      * GET PARAMETER FROM BROWSER URL
