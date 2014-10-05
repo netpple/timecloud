@@ -98,7 +98,12 @@
                 innerTop = $inner.length ? $inner.offset().top : 0,
                 iTotalHeight = Math.ceil(iTopHeight - innerTop + _$scroll.height() + iContainerTop);
 
-            if (!data.waiting && iTotalHeight + _options.padding >= $inner.outerHeight()) {
+//            console.log("data.waiting="+data.waiting);
+//            console.log("iTotalHeight + _options.padding="+(iTotalHeight + _options.padding));
+//            console.log("$inner.outerHeight()="+$inner.outerHeight());
+//            console.log($inner);
+            if (!data.waiting && ((iTotalHeight + _options.padding) >= $inner.outerHeight())) {
+//                console.log("load next ...........................");
                 _debug('info', 'jScroll:', $inner.outerHeight() - iTotalHeight, 'from bottom. Loading next request...');
                 return _load();
             }
@@ -121,9 +126,11 @@
             var $next = $e.find(_options.nextSelector).first();
             if (_options.autoTrigger && (_options.autoTriggerUntil === false || _options.autoTriggerUntil > 0)) {
                 _nextWrap($next);
-                if (_$body.height() <= _$window.height()) {
-                    _observe();
-                }
+//                console.log("body="+_$body.height());
+//                console.log("window="+_$window.height());
+//                if (_$body.height() <= _$window.height()) {   // 무한리퀘스트 때문에 막음
+//                    _observe();
+//                }
                 _$scroll.unbind('.jscroll').bind('scroll.jscroll', function () {
                     return _observe();
                 });
