@@ -97,16 +97,16 @@
     <div class='span12'>
         <%@ include file="../../menuGlobal.jsp" %>
         <div class="row-fluid">
-            <table width="100%">
-                <tr>
-                    <td align="right">
-                        <!-- Button trigger modal -->
-                        <button class="btn btn-primary btn-lg text-right" data-toggle="modal" data-target="#myModal">사용자
-                            추가
-                        </button>
-                    </td>
-                </tr>
-            </table>
+            <%--<table width="100%">--%>
+                <%--<tr>--%>
+                    <%--<td align="right">--%>
+                        <%--<!-- Button trigger modal -->--%>
+                        <%--<button class="btn btn-primary btn-lg text-right" data-toggle="modal" data-target="#myModal">사용자--%>
+                            <%--추가--%>
+                        <%--</button>--%>
+                    <%--</td>--%>
+                <%--</tr>--%>
+            <%--</table>--%>
 
             <%--Modal--%>
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
