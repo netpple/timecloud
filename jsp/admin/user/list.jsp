@@ -48,14 +48,14 @@
     <script type="text/javascript">
         function switchOn(idx) {
             if (confirm("사용자를 활성화합니다.\n계속하시겠습니까?")) {
-                location.replace("<%=CONTEXT_PATH%>/jsp/admin/user/toggle.jsp?user_idx=" + idx);
+                location.replace("<%=CONTEXT_PATH%>/jsp/admin/user/toggle.jsp?toggle=on&user_idx=" + idx);
             }
             return;
         }
 
         function switchOff(idx) { // -- task termination
             if (confirm("사용자를 비활성화합니다.\n계속하시겠습니까?")) {
-                location.replace("<%=CONTEXT_PATH%>/jsp/admin/user/toggle.jsp?user_idx=" + idx);
+                location.replace("<%=CONTEXT_PATH%>/jsp/admin/user/toggle.jsp?toggle=off&user_idx=" + idx);
             }
             return;
         }
@@ -97,16 +97,16 @@
     <div class='span12'>
         <%@ include file="../../menuGlobal.jsp" %>
         <div class="row-fluid">
-            <%--<table width="100%">--%>
-                <%--<tr>--%>
-                    <%--<td align="right">--%>
-                        <%--<!-- Button trigger modal -->--%>
-                        <%--<button class="btn btn-primary btn-lg text-right" data-toggle="modal" data-target="#myModal">사용자--%>
-                            <%--추가--%>
-                        <%--</button>--%>
-                    <%--</td>--%>
-                <%--</tr>--%>
-            <%--</table>--%>
+            <table width="100%">
+                <tr>
+                    <td align="right">
+                        <!-- Button trigger modal -->
+                        <button class="btn btn-primary btn-lg text-right" data-toggle="modal" data-target="#myModal">사용자
+                            추가
+                        </button>
+                    </td>
+                </tr>
+            </table>
 
             <%--Modal--%>
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
