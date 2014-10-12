@@ -2,7 +2,7 @@
 <%@ include file="../../common/include/incInit.jspf" %>
 <%@ include file="../../common/include/incSession.jspf" %>
 <%
-    DataSet ds = QueryHandler.executeQuery("SELECT_DOMAIN_USER_LIST", DOMAIN_IDX);
+    DataSet ds = QueryHandler.executeQuery("SELECT_DOMAIN_USER_LIST", new String[]{DOMAIN_IDX,DOMAIN_IDX});
 
     String listOff = "", tabOff = "<small class='label label-important'>OFF</small>";
     String listOn = "", tabOn = "<small class='label label-warning'>ON</small>";
