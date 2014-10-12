@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="../../common/include/incInit.jspf" %>
 <%@ include file="../../common/include/incSession.jspf" %>
-<%@ include file="../auth.jspf"%><%--관리자 권한체크 --%>
+<%@ include file="../auth.jspf" %>
+<%--관리자 권한체크 --%>
 <%
     final String thead = "<thead><tr><th>#</th><th>팀</th><th>팀원수</th><th>lastModified</th><th>최초등록</th><th>상태</th><th>&nbsp;</th></tr></thead>";
     String nodata = Html.tr(Html.td("데이터가 없습니다.", "style='text-align:center' colspan=7"));
@@ -17,7 +18,7 @@
         idx = team.getIdx();
 
         row = Html.td(idx)
-                + Html.td(Html.a(team.getName(),String.format("href='view.jsp?team_idx=%s'",idx)))
+                + Html.td(Html.a(team.getName(), String.format("href='view.jsp?team_idx=%s'", idx)))
                 + Html.td(team.getUserCnt())
                 + Html.td(team.getEdtDatetime())
                 + Html.td(team.getRegDatetime());
@@ -80,68 +81,66 @@
 </head>
 <body>
 <div class="row-fluid">
-    <div class='span10'>
+    <div class='span12'>
         <%@ include file="../../menuGlobal.jsp" %>
         <div class="row-fluid">
-            <div class='span12 all'>
-                <%-- --%>
-                <table width="100%">
-                    <tr>
-                        <td><h3>Team List</h3></td>
-                        <td align="right">
-                            <!-- Button trigger modal -->
-                            <button class="btn btn-primary btn-lg text-right" data-toggle="modal"
-                                    data-target="#myModal">팀 등록
-                            </button>
-                        </td>
-                    </tr>
-                </table>
+            <%-- --%>
+            <table width="100%">
+                <tr>
+                    <td></td>
+                    <td align="right">
+                        <!-- Button trigger modal -->
+                        <button class="btn btn-primary btn-lg text-right" data-toggle="modal"
+                                data-target="#myModal">팀 등록
+                        </button>
+                    </td>
+                </tr>
+            </table>
 
-                <%-- Modal --%>
-                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                     aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"><span
-                                        aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                <h4 class="modal-title" id="myModalLabel">팀 등록</h4>
-                            </div>
-                            <div class="modal-body">
-                                <form id='f1' method='post' action='insert.jsp'>
-                                    <table>
-                                        <tr>
-                                            <td>팀 명 :</td>
-                                            <td><input type="text" name="team_name"/></td>
-                                        </tr>
-                                    </table>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary"
-                                        onclick="javascript:document.getElementById('f1').submit();">Save changes
-                                </button>
-                            </div>
+            <%-- Modal --%>
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span
+                                    aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <h4 class="modal-title" id="myModalLabel">팀 등록</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form id='f1' method='post' action='insert.jsp'>
+                                <table>
+                                    <tr>
+                                        <td>팀 명 :</td>
+                                        <td><input type="text" name="team_name"/></td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary"
+                                    onclick="javascript:document.getElementById('f1').submit();">Save changes
+                            </button>
                         </div>
                     </div>
                 </div>
-                <ul class="nav nav-tabs">
-                    <li class=active><a href="#tab1" data-toggle="tab"><%=tabOn %>
-                    </a></li>
-                    <li><a href="#tab2" data-toggle="tab"><%=tabOff %>
-                    </a></li>
-                </ul>
-                <br/>
-
-                <div class='tab-content'>
-                    <div class='tab-pane active' id='tab1'><%=listOn %>
-                    </div>
-                    <div class='tab-pane' id='tab2'><%=listOff %>
-                    </div>
-                </div>
-                <%-- --%>
             </div>
+            <ul class="nav nav-tabs">
+                <li class=active><a href="#tab1" data-toggle="tab"><%=tabOn %>
+                </a></li>
+                <li><a href="#tab2" data-toggle="tab"><%=tabOff %>
+                </a></li>
+            </ul>
+            <br/>
+
+            <div class='tab-content'>
+                <div class='tab-pane active' id='tab1'><%=listOn %>
+                </div>
+                <div class='tab-pane' id='tab2'><%=listOff %>
+                </div>
+            </div>
+            <%-- --%>
         </div>
     </div>
 </div>

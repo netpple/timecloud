@@ -52,7 +52,7 @@
 <%--$(function() {--%>
 	<%--var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;--%>
 	<%----%>
-	<%--var chatSocket = new WS("ws://<%=NOTIFICATION_SERVER_URL%>/noti.connect?sessionId=<%=sessionId%>");--%>
+	<%--var chatSocket = new WS("ws://<%=NOTIFICATION_SERVER_URL%>/noti.connect?notiSessionId=<%=notiSessionId%>");--%>
 	<%----%>
 	<%--var receiveEvent = function(event) {--%>
 		<%--var data = JSON.parse(event.data);--%>

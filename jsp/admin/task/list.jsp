@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="../../common/include/incInit.jspf" %>
 <%@ include file="../../common/include/incSession.jspf" %>
-<%@ include file="../auth.jspf" %><%--관리자 권한체크 --%>
+<%@ include file="../auth.jspf" %>
+<%--관리자 권한체크 --%>
 <%
-//    _globalTabNo = 0;
+    //    _globalTabNo = 0;
 
     // --
     int[] taskType = new int[]{0, 0, 0};
@@ -191,42 +192,28 @@
     </script>
 </head>
 <body>
-<%--
-	<form id='f1' method='post' action='taskAction.jsp' class="form-inline" onSubmit="onSubmit(this); return false;">
-		<input type="text" id="taskRegister" name="pTaskDesc" class="input-xxlarge" placeholder="태스크를 적어주세요 .." autofocus onKeyup="if (event.keyCode == 13) onSubmit(document.forms[0]);"/> <button type="submit" class='btn btn-primary'>등록</button>
-	</form>	
- --%>
 <div class='row-fluid'>
     <div class='span12'>
         <%@ include file="../../menuGlobal.jsp" %>
         <div class='row-fluid'>
-            <%--<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>--%>
-            <div class='span12 all'>
-                <%--<h7>내가 수행할 태스크 (전체)</h7>--%>
-                <%--<div class='row-fluid'>--%>
-                <%--<div class='span6'><form class='form-inline'><%=ctrlTaskType.toString() %></form></div>--%>
-                <%--<div class='span6'><div align=right><%=rankTable %></div></div>--%>
-                <%--</div>--%>
-                <div>
-                    <ul class="nav nav-tabs">
-                        <li class=active><a href="#tab1" data-toggle="tab"><%=tabOn %>
-                        </a></li>
-                        <li><a href="#tab2" data-toggle="tab"><%=tabOff %>
-                        </a></li>
-                    </ul>
-                    <br/>
+            <div>
+                <ul class="nav nav-tabs">
+                    <li class=active><a href="#tab1" data-toggle="tab"><%=tabOn %>
+                    </a></li>
+                    <li><a href="#tab2" data-toggle="tab"><%=tabOff %>
+                    </a></li>
+                </ul>
+                <br/>
 
-                    <div class='tab-content'>
-                        <div class='tab-pane active' id='tab1'><%=listOn %>
-                        </div>
-                        <div class='tab-pane' id='tab2'><%=listOff %>
-                        </div>
+                <div class='tab-content'>
+                    <div class='tab-pane active' id='tab1'><%=listOn %>
+                    </div>
+                    <div class='tab-pane' id='tab2'><%=listOff %>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <%--<%=getNotification(oUserSession, "span3 noti") %>--%>
 </div>
 <form id='f2' method='post'>
     <input type='hidden' name='tsk_idx' value=''/>
@@ -513,7 +500,7 @@
             String[] asUser = v_parent_user.split("-");
             photo = getProfileImage(Integer.parseInt(asUser[0]));
 
-            out = "<td>" + n_idx + "</td>" + "<td>" + photo + "</td>"+ Html.td(Html.a(v_team_name,String.format("href='/jsp/admin/team/view.jsp?team_idx=%d'",n_team_idx)))
+            out = "<td>" + n_idx + "</td>" + "<td>" + photo + "</td>" + Html.td(Html.a(v_team_name, String.format("href='/jsp/admin/team/view.jsp?team_idx=%d'", n_team_idx)))
                     + "<td>" + desc + " " + Html.small(v_edt_datetime) + "</td>"
 //					+ "<td><div class='btn-toolbar'>"+ getTypePrivateToggle() + getTypeTermToggle()+ getTypeRepeatToggle() + "</div></td>"
 /*

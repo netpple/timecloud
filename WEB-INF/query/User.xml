@@ -231,12 +231,23 @@
             , A.C_OFF_YN
             , FN_TIMEGAP(A.V_REG_DATETIME) AS V_REG_DATETIME
             , FN_TIMEGAP(A.V_EDT_DATETIME) AS V_EDT_DATETIME
+            , A.TEAM_NAME
+            , A.TEAM_IDX
+            , B.N_IDX AS DOMAIN_IDX
             FROM
-            TIMECLOUD_USER A, TIMECLOUD_DOMAIN_USER X, TIMECLOUD_DOMAIN B
+            (
+            SELECT
+            C.N_IDX,C.V_EMAIL,C.V_NAME,C.C_OFF_YN,C.V_REG_DATETIME,C.V_EDT_DATETIME
+            ,E.V_NAME AS TEAM_NAME, E.N_IDX AS TEAM_IDX, E.N_DOMAIN_IDX AS TEAM_DOMAIN_IDX
+            FROM TIMECLOUD_USER C, TIMECLOUD_TEAM_USER D, TIMECLOUD_TEAM E
+            WHERE (C.N_IDX = D.N_USER_IDX AND D.N_TEAM_IDX = E.N_IDX)
+            AND C.C_DEL_YN = 'N'
+            )A, TIMECLOUD_DOMAIN_USER X, TIMECLOUD_DOMAIN B
             WHERE
             (A.N_IDX = X.N_USER_IDX AND X.N_DOMAIN_IDX = B.N_IDX)
-            AND A.C_DEL_YN = 'N'
+            AND (A.TEAM_DOMAIN_IDX = B.N_IDX)
             AND B.N_IDX = ?
+            order by A.N_IDX ASC
         </value>
         <description></description>
     </query>

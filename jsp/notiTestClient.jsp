@@ -13,25 +13,16 @@
     <title></title>
 </head>
 <body>
-<%=getNotification(oUserSession, "span3 noti") %>
+<div id="onlineUsers">
+    <ul></ul>
+</div>
+<%--<%=getNotification(oUserSession, "span3 noti") %>--%>
 <script src="<%=JS_PATH%>/jquery.js"></script>
-<script type="text/javascript">
-    $( document ).ready(function() {
-        var height = window.document.height;
-        $(".noti").css("height",height);
-
-        $( window ).resize(function() {
-            var height = window.document.height;
-            $(".noti").css("height",height);
-        });
-    });
-</script>
 <script type="text/javascript">
     $(function() {
         var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
 
-        var chatSocket = new WS("ws://<%=NOTIFICATION_SERVER_URL%>/noti.connect?sessionId=<%=sessionId%>");
-
+        var chatSocket = new WS("ws://<%=NOTIFICATION_SERVER_URL%>/noti.connect?notiSessionId=<%=notiSessionId%>");
 
         var receiveEvent = function(event) {
             console.log("received");
@@ -40,6 +31,20 @@
                 console.log(data.error);
                 return;
             } else {
+//                console.log(data);
+//                return;
+                if(data.userList){
+                    list = data.userList;
+                    console.log(data.userList);
+                    $("#onlineUsers > ul li").remove();
+                    for(i=0;i<list.length;i++){
+                        idx = list[i];
+//                        idxs = idx.split("|");
+                        <%--if(idxs[1] != <%=TEAM_IDX%> || idxs[2] != <%=DOMAIN_IDX%>)continue;--%>
+                        $("#onlineUsers > ul").append($("<li></li>").append($("<img />",{'src':'/repos/profile/'+idx,'class':'img-circle','width':'35px','height':'35px'})));
+                    }
+                    return;
+                }
                 //toast.push(data.ntfcMessage);
                 console.log(data.ntfcMessage);
 
@@ -57,33 +62,6 @@
         chatSocket.onmessage = receiveEvent;
 
         console.log(chatSocket);
-    });
-</script>
-
-<script>
-    var noti = $(".noti");
-    noti.scroll(function() {
-        var sc = parseInt(noti.outerHeight()) + parseInt(150);
-        if ( noti[0].scrollHeight - noti.scrollTop() <= sc){
-            var listCount = noti.attr('listCount');
-            $.ajax({
-                type : 'post',
-                async : true,
-                url : "notificationAction.jsp?listCount="+listCount,
-                beforeSend : function() {
-                    $('#notificationLoading').show().fadeIn('fast');
-                },
-                success : function(data) {
-                    if(data != -1){
-                        $('.media-list').append(data);
-                        noti.attr("listCount",parseInt(listCount) + parseInt(10));
-                    }
-                },
-                complete : function() {
-                    $('#notificationLoading').fadeOut();
-                }
-            });
-        }
     });
 </script>
 </body>

@@ -140,6 +140,9 @@
                         <a href="#"><i class="fa fa-dashboard fa-fw"></i> Administration<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level left-domain-admin">
                             <li>
+                                <a href="javascript:setFrame('Users', '/jsp/admin/user/list.jsp');">Users</a>
+                            </li>
+                            <li>
                                 <a href="javascript:setFrame('Teams', '/jsp/admin/team/list.jsp');">Teams</a>
                             </li>
                             <li>
@@ -153,6 +156,10 @@
 
                     <li>
                         <img src="/repos/<%=DOMAIN_IDX%>/ci/ci_2.jpg" style="width:250px;"/>
+                    </li>
+                    <li><a href="#"><i class="fa fa-group fa-fw"></i> 참여 중<span class="fa arrow"> <button type="button" disabled class="btn btn-default btn-xs">0명</button></span></a>
+                        <ul class="nav nav-second-level left-online-users">
+                        </ul>
                     </li>
                 </ul>
             </div>
@@ -889,26 +896,43 @@ function setFeedback(list, chat) {
 <script>
     $(function() {
         var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
-        var webSocket = new WS("ws://<%=NOTIFICATION_SERVER_URL%>/noti.connect?sessionId=<%=sessionId%>");
-
-
+        //부가 정보를 보내고 싶다.
+        var url = "ws://<%=NOTIFICATION_SERVER_URL%>/noti.connect?notiSessionId=<%=notiSessionId%>&userName=<%=oUserSession.getUserName()%>&teamIdx=<%=TEAM_IDX%>&domainIdx=<%=DOMAIN_IDX%>";
+        url = encodeURI(url);
+        var webSocket = new WS(url);
         var receiveEvent = function(event) {
             var data = JSON.parse(event.data);
+            console.log(data);
             if(data.error) {
                 console.log(data.error);
                 return;
             } else {
+                if(data.userList){
+                    list = data.userList;
+                    console.log(data.userList);
+                    var online = $(".left-online-users");
+                    console.log(online);
+                    $("li",online).remove();
+                    var cnt = list.length;
+                    $("button",online.parent()).text(cnt+'명');
+                    for(i=0;i<cnt;i++){
+                        obj = list[i];
+                        userIdx = obj.userIdx;
+                        teamIdx = obj.teamIdx;
+                        domainIdx = obj.domainIdx;
+                        userName = obj.userName;
+                        online.append(
+                            $("<li></li>").append(
+                                $("<a></a>",{href:"#"})
+                                        .append($("<img />",{'src':'/repos/profile/'+userIdx,'class':'img-circle','width':'30px','height':'30px'}))
+                                        .append($("<span></span>").text(" "+userName))
+                            )
+                        );
+                    }
+                    return;
+                }
                 toast.push(data.ntfcMessage);
-                console.log(data);
                 prependDropdownNoti(data);
-//                var html = "<li class='media'>";
-//                html += "<a class='pull-left'>";
-//                html += "<img class='media-object' src='/repos/profile/"+data.ntfcSenderIdx+"'>";
-//                html += "</a>";
-//                html += "<div class='media-body messageBody'><div><a href='"+data.linkUrl+"'>"+data.ntfcMessage+"</a></div></div>";
-//                html += "</li>";
-//
-//                $(".media-list").prepend(html);
             }
         }
 
