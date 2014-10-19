@@ -86,18 +86,18 @@
 		<div class='row-fluid'>
 			<%--<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>--%>
 			<div class='span12 all'>
-				<div class='row-fluid'>	
-					<div class='span6'>
-						<span class="label label-success" >Files in</span>
-						<ul class="nav nav-pills">
-							<li class="<%=selected[SELECT_ALL]%>"><a href="javascript:allTaskFile();"><%=ALL_TASK %></a></li>
-							<li class="<%=selected[SELECT_MY]%>"><a href="javascript:myTaskFile();"><%=MY_TASK %></a></li>
-							<li class="<%=selected[SELECT_MYCHILD]%>"><a href="javascript:childTaskFile();"><%=MYCHILD_TASK %></a></li>
-							<li class="<%=selected[SELECT_OBSERVER]%>"><a href="javascript:observerTaskFile();"><%=OBSERVER_TASK %></a></li>
-						</ul>
-					</div>
-					<div class='span6' align=right><%=rankTable%></div>
-				</div>
+				<%--<div class='row-fluid'>	--%>
+					<%--<div class='span6'>--%>
+						<%--<span class="label label-success" >Files in</span>--%>
+						<%--<ul class="nav nav-pills">--%>
+							<%--<li class="<%=selected[SELECT_ALL]%>"><a href="javascript:allTaskFile();"><%=ALL_TASK %></a></li>--%>
+							<%--<li class="<%=selected[SELECT_MY]%>"><a href="javascript:myTaskFile();"><%=MY_TASK %></a></li>--%>
+							<%--<li class="<%=selected[SELECT_MYCHILD]%>"><a href="javascript:childTaskFile();"><%=MYCHILD_TASK %></a></li>--%>
+							<%--<li class="<%=selected[SELECT_OBSERVER]%>"><a href="javascript:observerTaskFile();"><%=OBSERVER_TASK %></a></li>--%>
+						<%--</ul>--%>
+					<%--</div>--%>
+					<%--<div class='span6' align=right><%=rankTable%></div>--%>
+				<%--</div>--%>
 				<div><%=(sbFileList != null)?sbFileList.toString():"" %></div>
 			</div>
 		</div>
@@ -134,21 +134,23 @@ class FileObject {
 	public String get(UserSession sess) {
 		StringBuffer sbOut = new StringBuffer() ;
 		
-		sbOut.append("<div style='float:left'>") 
+		sbOut.append("<div style='float:left'>")
 				.append("<div style='float:left'>")
-				.append( getProfileImage(n_owner_idx) )
-				.append("</div>")
+				.append( getProfileImage(n_owner_idx,55,ImageShape.CIRCLE) )
+                .append("<center>")
+                .append(v_file_owner)
+				.append("</center></div>")
 				.append("<div style='float:right;padding:0 0 0 10px'>")
-					.append(v_file_owner).append("<br />")
+                    .append("<i class='fa fa-tasks'></i>").append( stringToHTMLString( v_task_desc ) )
+                    .append(" &nbsp;<span style='color:gray'> <i class='fa fa-calendar'></i> ")
+                    .append( DateTime.convertDateFormat(v_reg_datetime) )
+                    .append("<br />")
 					.append("<a href='/jsp/file.jsp?tsk_idx=").append(n_task_idx)	// -- 파일함에서 다운로드
 					.append("'>")
 					.append( stringToHTMLString( v_origin_name ) ).append("</a>")
-					.append("<br /><a href='javascript:onViewCalendar(").append(n_task_idx)
-					.append(");'><span class='label'>태스크</span> ").append( stringToHTMLString( v_task_desc ) )
-				.append("</a> ").append(getTaskStatus()).append("<br /><i>")
-				.append( DateTime.convertDateFormat(v_reg_datetime) )
-				.append("</i></div>")
-			.append("</div><br style='clear:both' />") ;
+                .append("</a> ")
+				.append("</div>")
+			.append("</div><br style='clear:both' /><hr/>") ;
 		return sbOut.toString() ;
 	}
 	

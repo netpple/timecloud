@@ -22,7 +22,7 @@
         <value>
             SELECT
             X.N_IDX, X.N_OWNER_IDX, X.N_TASK_IDX,
-            X.V_DESC, X.V_REG_DATETIME,
+            X.V_DESC, fn_timegap(X.V_REG_DATETIME),
             Y.V_DESC AS V_TASK_DESC, Y.N_OWNER_IDX AS N_TASK_OWNER ,
             (SELECT V_NAME FROM TIMECLOUD_USER WHERE N_IDX=X.N_OWNER_IDX) AS V_FEEDBACK_OWNER
             ,Y.C_STATUS

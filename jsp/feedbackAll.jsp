@@ -85,18 +85,18 @@
 		<div class='row-fluid'>
 			<%--<div class='span2 vertNav'><%=getVertNav(req, oUserSession) %></div>--%>
 			<div class='span12 all'>
-				<div class='row-fluid'>	
-					<div class='span6'>
-						<span class="label label-success" >Feedback in</span>
-						<ul class="nav nav-pills">
-							<li class="<%=selected[SELECT_ALL]%>"><a href="javascript:allTaskFeedback();"><%=ALL_TASK %></a></li>
-							<li class="<%=selected[SELECT_MY]%>"><a href="javascript:myTaskFeedback();"><%=MY_TASK %></a></li>
-							<li class="<%=selected[SELECT_MYCHILD]%>"><a href="javascript:childTaskFeedback();"><%=MYCHILD_TASK %></a></li>
-							<li class="<%=selected[SELECT_OBSERVER]%>"><a href="javascript:observerTaskFeedback();"><%=OBSERVER_TASK %></a></li>
-						</ul>
-					</div>
-					<div class='span6' align=right><%=rankTable%></div>
-				</div>
+				<%--<div class='row-fluid'>	--%>
+					<%--<div class='span6'>--%>
+						<%--<span class="label label-success" >Feedback in</span>--%>
+						<%--<ul class="nav nav-pills">--%>
+							<%--<li class="<%=selected[SELECT_ALL]%>"><a href="javascript:allTaskFeedback();"><%=ALL_TASK %></a></li>--%>
+							<%--<li class="<%=selected[SELECT_MY]%>"><a href="javascript:myTaskFeedback();"><%=MY_TASK %></a></li>--%>
+							<%--<li class="<%=selected[SELECT_MYCHILD]%>"><a href="javascript:childTaskFeedback();"><%=MYCHILD_TASK %></a></li>--%>
+							<%--<li class="<%=selected[SELECT_OBSERVER]%>"><a href="javascript:observerTaskFeedback();"><%=OBSERVER_TASK %></a></li>--%>
+						<%--</ul>--%>
+					<%--</div>--%>
+					<%--<div class='span6' align=right><%=rankTable%></div>--%>
+				<%--</div>--%>
 				<div><%=(sbFeedbackList != null)?sbFeedbackList.toString():"" %></div>
 			</div>
 		</div>
@@ -134,48 +134,52 @@ class Feedback {
 	public String get(UserSession sess) {
 		StringBuffer sbOut = new StringBuffer() ;
 		
-		sbOut.append("<div style='float:left'>") 
+		sbOut.append("<div style='float:left'>")
 				.append("<div style='float:left'>")
-				.append( getProfileImage(n_owner_idx) )
-				.append("</div>")
+				.append( getProfileImage(n_owner_idx,55,ImageShape.CIRCLE))
+                .append("<center>")
+                .append(v_feedback_owner)
+				.append("</center></div>")
 				.append("<div style='float:right;padding:0 0 0 10px'>")
-					.append(v_feedback_owner).append("<br />")
-					.append("<a href='/jsp/task.jsp?tsk_idx=").append(n_task_idx)
-					.append("'>")
-					.append( stringToHTMLString( v_desc )  ).append( "</a>")
-					.append("<br /><a href='javascript:onViewCalendar(").append(n_task_idx)
-					.append(");'><span class='label'>태스크</span> ").append( stringToHTMLString( v_task_desc ) )
-				.append("</a> ").append(getTaskStatus()).append("<br /><i>")
-				.append( DateTime.convertDateFormat(v_reg_datetime) )
-				.append("</i></div>")
-			.append("</div><br style='clear:both' />") ;
+                    .append("<i class='fa fa-tasks'></i>").append( stringToHTMLString( v_task_desc ) )
+                    //.append("<a href='javascript:onViewCalendar(").append(n_task_idx).append(");'>")
+                    //.append("</a> ").append(getTaskStatus())
+					.append(" &nbsp;<span style='color:gray'> <i class='fa fa-calendar'></i> ")
+                    //.append( DateTime.convertDateFormat(v_reg_datetime) )
+                    .append( v_reg_datetime )
+					.append("</span><div>")
+                    .append( stringToHTMLString( v_desc )  )
+					.append("</div><br />")
+                    .append("<a href='/jsp/task.jsp?tsk_idx=").append(n_task_idx).append("#FEEDBACK_").append(n_idx).append("'>원문보기</a>")
+				.append("</div>")
+			.append("</div><br style='clear:both' /><hr/>") ;
 		return sbOut.toString() ;
 	}
 	
 	// -- 이 메쏘는 Task에서 온것으로, 추후 Task 클래스의 static 메쏘드로 선언해야 할 듯함.
-	private String getTaskStatus() {
-		String status = "" ;
-		if( "01".equals(c_task_status) ) {
-			status = "<span class='badge badge-warning'>지연</span>" ;
-		}
-		else if( "02".equals(c_task_status) ) {
-			status = "<span class='badge badge-warning'>이슈</span>" ;
-		}
-		else if( "03".equals(c_task_status) ) {
-			status = "<span class='badge badge-important'>중단</span>" ;	// -- 혹은 보류?
-		}
-		else if( "04".equals(c_task_status) ) {
-			status = "<span class='badge badge-important'>실패</span>" ;
-		}
-		else if( "05".equals(c_task_status) ) {
-			status = "<span class='badge badge-success'>성공</span>" ;
-		}
-		else {
-			status = "<span class='badge badge-success'>정상</span>" ;
-		}
-		
-		return status ;
-	}
+//	private String getTaskStatus() {
+//		String status = "" ;
+//		if( "01".equals(c_task_status) ) {
+//			status = "<span class='badge badge-warning'>지연</span>" ;
+//		}
+//		else if( "02".equals(c_task_status) ) {
+//			status = "<span class='badge badge-warning'>이슈</span>" ;
+//		}
+//		else if( "03".equals(c_task_status) ) {
+//			status = "<span class='badge badge-important'>중단</span>" ;	// -- 혹은 보류?
+//		}
+//		else if( "04".equals(c_task_status) ) {
+//			status = "<span class='badge badge-important'>실패</span>" ;
+//		}
+//		else if( "05".equals(c_task_status) ) {
+//			status = "<span class='badge badge-success'>성공</span>" ;
+//		}
+//		else {
+//			status = "<span class='badge badge-success'>정상</span>" ;
+//		}
+//
+//		return status ;
+//	}
 }
 %>
 <%!

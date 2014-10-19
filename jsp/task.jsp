@@ -473,7 +473,7 @@
                 sbOut.append("<dd>");
                 sbOut.append(component);
                 sbOut.append("</dd>");
-                sbOut.append("</dl></div>");
+                sbOut.append("</dl><hr/></div>");
 
             } catch (Exception e) {
             }
